@@ -1,0 +1,115 @@
+.vacinne-item {
+  background: var(--color-box-base);
+  border: 1px solid var(--color-line-in-white);
+  border-radius: 0.8rem;
+  margin-top: 2.4rem;
+  overflow: hidden;
+}
+
+.vacinne-item header {
+  padding: 3.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.vacinne-item header div {
+  margin-top: 1rem;
+}
+
+.vacinne-item header strong {
+  font: 700 2.4rem Archivo;
+  display: block;
+  color: var(--color-text-title);
+}
+
+.vacinne-item header div ul li strong {
+  color: var(--color-primary);
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.vacinne-item header div ul li {
+  display: flex;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.vacinne-item header button {
+  width: 100%;
+  height: 5.6rem;
+  background: var(--color-primary-light);
+  color: var(--color-button-text);
+  border: 0;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.6rem Archivo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  margin-top: 3.2rem;
+}
+
+.vacinne-item footer {
+  padding: 3.2rem 2rem;
+  background: var(--color-box-footer);
+  border-top: 1px solid var(--color-line-in-white);
+  margin-top: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vacinne-item footer p strong {
+  color: var(--color-primary);
+  font-size: 1.6rem;
+  display: block;
+}
+
+.vacinne-item footer a {
+  width: 20rem;
+  height: 5.6rem;
+  background: var(--color-secundary);
+  color: var(--color-button-text);
+  border: 0;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.4rem Archivo;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  transition: 0.2s;
+  text-decoration: none;
+}
+
+.vacinne-item footer a:hover {
+  background: var(--color-secundary-dark);
+}
+
+@media (min-width: 700px) {
+  .vacinne-item header,
+  .vacinne-item footer {
+    padding: 3.2rem;
+  }
+
+  .vacinne-item > p {
+    padding: 0 3.2rem;
+  }
+
+  .vacinne-item footer p strong {
+    display: initial;
+    margin-left: 1.6rem;
+  }
+
+  .vacinne-item footer a {
+    width: 24.5rem;
+    font-size: 1.6rem;
+    justify-content: center;
+  }
+
+  .vacinne-item footer a img {
+    margin-right: 1.6rem;
+  }
+}

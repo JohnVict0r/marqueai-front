@@ -1,0 +1,50 @@
+.panel-container {
+  background: #fcfcfc;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+  display: grid;
+  grid-template-areas:
+    'header header header header action'
+    'content content content content content';
+}
+
+.panel-container header {
+  grid-area: header;
+  padding-top: 2vh;
+  margin-bottom: 3vh;
+}
+
+.panel-container header .panel-title {
+  margin-left: 2vw; //TO DO: fazer funcionar
+  margin: 0;
+  display: flex;
+}
+
+.panel-container main {
+  grid-area: content;
+  display: flex;
+  justify-content: space-around;
+}
+
+.action {
+  grid-area: action;
+  color: '#701AA7';
+  align-self: center;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
+
+@media only screen and (max-width: 720px) {
+  .action {
+    margin: 0;
+    align-self: center;
+  }
+  .panel-container {
+    display: grid;
+    grid-template-areas:
+      'header '
+      'action '
+      'content ';
+  }
+}

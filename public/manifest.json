@@ -1,0 +1,25 @@
+{
+  "short_name": "Gestio",
+  "name": "Gestio Soluções",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "gestio.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "gestio.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

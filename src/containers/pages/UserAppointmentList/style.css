@@ -1,0 +1,214 @@
+/* O menu */
+/* O menu começara escondido */
+.menu strong {
+  font: 700 2.4rem Archivo;
+  width: 100%;
+  height: 5.6rem;
+  color: var(--color-button-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-top: 3.2rem;
+}
+
+.menu button {
+  width: 100%;
+  height: 5.6rem;
+  background: var(--color-primary-light);
+  color: var(--color-button-text);
+  border: 0;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.6rem Archivo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  margin-top: 3.2rem;
+}
+
+.menu .logout {
+  position: absolute;
+  width: 100%;
+  top: 90vh;
+}
+
+#page-teacher-list {
+  width: 100vw;
+  height: 100vh;
+}
+
+#search-teachers {
+  margin-top: 3.2rem;
+}
+
+#search-teachers label {
+  color: var(--color-text-in-primary);
+}
+
+#search-teachers button {
+  width: 100%;
+  height: 5.6rem;
+  background: var(--color-secundary);
+  color: var(--color-button-text);
+  border: 0;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.6rem Archivo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  margin-top: 3.2rem;
+}
+
+#search-teachers button:hover {
+  background: var(--color-secundary-dark);
+}
+
+#page-teacher-list main {
+  margin: 3.2rem auto;
+  width: 90%;
+}
+@media (max-width: 699px) {
+  .mobile-header {
+    display: none;
+  }
+  .menu {
+    display: none;
+  }
+
+  .menu strong {
+    font: 400 1.4rem Archivo;
+    width: 100%;
+    height: 3.6rem;
+    color: var(--color-button-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-top: 3.2rem;
+  }
+
+  .menu button {
+    width: 100%;
+    height: 3.6rem;
+    background: var(--color-primary-light);
+    color: var(--color-button-text);
+    border: 0;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font: 400 1.2rem Archivo;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-top: 3.2rem;
+  }
+}
+
+@media (min-width: 720px) {
+  #page-teacher-list main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 700px) {
+  .menu {
+    left: -15px;
+    height: 110%;
+    top: -5px;
+    position: fixed;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--color-primary);
+    border: 1px solid var(--color-line-in-white);
+    border-radius: 2rem;
+    overflow: hidden;
+  }
+  #page-teacher-list {
+    max-width: 100%;
+    margin-left: 200px;
+  }
+
+  #search-teachers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 16px;
+    position: absolute;
+    bottom: -28px;
+  }
+
+  #search-teachers button {
+    width: 200px;
+    height: 5.6rem;
+    background: var(--color-secundary);
+    color: var(--color-button-text);
+    border: 0;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font: 700 1.6rem Archivo;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-top: 3.2rem;
+  }
+  #page-teacher-list main {
+    padding: 3.2rem 0;
+    max-width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 16px;
+  }
+
+  .teacher-item header,
+  .teacher-item footer {
+    padding: 3.2rem;
+  }
+
+  .teacher-item > p {
+    padding: 0 3.2rem;
+  }
+
+  .teacher-item footer p strong {
+    display: initial;
+    margin-left: 1.6rem;
+  }
+
+  .teacher-item footer button {
+    width: 24.5rem;
+    font-size: 1.6rem;
+    justify-content: center;
+  }
+
+  .teacher-item footer button img {
+    margin-right: 1.6rem;
+  }
+  .header-content strong {
+    margin-left: 1.5rem;
+  }
+  .header-content p {
+    margin-left: 1.5rem;
+  }
+}
+
+@media (min-width: 1250px) {
+  #page-teacher-list main {
+    padding: 3.2rem 0;
+    max-width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 16px;
+  }
+}
