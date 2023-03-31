@@ -45,12 +45,12 @@ const ProfileForm: FC = () => {
   const [city, setCity] = useState(profile.city)
   const [loading, setLoading] = useState(false)
 
-  const [day, setDay] = useState(profile.birth.split('T')[0].split('-')[2])
-  const [month, setMonth] = useState(
-    textMonths[Number(profile.birth.split('T')[0].split('-')[1])]
-  )
+  // const [day, setDay] = useState(profile.birth.split('T')[0].split('-')[2])
+  // const [month, setMonth] = useState(
+  //   textMonths[Number(profile.birth.split('T')[0].split('-')[1])]
+  // )
 
-  const [year, setYear] = useState(profile.birth.split('T')[0].split('-')[0])
+  // const [year, setYear] = useState(profile.birth.split('T')[0].split('-')[0])
 
   useEffect(() => {
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(
@@ -76,7 +76,7 @@ const ProfileForm: FC = () => {
     api
       .put(`/profiles/${profile.id}`, {
         ...values,
-        birth: `${year}-${month}-${day}`,
+        // birth: `${year}-${month}-${day}`,
         state: stateFormated,
         city,
       })
@@ -84,7 +84,7 @@ const ProfileForm: FC = () => {
         setProfile({
           ...profile,
           ...values,
-          birth: `${year}-${month}-${day}`,
+          // birth: `${year}-${month}-${day}`,
           state: stateFormated,
           city,
         })
@@ -131,7 +131,7 @@ const ProfileForm: FC = () => {
         <Input placeholder='Ex.:  Carlos.augusto@email.com' size='large' />
       </Form.Item> */}
 
-      <Form.Item name='birth' label='Data de Nascimento'>
+      {/* <Form.Item name='birth' label='Data de Nascimento'>
         <Space>
           <InputNumber
             placeholder='Dia'
@@ -164,7 +164,7 @@ const ProfileForm: FC = () => {
             }}
           />
         </Space>
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item
         name='gender'

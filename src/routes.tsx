@@ -1,50 +1,37 @@
 import React from 'react'
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
-// import VaccineList from './containers/pages/VaccineList'
-// import VaccineInfo from './containers/pages/VacinneInfo'
-import Login from './containers/Authentication/Login'
-import SignUp from './containers/Authentication/SignUp'
-import ProfessionalSignUp from './containers/pages/ProfessionalSignUp'
-import ProfileVaccineCreate from './containers/pages/ProfileVacinneCreate'
-import SelectUser from './containers/pages/SelectUser'
-/* import ProfileVaccineUpdate from './containers/pages/ProfileVacinneUpdate' */
+import Login from './containers/auth/Login/Login'
+import SignUp from './containers/auth/SignUp/SignUp'
+import SelectUser from './containers/auth/SelectUser'
 import { isAuthenticated } from './utils/authentication'
-import PrivateLayout from './containers/Layout/PrivateLayout'
-import ManagerPrivateLayout from './containers/Layout/ManagerPrivateLayout'
-import PublicLayout from './containers/Layout/PublicLayout'
+import PrivateLayout from './layouts/PrivateLayout'
+import ManagerPrivateLayout from './layouts/ManagerPrivateLayout'
+import PublicLayout from './layouts/PublicLayout'
 import Home from './containers/pages/Home'
-import VaccineList from './containers/pages/VaccineList'
-import UserAppointmentList from './containers/pages/UserAppointmentList'
-import ManagerVaccineList from './containers/pages/ManagerVaccineList'
 import Profile from './containers/pages/Profile'
-import Welcome from './containers/pages/Welcome'
-import Success from './containers/pages/Success'
-import Terms from './containers/Public/Terms'
-import PrivacyPolicy from './containers/Public/PrivacyPolicy'
-// import ForgotPassword from './containers/pages/ForgotPassword'
-import ResetPassword from './containers/pages/ResetPassword'
-import VerifyEmail from './containers/pages/VerifyEmail'
-import ManagerOperatorList from './containers/pages/ManagerOperatorList'
-import ManagerProfessionalList from './containers/pages/ManagerProfessionalList'
-import ManagerUserList from './containers/pages/ManagerUserList'
-import ManagerProfessionalCreate from './containers/pages/ManagerProfessionalCreate'
-import ManagerOperatorCreate from './containers/pages/ManagerOperatorCreate'
-import ManagerCitizenCreate from './containers/pages/ManagerCitizenCreate'
-import UserAppointmentCreate from './containers/pages/UserAppointmentCreate'
-import ManagerHome from './containers/Manager/Home/ManagerHome'
-import ManagerEstablishmentCreate from './containers/pages/ManagerEstablishmentCreate'
+import Success from './containers/auth/Success'
+import Terms from './containers/public/Terms'
+import PrivacyPolicy from './containers/public/PrivacyPolicy'
+import ResetPassword from './containers/auth/ResetPassword'
+import VerifyEmail from './containers/auth/VerifyEmail'
+import ManagerProfessionalList from './containers/manager/establishiment/ManagerProfessionalList'
+import ManagerUserList from './containers/admin/ManagerUserList'
+import ManagerProfessionalCreate from './containers/manager/establishiment/ManagerProfessionalCreate'
+import ManagerCitizenCreate from './containers/admin/ManagerCitizenCreate'
+import UserAppointmentCreate from './containers/customer/UserAppointmentCreate'
+import ManagerHome from './containers/manager/Home/ManagerHome'
+import ManagerEstablishmentCreate from './containers/manager/establishiment/ManagerEstablishmentCreate'
 import ManagerEstablishmentAppointments from './containers/pages/ManagerEstablishmentAppointments'
-import ManagerEstablishmentHours from './containers/pages/ManagerEstablishmentHours'
-import ManagerEstablishmentList from './containers/pages/ManagerEstablishmentList'
-import ManagerAppointmentsList from './containers/pages/ManagerAppointmentsList'
+import ManagerAppointmentsList from './containers/manager/professional/ManagerAppointmentsList'
 
 // módulos
-import ManagerPuzzleList from './containers/Manager/Puzzle/ManagerPuzzleList'
-import ManagerPuzzleCreate from './containers/Manager/Puzzle/ManagerPuzzleCreate'
-import ManagerPuzzleItemList from './containers/Manager/Puzzle/Item/ManagerPuzzleItemList'
-import ManagerPuzzleItemCreate from './containers/Manager/Puzzle/Item/ManagerPuzzleItemCreate'
-import ManagerPuzzleSchedulableList from './containers/Manager/Puzzle/schedulable/ManagerPuzzleSchedulableList'
-import ManagerPuzzleSchedulableCreate from './containers/Manager/Puzzle/schedulable/ManagerPuzzleSchedulableCreate'
+import ManagerPuzzleItemList from './containers/manager/professional/services/ManagerServicesList'
+import ManagerPuzzleItemCreate from './containers/manager/professional/services/ManagerServicesCreate'
+import ManagerPuzzleSchedulableList from './containers/manager/professional/schedules/ManagerPuzzleSchedulableList'
+import ManagerPuzzleSchedulableCreate from './containers/manager/professional/schedules/ManagerPuzzleSchedulableCreate'
+import Welcome from './containers/auth/Welcome'
+import UserAppointmentList from './containers/customer/UserAppointmentList'
+import ManagerEstablishmentList from './containers/manager/establishiment/ManagerEstablishmentList'
 interface IPublicRouteProps {
   component: any
 }
@@ -125,10 +112,6 @@ function Routes() {
         <Route path='/politica-de-privacidade' component={PrivacyPolicy} />
         <PublicRoute path='/login' component={Login} />
         <PublicRoute path='/cadastro' component={SignUp} />
-        <PublicRoute
-          path='/cadastro-profissional'
-          component={ProfessionalSignUp}
-        />
         {/*<PublicRoute path='/esqueceu-a-senha' component={ForgotPassword} /> */}
         <PublicRoute path='/reset-password/:token' component={ResetPassword} />
         <PublicRoute path='/verify-email/:token' component={VerifyEmail} />
@@ -136,7 +119,6 @@ function Routes() {
         <PublicRoute path='/success/:type' component={Success} />
         <PrivateRoute path='/cidadao/inicio' component={Home} />
         <PrivateRoute path='/cidadao/perfil' exact component={Profile} />
-        <PrivateRoute path='/cidadao/vacinas' exact component={VaccineList} />
         <PrivateRoute
           path='/cidadao/agendamentos'
           exact
@@ -148,133 +130,91 @@ function Routes() {
           component={UserAppointmentCreate}
         />
 
-        {/*   Rotas do gestor */}
+        {/* PROFESSIONAL */}
         <ManagerPrivateRoute
-          path='/gestao/modulos'
+          path='/manager/professional/home'
           exact
-          component={ManagerPuzzleList}
+          component={ManagerHome}
         />
         <ManagerPrivateRoute
-          path='/gestao/modulos/cadastro'
-          exact
-          component={ManagerPuzzleCreate}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/modulos/:puzzle_id/itens'
+          path='/manager/professional/services'
           exact
           component={ManagerPuzzleItemList}
         />
         <ManagerPrivateRoute
-          path='/gestao/modulos/:puzzle_id/itens/cadastro'
+          path='/manager/professional/services/create'
           exact
           component={ManagerPuzzleItemCreate}
         />
         <ManagerPrivateRoute
-          path='/gestao/modulos/:puzzle_id/horarios'
+          path='/manager/professional/schedules'
           exact
           component={ManagerPuzzleSchedulableList}
         />
         <ManagerPrivateRoute
-          path='/gestao/modulos/:puzzle_id/horarios/cadastro'
+          path='/manager/professional/schedules/create'
           exact
           component={ManagerPuzzleSchedulableCreate}
         />
 
         <ManagerPrivateRoute
-          path='/gestao/agendamentos'
+          path='/manager/professional/appointments'
           exact
           component={ManagerAppointmentsList}
         />
         <ManagerPrivateRoute
-          path='/gestao/horarios'
+          path='/manager/professional/appointments/create'
           exact
-          component={ManagerPuzzleSchedulableList}
+          component={ManagerAppointmentsList}
         />
         <ManagerPrivateRoute
-          path='/gestao/horarios/cadastro'
+          path='/manager/professional/profile'
           exact
-          component={ManagerPuzzleSchedulableCreate}
+          component={Profile}
         />
+
+        {/* ESTABLISHIMENT */}
         <ManagerPrivateRoute
-          path='/gestao/vacinas'
-          exact
-          component={ManagerVaccineList}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/profissionais'
+          path='/manager/establishiment/professionais'
           exact
           component={ManagerProfessionalList}
         />
         <ManagerPrivateRoute
-          path='/gestao/profissionais/cadastro'
+          path='/manager/establishiment/professionais/create'
           exact
           component={ManagerProfessionalCreate}
         />
+
+        {/* ADMIN */}
         <ManagerPrivateRoute
-          path='/gestao/operadores/cadastro'
-          exact
-          component={ManagerOperatorCreate}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/cidadaos/cadastro'
-          exact
-          component={ManagerCitizenCreate}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/operadores'
-          exact
-          component={ManagerOperatorList}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/cidadaos'
+          path='/admim/users'
           exact
           component={ManagerUserList}
         />
         <ManagerPrivateRoute
-          path='/gestao/estabelecimentos'
+          path='/admim/users/create'
+          exact
+          component={ManagerCitizenCreate}
+        />
+        <ManagerPrivateRoute
+          path='/admin/establishment'
           exact
           component={ManagerEstablishmentList}
         />
         <ManagerPrivateRoute
-          path='/gestao/estabelecimentos/cadastro'
+          path='/admin/establishment/create'
           exact
           component={ManagerEstablishmentCreate}
         />
         <ManagerPrivateRoute
-          path='/gestao/estabelecimentos/:establishmentId/agenda'
+          path='/admin/establishment/:establishmentId/agenda'
           exact
           component={ManagerEstablishmentAppointments}
         />
-        <ManagerPrivateRoute
-          path='/gestao/estabelecimentos/:establishmentId/agenda/:data'
-          exact
-          component={ManagerEstablishmentHours}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/estabelecimentos/:establishmentId/agendamentos'
-          exact
-          component={ManagerAppointmentsList}
-        />
-        <ManagerPrivateRoute
-          path='/gestao/inicio'
-          exact
-          component={ManagerHome}
-        />
 
         {/*Rotas Operador*/}
-        <ManagerPrivateRoute
-          path='/gestao/vacinas/cadastro'
-          exact
-          component={ProfileVaccineCreate}
-        />
         <Route path='/selecionar-modulo' component={SelectUser} />
-        {/*  <PrivateRoute
-          path='/cidadao/vacinas/:id/atualizar'
-          exact
-          component={ProfileVaccineUpdate}
-        /> */}
-        <ManagerPrivateRoute path='/gestao/inicio' exact component={Home} />
-        <ManagerPrivateRoute path='/gestao/perfil' exact component={Profile} />
+        <ManagerPrivateRoute path='/customer/inicio' exact component={Home} />
 
         {/* <PrivateRoute path='/vaccines/:id' exact component={VaccineInfo} /> */}
         <Redirect

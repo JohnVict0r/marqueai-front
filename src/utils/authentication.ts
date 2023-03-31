@@ -1,4 +1,4 @@
-const APP_KEY = '@Agendita';
+const APP_KEY = '@Marqueai';
 const TOKEN_KEY = `${APP_KEY}:Token`;
 const PROFILE_KEY = `${APP_KEY}:Profile`;
 const ROLES_KEY = `${APP_KEY}:Roles`;
