@@ -182,7 +182,7 @@ function ManagerServicesCreate() {
               </Form.Item>
 
               <Form.Item
-                label='Tempo de duração'
+                label='Tempo de duração (min)'
                 name='duration'
                 className='login-form-item'
                 rules={[
