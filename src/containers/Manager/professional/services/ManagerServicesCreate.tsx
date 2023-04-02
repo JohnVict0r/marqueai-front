@@ -32,7 +32,7 @@ const validateMessages = {
   },
 }
 
-function ManagerPuzzleItemCreate() {
+function ManagerServicesCreate() {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
@@ -235,4 +235,4 @@ function ManagerPuzzleItemCreate() {
   )
 }
 
-export default ManagerPuzzleItemCreate
+export default ManagerServicesCreate

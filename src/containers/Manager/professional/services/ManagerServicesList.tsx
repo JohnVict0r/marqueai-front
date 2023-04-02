@@ -7,7 +7,7 @@ import api from '../../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
 
-function PuzzleItemList() {
+function ServicesList() {
   const isMobile = window.innerWidth < 720
   const params = useParams<any>()
   const history = useHistory()
@@ -139,4 +139,4 @@ function PuzzleItemList() {
   )
 }
 
-export default PuzzleItemList
+export default ServicesList
