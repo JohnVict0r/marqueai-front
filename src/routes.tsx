@@ -23,12 +23,10 @@ import ManagerHome from './containers/manager/Home/ManagerHome'
 import ManagerEstablishmentCreate from './containers/manager/establishiment/ManagerEstablishmentCreate'
 import ManagerEstablishmentAppointments from './containers/pages/ManagerEstablishmentAppointments'
 import ManagerAppointmentsList from './containers/manager/professional/ManagerAppointmentsList'
-
-// módulos
-import ManagerPuzzleItemList from './containers/manager/professional/services/ManagerServicesList'
-import ManagerPuzzleItemCreate from './containers/manager/professional/services/ManagerServicesCreate'
-import ManagerPuzzleSchedulableList from './containers/manager/professional/schedules/ManagerPuzzleSchedulableList'
-import ManagerPuzzleSchedulableCreate from './containers/manager/professional/schedules/ManagerPuzzleSchedulableCreate'
+import ManagerProfessionalServicesList from './containers/manager/professional/services/ManagerProfessionalServicesList'
+import ManagerProfessionalServicesCreate from './containers/manager/professional/services/ManagerProfessionalServicesCreate'
+import ManagerProfessionalSchedulesList from './containers/manager/professional/schedules/ManagerProfessionalSchedulesList'
+import ManagerProfessionalSchedulesCreate from './containers/manager/professional/schedules/ManagerProfessionalSchedulesCreate'
 import Welcome from './containers/auth/Welcome'
 import UserAppointmentList from './containers/customer/UserAppointmentList'
 import ManagerEstablishmentList from './containers/manager/establishiment/ManagerEstablishmentList'
@@ -139,22 +137,22 @@ function Routes() {
         <ManagerPrivateRoute
           path='/manager/professional/services'
           exact
-          component={ManagerPuzzleItemList}
+          component={ManagerProfessionalServicesList}
         />
         <ManagerPrivateRoute
           path='/manager/professional/services/create'
           exact
-          component={ManagerPuzzleItemCreate}
+          component={ManagerProfessionalServicesCreate}
         />
         <ManagerPrivateRoute
           path='/manager/professional/schedules'
           exact
-          component={ManagerPuzzleSchedulableList}
+          component={ManagerProfessionalSchedulesList}
         />
         <ManagerPrivateRoute
           path='/manager/professional/schedules/create'
           exact
-          component={ManagerPuzzleSchedulableCreate}
+          component={ManagerProfessionalSchedulesCreate}
         />
 
         <ManagerPrivateRoute
