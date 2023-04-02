@@ -6,28 +6,13 @@ import { useHistory, useParams } from 'react-router-dom'
 import api from '../../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
+import { weekdays } from '../../../../utils/constants'
 
-function ManagerPuzzleSchedulableList() {
+function ManagerProfessionalSchedulesList() {
   const isMobile = window.innerWidth < 720
   // const params = useParams<any>()
   const history = useHistory()
   const [dataSchedule, setDataSchedule] = useState<any[]>([])
-  //const [dataPuzzle, setDataPuzzle] = useState<any[]>([])
-
-  /* const currentPuzzle = useMemo<any>(() => {
-    return dataPuzzle.filter(item => item.id === Number(params.puzzle_id))[0]
-    //eslint-disable-next-line
-  }, [dataPuzzle]) */
-
-  const weekdays = [
-    { name: 'Segunda-feira', value: 'Segunda' },
-    { name: 'Terça-feira', value: 'terca' },
-    { name: 'Quarta-feira', value: 'quarta' },
-    { name: 'Quinta-feira', value: 'quinta' },
-    { name: 'Sexta-feira', value: 'sexta' },
-    { name: 'Sábado', value: 'sabado' },
-    { name: 'Domingo', value: 'domingo' },
-  ]
 
   const findDay = (dayId: any) => {
     const day: any = weekdays.find(element => element.value === dayId)
@@ -74,17 +59,6 @@ function ManagerPuzzleSchedulableList() {
         return numero;
     } */
 
-  /* const onlyUnique = (value:any, index:any, self:any) => {
-    return self.indexOf(value) === index;
-  }
-
-  const get_unique_date = (data:any) => {
-    let atribute = data.map((item:any)=>item.user_name);
-    let unique = atribute.filter(onlyUnique);
-
-    return unique;
-  } */
-
   return (
     <>
       <Panel
@@ -94,7 +68,7 @@ function ManagerPuzzleSchedulableList() {
             style={{ backgroundColor: '#1e3978', color: '#FCFCFC' }}
             icon={<FormOutlined />}
             onClick={() => {
-              history.push(`/gestao/horarios/cadastro`)
+              history.push(`/manager/professional/schedules/create`)
             }}
           >
             Cadastrar Horário
@@ -104,27 +78,13 @@ function ManagerPuzzleSchedulableList() {
         <Row gutter={[24, 24]} style={{ width: '100%' }}>
           <Col xs={{ span: 24 }} lg={{ span: 24 }}>
             <Statistic
-              title='Controle os horários disponíveis por dia da semana'
+              title='Controle os horários de funcionamento por dia da semana'
               value={dataSchedule.length}
             />
           </Col>
 
           <Col xs={{ span: 24 }} lg={{ span: 24 }}>
-            <Panel
-              title={'Horários Disponíveis'}
-
-              /* action={
-            <Button
-              style={{ backgroundColor: '#1e3978', color: '#FCFCFC' }}
-              icon={<FormOutlined />}
-              onClick={() => {
-                history.push('/gestao/modulos/cadastro')
-              }}
-            >
-              Listar Todos
-            </Button>
-          } */
-            >
+            <Panel title={'Horários Disponíveis'}>
               {!isMobile ? (
                 <List
                   grid={{
@@ -177,9 +137,9 @@ function ManagerPuzzleSchedulableList() {
                       >
                         <p>
                           {' '}
-                          <strong>Horário de abertura:</strong>{' '}
+                          <strong>Aabertura:</strong>{' '}
                           {time_format(item.start_time)}{' '}
-                          <strong>Horário de fechamento:</strong>{' '}
+                          <strong>Fechamento:</strong>{' '}
                           {time_format(item.end_time)}{' '}
                         </p>
                       </Card>
@@ -189,24 +149,10 @@ function ManagerPuzzleSchedulableList() {
               )}
             </Panel>
           </Col>
-
-          {/* {currentPuzzle && currentPuzzle.chartable===true &&
-
-          <Col xs={{ span: 24 }} lg={{ span: 24 }}>
-            <Panel title={'Análise dos Itens'}>
-            {dataItem.length>0 &&
-              <Donut
-                title={'Porcentagem de estoque dos itens'}
-                data={dataItem}
-              />
-            }
-            </Panel>
-          </Col>
-        } */}
         </Row>
       </Panel>
     </>
   )
 }
 
-export default ManagerPuzzleSchedulableList
+export default ManagerProfessionalSchedulesList
