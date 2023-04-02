@@ -6,6 +6,10 @@ import { useHistory, useParams } from 'react-router-dom'
 import api from '../../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
+import {
+  minutesToHourString,
+  priceToCurrencyString,
+} from '../../../../utils/format'
 
 function ServicesList() {
   const isMobile = window.innerWidth < 720
@@ -18,27 +22,6 @@ function ServicesList() {
       setDataItem(response.data.data)
     })
   }, [params.puzzle_id])
-
-  const priceFormat = (price: any) => {
-    return `R$${price},00`
-  }
-
-  const timeFormat = (time: any) => {
-    const minutesCalc = time % 60
-    const hourCalc = Math.trunc(time / 60)
-
-    if (!hourCalc) return `${minutesCalc}min`
-    if (!minutesCalc) return `${hourCalc}h`
-
-    const minutes = adicionaZero(time % 60)
-
-    return `${hourCalc}h${minutes}min`
-  }
-
-  function adicionaZero(numero: any) {
-    if (numero <= 9) return '0' + numero
-    else return numero
-  }
 
   return (
     <>
@@ -89,12 +72,13 @@ function ServicesList() {
                           </p>,
                           <p>
                             {' '}
-                            <strong> Preço:</strong> {priceFormat(item.price)}
+                            <strong> Preço:</strong>{' '}
+                            {priceToCurrencyString(item.price)}
                           </p>,
                           <p>
                             {' '}
                             <strong> Duração:</strong>{' '}
-                            {timeFormat(item.duration)}
+                            {minutesToHourString(item.duration)}
                           </p>,
                         ]}
                       </Card>
@@ -122,8 +106,13 @@ function ServicesList() {
                           </p>,
                           <p>
                             {' '}
-                            <strong> Estoque inicial:</strong>{' '}
-                            {item.controlable && item.controlable_amount}
+                            <strong> Preço:</strong>{' '}
+                            {priceToCurrencyString(item.price)}
+                          </p>,
+                          <p>
+                            {' '}
+                            <strong> Duração:</strong>{' '}
+                            {minutesToHourString(item.duration)}
                           </p>,
                         ]}
                       </Card>

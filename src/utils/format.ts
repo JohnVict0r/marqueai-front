@@ -22,14 +22,6 @@ export const dateWithoutTimestamp = (date: any) => {
   return date.split('T')[0]
 }
 
-export const minutesToHourString = (minutes: any) => {
-  if (!minutes) return
-  const hours = Math.trunc(minutes / 60);
-  const min = minutes % 60
-
-  return `${hours}h ${min}min`
-}
-
 export const dateExtend = (date: any) => {
   const [year, month, day] = date.split('T')[0].split('-')
 
@@ -40,4 +32,27 @@ export const dateInitial = (date: any) => {
   const [year, month, day] = date.split('T')[0].split('-')
 
   return `${day}/${month}/${year}`
+}
+
+export const minutesToHourString = (minutes: number): string => {
+  const hourCalc = Math.trunc(minutes / 60)
+
+  if (!hourCalc) return `${minutes}min`
+
+  const minutesCalc = minutes % 60
+
+  if (!minutesCalc) return `${hourCalc}h`
+
+  const minutesWithZero = addZero(minutes % 60)
+
+  return `${hourCalc}h${minutesWithZero}min`
+}
+
+function addZero(numero: any) {
+  if (numero <= 9) return '0' + numero
+  else return numero
+}
+
+export const priceToCurrencyString = (price: any) => {
+  return `R$${price},00`
 }
