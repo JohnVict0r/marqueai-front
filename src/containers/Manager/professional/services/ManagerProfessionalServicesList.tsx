@@ -11,7 +11,7 @@ import {
   priceToCurrencyString,
 } from '../../../../utils/format'
 
-function ServicesList() {
+function ManagerProfessionalServicesList() {
   const isMobile = window.innerWidth < 720
   const params = useParams<any>()
   const history = useHistory()
@@ -128,4 +128,4 @@ function ServicesList() {
   )
 }
 
-export default ServicesList
+export default ManagerProfessionalServicesList

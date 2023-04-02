@@ -1,22 +1,10 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import {
-  Form,
-  Input,
-  Button,
-  Tooltip,
-  Radio,
-  Row,
-  Col,
-  InputNumber,
-  message,
-} from 'antd'
+import { Form, Input, Button, Row, Col, InputNumber } from 'antd'
 
 import Panel from '../../../../components/Panel'
 
-import { QuestionCircleOutlined } from '@ant-design/icons'
-
 import api from '../../../../services/api'
+import { useNotification } from '../../../../contexts/notification'
 
 const validateMessages = {
   // eslint-disable-next-line
@@ -32,10 +20,10 @@ const validateMessages = {
   },
 }
 
-function ManagerServicesCreate() {
+function ManagerProfessionalServicesCreate() {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
-  const [messageApi, contextHolder] = message.useMessage()
+  const { openNotification } = useNotification()
 
   const onFinish = (values: any) => {
     setLoading(true)
@@ -47,10 +35,9 @@ function ManagerServicesCreate() {
       .then(() => {
         setLoading(false)
         form.resetFields()
-        messageApi.open({
+        openNotification({
           type: 'success',
-          content: 'Serviço cadastrado com sucesso!',
-          duration: 3,
+          message: 'Serviço cadastrado com sucesso!',
         })
       })
       .catch(({ response }) => {
@@ -68,7 +55,6 @@ function ManagerServicesCreate() {
 
   return (
     <>
-      {contextHolder}
       <Panel title='Cadastrar Serviço'>
         <Row gutter={[24, 24]} style={{ width: '100%' }}>
           <Col xs={{ span: 24 }} lg={{ span: 12, offset: 6 }}>
@@ -235,4 +221,4 @@ function ManagerServicesCreate() {
   )
 }
 
-export default ManagerServicesCreate
+export default ManagerProfessionalServicesCreate
