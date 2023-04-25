@@ -30,6 +30,8 @@ import ManagerProfessionalSchedulesCreate from './containers/manager/professiona
 import Welcome from './containers/auth/Welcome'
 import UserAppointmentList from './containers/customer/UserAppointmentList'
 import ManagerEstablishmentList from './containers/manager/establishiment/ManagerEstablishmentList'
+import Chat from './containers/customer/Chat'
+import Page404 from './containers/public/404'
 interface IPublicRouteProps {
   component: any
 }
@@ -108,6 +110,8 @@ function Routes() {
       <Switch>
         <Route path='/termos-de-uso' component={Terms} />
         <Route path='/politica-de-privacidade' component={PrivacyPolicy} />
+        <Route path='/404' component={Page404} />
+
         <PublicRoute path='/login' component={Login} />
         <PublicRoute path='/cadastro' component={SignUp} />
         {/*<PublicRoute path='/esqueceu-a-senha' component={ForgotPassword} /> */}
@@ -115,6 +119,7 @@ function Routes() {
         <PublicRoute path='/verify-email/:token' component={VerifyEmail} />
         <PublicRoute path='/bem-vindo' component={Welcome} />
         <PublicRoute path='/success/:type' component={Success} />
+        <PublicRoute path='/:username' component={Chat} />
         <PrivateRoute path='/cidadao/inicio' component={Home} />
         <PrivateRoute path='/cidadao/perfil' exact component={Profile} />
         <PrivateRoute

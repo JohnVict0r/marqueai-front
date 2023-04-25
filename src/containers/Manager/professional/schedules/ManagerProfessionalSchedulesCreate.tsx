@@ -40,7 +40,7 @@ function ManagerProfessionalSchedulesCreate() {
     const endTimeInMinutes = (endHour || 0) * 60 + (endMinutes || 0)
 
     api
-      .post(`/schedules`, {
+      .post(`/me/schedules`, {
         ...values,
         start_time: startTimeInMinutes,
         end_time: endTimeInMinutes,

@@ -24,7 +24,6 @@ export const dateWithoutTimestamp = (date: any) => {
 
 export const dateExtend = (date: any) => {
   const [year, month, day] = date.split('T')[0].split('-')
-
   return `Dia ${day} de ${textMonths[Number(month)]} de ${year}`
 }
 

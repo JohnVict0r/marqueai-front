@@ -18,10 +18,10 @@ function ManagerProfessionalServicesList() {
   const [dataItem, setDataItem] = useState<any[]>([])
 
   useEffect(() => {
-    api.get(`/services`).then(response => {
+    api.get(`/me/services`).then(response => {
       setDataItem(response.data.data)
     })
-  }, [params.puzzle_id])
+  }, [])
 
   return (
     <>

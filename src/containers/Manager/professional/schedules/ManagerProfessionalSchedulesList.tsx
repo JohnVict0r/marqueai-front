@@ -32,7 +32,7 @@ function ManagerProfessionalSchedulesList() {
   }
 
   useEffect(() => {
-    api.get(`/schedules`).then(response => {
+    api.get(`/me/schedules`).then(response => {
       setDataSchedule(response.data.data)
     })
   }, [])

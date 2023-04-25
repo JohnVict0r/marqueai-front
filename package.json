@@ -1,5 +1,5 @@
 {
-  "name": "gestio-web",
+  "name": "marqueai-front",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,6 +21,7 @@
     "craco-less": "^1.17.0",
     "hammerjs": "^2.0.8",
     "react": "^16.13.1",
+    "react-day-picker": "^8.7.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",

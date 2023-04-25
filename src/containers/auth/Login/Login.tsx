@@ -49,7 +49,7 @@ const Login: FC = () => {
   }
   return (
     <>
-      <Typography.Title
+      {/* <Typography.Title
         style={{
           textAlign: 'center',
           fontSize: `32px`,
@@ -59,7 +59,7 @@ const Login: FC = () => {
         }}
       >
         Realize o Login
-      </Typography.Title>
+      </Typography.Title> */}
       <Form
         name='login-form'
         className='login-form'

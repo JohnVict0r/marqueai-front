@@ -27,9 +27,8 @@ function ManagerProfessionalServicesCreate() {
 
   const onFinish = (values: any) => {
     setLoading(true)
-    console.log(values)
     api
-      .post(`/services`, {
+      .post(`/me/services`, {
         ...values,
       })
       .then(() => {
@@ -43,6 +42,8 @@ function ManagerProfessionalServicesCreate() {
       .catch(({ response }) => {
         setLoading(false)
         if (response.data) {
+          console.log(response.data)
+
           form.setFields([
             {
               name: 'description',

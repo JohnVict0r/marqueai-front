@@ -1,6 +1,6 @@
 {
-  "short_name": "Gestio",
-  "name": "Gestio Soluções",
+  "short_name": "MarqueAí",
+  "name": "MarqueAí",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "gestio.png",
+      "src": "marqueai.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "gestio.png",
+      "src": "marqueai.png",
       "type": "image/png",
       "sizes": "512x512"
     }

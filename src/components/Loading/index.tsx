@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react'
 
-import "./styles.css";
+import './styles.less'
 
 const Loading: React.FC = () => {
   return (
-    <div className="loading">
-      <div className="ring"></div>
+    <div className='loading'>
+      <div className='ring'></div>
     </div>
-  );
-};
+  )
+}
 
-export default Loading;
+export default Loading
