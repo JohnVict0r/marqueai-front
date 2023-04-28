@@ -60,7 +60,10 @@ const months = [
 
 const initialData = {
   name: '',
+  number: '',
   services: [],
+  date: '',
+  price: 0,
 }
 
 const Chat: FC = () => {
@@ -69,10 +72,12 @@ const Chat: FC = () => {
   const [form] = Form.useForm()
   const [messages, setMessages] = useState(initialMessages)
   const [name, setName] = useState('')
+  const [areaCode, setAreaCode] = useState('84')
+  const [number, setNumber] = useState('')
   const [data, setData] = useState(initialData)
   const [services, setServices] = useState([])
   const [currentStep, setCurrentStep] = useState(0)
-  const [servicesSelected, setServicesSelected] = useState([])
+  const [servicesSelected, setServicesSelected] = useState<any>([])
   const [schedules, setSchedules] = useState([])
   const [schedule, setSchedule] = useState()
   const [date, setDate] = useState()
@@ -117,6 +122,20 @@ const Chat: FC = () => {
     setCurrentStep(currentStep + 1)
   }
 
+  const addNumber = () => {
+    setData({
+      ...data,
+      number: areaCode + number,
+    })
+    setMessages([
+      ...messages,
+      customerMessage(name),
+      botMessage(`Excelente, ${name}! Bora lá?`),
+      botMessage('Para qual serviço você deseja marcar um horário?'),
+    ])
+    setCurrentStep(currentStep + 1)
+  }
+
   const getSchedules = () => {
     api
       .post(`/schedules/available`, {
@@ -128,7 +147,7 @@ const Chat: FC = () => {
       })
       .then(response => {
         setLoading(false)
-        if (typeof response.data === 'string') {
+        if (typeof response.data === 'string' || !response.data.length) {
           setMessages([
             ...messages,
             customerMessage(
@@ -154,17 +173,24 @@ const Chat: FC = () => {
   }
 
   const addService = () => {
+    const servicesTotalPrice = services
+      .filter((item: any) => servicesSelected.includes(item.id))
+      .reduce((accumulator, item: any) => accumulator + item.price, 0)
+
     setData({
       ...data,
       services: servicesSelected,
+      price: servicesTotalPrice,
     })
 
-    // const serviceFinded = services.find(
-    //   (item: any) => item.id === service
-    // ) as any
+    const serviceNames = services
+      .filter((item: any) => servicesSelected.includes(item.id))
+      .map((item: any) => item.name)
+      .join(', ')
+
     setMessages([
       ...messages,
-      //customerMessage(serviceFinded?.name),
+      customerMessage(serviceNames),
       botMessage('Qual dia você deseja agendar?'),
     ])
     setCurrentStep(currentStep + 1)
@@ -181,18 +207,39 @@ const Chat: FC = () => {
 
   const addDate = () => {
     setLoading(true)
-    setMessages([
-      ...messages,
-      customerMessage(
-        dateExtend(
-          `${year}-${month < 10 ? '0' + month : month}-${
-            day < 10 ? '0' + day : day
-          }`
-        ) || ''
-      ),
-    ])
+    const dateValue = `${year}-${month < 10 ? '0' + month : month}-${
+      day < 10 ? '0' + day : day
+    }`
+    setData({
+      ...data,
+      date: dateValue,
+    })
+
+    setMessages([...messages, customerMessage(dateExtend(dateValue) || '')])
     setCurrentStep(currentStep + 1)
     setTimeout(getSchedules, 1000)
+  }
+
+  const handleCreateAppoitment = () => {
+    setLoading(true)
+    const servicesTotalTime = services
+      .filter((item: any) => servicesSelected.includes(item.id))
+      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
+
+    api
+      .post(`/appointments`, {
+        ...data,
+        user_id: (professional as any).id,
+        type: 'service',
+        start_time: schedule,
+        end_time: Number(schedule) + servicesTotalTime,
+        status: 'pending',
+      })
+      .then(response => {
+        setLoading(false)
+        console.log(response)
+        history.push('/success')
+      })
   }
 
   if (professionalLoading) return <Spin />
@@ -240,16 +287,53 @@ const Chat: FC = () => {
           </Button>
         </>
       )}
+
       {currentStep === 1 && (
         <>
+          <Space direction='vertical' size='middle'>
+            <Input
+              style={{ width: '10%' }}
+              value={areaCode}
+              onChange={e => setAreaCode(e.target.value)}
+            />
+            <Input
+              style={{ width: '90%' }}
+              value={number}
+              onChange={e => setNumber(e.target.value)}
+            />
+          </Space>
+          <Button
+            type='primary'
+            htmlType='submit'
+            className='login-form-button'
+            size='large'
+            style={{
+              height: `48px`,
+              fontSize: `16px`,
+              fontWeight: `bold`,
+              marginBottom: '48px',
+            }}
+            disabled={name === ''}
+            onClick={addNumber}
+          >
+            Enviar
+          </Button>
+        </>
+      )}
+      {currentStep === 2 && (
+        <>
           <Checkbox.Group
-            style={{ width: '100%' }}
+            style={{ width: '100%', display: 'flex', flexDirection: 'column' }}
             onChange={(checkedValues: any) =>
               setServicesSelected(checkedValues)
             }
           >
             {services.map((service: any) => (
-              <Checkbox key={service.id} value={service.id}>
+              <Checkbox
+                style={{ marginLeft: 0 }}
+                key={service.id}
+                value={service.id}
+              >
                 {service.name} | {minutesToHourString(service.duration)} |{' '}
                 {priceToCurrencyString(service.price)}
               </Checkbox>
@@ -273,7 +357,7 @@ const Chat: FC = () => {
           </Button>
         </>
       )}
-      {!loading && currentStep === 2 && (
+      {!loading && currentStep === 3 && (
         <>
           <div
             style={{
@@ -332,7 +416,7 @@ const Chat: FC = () => {
           </Button>
         </>
       )}
-      {!loading && currentStep === 3 && (
+      {!loading && currentStep === 4 && (
         <>
           <Space direction='vertical' style={{ width: '100%' }}>
             <Select
@@ -360,7 +444,7 @@ const Chat: FC = () => {
               marginTop: '8px',
             }}
             disabled={name === ''}
-            onClick={() => console.log('Agendamento finalizado!')}
+            onClick={handleCreateAppoitment}
           >
             Finalizar Agendamento
           </Button>
