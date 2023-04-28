@@ -72,7 +72,6 @@ const Chat: FC = () => {
   const [form] = Form.useForm()
   const [messages, setMessages] = useState(initialMessages)
   const [name, setName] = useState('')
-  const [areaCode, setAreaCode] = useState('84')
   const [number, setNumber] = useState('')
   const [data, setData] = useState(initialData)
   const [services, setServices] = useState([])
@@ -117,7 +116,7 @@ const Chat: FC = () => {
       ...messages,
       customerMessage(name),
       botMessage(`Excelente, ${name}! Bora lá?`),
-      botMessage('Para qual serviço você deseja marcar um horário?'),
+      botMessage('Poderia informar um telefone/celular para contato?'),
     ])
     setCurrentStep(currentStep + 1)
   }
@@ -125,12 +124,11 @@ const Chat: FC = () => {
   const addNumber = () => {
     setData({
       ...data,
-      number: areaCode + number,
+      number,
     })
     setMessages([
       ...messages,
-      customerMessage(name),
-      botMessage(`Excelente, ${name}! Bora lá?`),
+      customerMessage(number),
       botMessage('Para qual serviço você deseja marcar um horário?'),
     ])
     setCurrentStep(currentStep + 1)
@@ -165,6 +163,13 @@ const Chat: FC = () => {
         } else {
           setMessages([
             ...messages,
+            customerMessage(
+              dateExtend(
+                `${year}-${month < 10 ? '0' + month : month}-${
+                  day < 10 ? '0' + day : day
+                }`
+              ) || ''
+            ),
             botMessage('Qual horário você deseja marcar?'),
           ])
           setSchedules(response.data)
@@ -232,7 +237,7 @@ const Chat: FC = () => {
         user_id: (professional as any).id,
         type: 'service',
         start_time: schedule,
-        end_time: Number(schedule) + servicesTotalTime,
+        end_time: Number(schedule) + servicesTotalTime - 1,
         status: 'pending',
       })
       .then(response => {
@@ -290,18 +295,16 @@ const Chat: FC = () => {
 
       {currentStep === 1 && (
         <>
-          <Space direction='vertical' size='middle'>
-            <Input
-              style={{ width: '10%' }}
-              value={areaCode}
-              onChange={e => setAreaCode(e.target.value)}
-            />
-            <Input
-              style={{ width: '90%' }}
-              value={number}
-              onChange={e => setNumber(e.target.value)}
-            />
-          </Space>
+          <Input
+            value={number}
+            onChange={e => setNumber(e.target.value)}
+            placeholder='Ex.: (84) 994654749'
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                addNumber()
+              }
+            }}
+          />
           <Button
             type='primary'
             htmlType='submit'
@@ -313,7 +316,7 @@ const Chat: FC = () => {
               fontWeight: `bold`,
               marginBottom: '48px',
             }}
-            disabled={name === ''}
+            disabled={number === ''}
             onClick={addNumber}
           >
             Enviar
