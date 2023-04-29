@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import {
   Form,
   Input,
@@ -26,6 +26,7 @@ import {
   minutesToHourString,
   priceToCurrencyString,
 } from '../../../utils/format'
+import { setCustomerAppointment } from '../../../utils/authentication'
 
 const botMessage = (msg: string) => ({
   message: msg,
@@ -42,6 +43,20 @@ const initialMessages = [
   botMessage('Sou o Mark, assistente virtual para marcar o seu horário!'),
   botMessage('Qual o seu nome, por favor?'),
 ]
+
+const validateMessages = {
+  // eslint-disable-next-line
+  required: '${label} é um campo obrigatório!',
+  types: {
+    email: 'Por favor, insira um E-mail válido!',
+    // eslint-disable-next-line
+    number: '${label} is not a validate number!',
+  },
+  number: {
+    // eslint-disable-next-line
+    range: '${label} must be between ${min} and ${max}',
+  },
+}
 
 const months = [
   { name: 'Janeiro', value: 1 },
@@ -61,18 +76,24 @@ const months = [
 const initialData = {
   name: '',
   number: '',
+  email: '',
   services: [],
+  serviceNames: '',
   date: '',
+  dateExtend: '',
   price: 0,
 }
 
 const Chat: FC = () => {
   const history = useHistory()
   const params = useParams() as any
-  const [form] = Form.useForm()
+  const [formEmail] = Form.useForm()
   const [messages, setMessages] = useState(initialMessages)
+  const messagesEndRef = useRef(null) as any
+
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
+  const [email, setEmail] = useState('')
   const [data, setData] = useState(initialData)
   const [services, setServices] = useState([])
   const [currentStep, setCurrentStep] = useState(0)
@@ -107,6 +128,12 @@ const Chat: FC = () => {
     })
   }, [])
 
+  useEffect(() => {
+    messagesEndRef &&
+      messagesEndRef.current &&
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
   const addName = () => {
     setData({
       ...data,
@@ -129,6 +156,30 @@ const Chat: FC = () => {
     setMessages([
       ...messages,
       customerMessage(number),
+      botMessage(
+        'Deseja receber notificações via e-mail? informe o seu, por favor.'
+      ),
+    ])
+    setCurrentStep(currentStep + 1)
+  }
+
+  const addEmail = () => {
+    setData({
+      ...data,
+      email,
+    })
+    setMessages([
+      ...messages,
+      customerMessage(email),
+      botMessage('Para qual serviço você deseja marcar um horário?'),
+    ])
+    setCurrentStep(currentStep + 1)
+  }
+
+  const nextEmail = () => {
+    setMessages([
+      ...messages,
+      customerMessage('Não'),
       botMessage('Para qual serviço você deseja marcar um horário?'),
     ])
     setCurrentStep(currentStep + 1)
@@ -182,16 +233,17 @@ const Chat: FC = () => {
       .filter((item: any) => servicesSelected.includes(item.id))
       .reduce((accumulator, item: any) => accumulator + item.price, 0)
 
-    setData({
-      ...data,
-      services: servicesSelected,
-      price: servicesTotalPrice,
-    })
-
     const serviceNames = services
       .filter((item: any) => servicesSelected.includes(item.id))
       .map((item: any) => item.name)
       .join(', ')
+
+    setData({
+      ...data,
+      services: servicesSelected,
+      price: servicesTotalPrice,
+      serviceNames,
+    })
 
     setMessages([
       ...messages,
@@ -218,6 +270,7 @@ const Chat: FC = () => {
     setData({
       ...data,
       date: dateValue,
+      dateExtend: dateExtend(dateValue) || '',
     })
 
     setMessages([...messages, customerMessage(dateExtend(dateValue) || '')])
@@ -237,12 +290,12 @@ const Chat: FC = () => {
         user_id: (professional as any).id,
         type: 'service',
         start_time: schedule,
-        end_time: Number(schedule) + servicesTotalTime - 1,
+        end_time: Number(schedule) + servicesTotalTime,
         status: 'pending',
       })
       .then(response => {
         setLoading(false)
-        console.log(response)
+        setCustomerAppointment({ ...response.data, ...data, schedule })
         history.push('/success')
       })
   }
@@ -251,177 +304,163 @@ const Chat: FC = () => {
 
   return (
     <>
-      <List
-        size='large'
-        dataSource={messages}
-        renderItem={item => (
-          <List.Item
-            key={item.message}
-            style={{
-              justifyContent: item.type === 'BOT' ? 'flex-start' : 'flex-end',
-            }}
-          >
-            {item.message}
-          </List.Item>
+      <div style={{ height: '50vh', overflowY: 'auto' }}>
+        <List
+          size='large'
+          dataSource={messages}
+          renderItem={item => (
+            <List.Item
+              key={item.message}
+              style={{
+                justifyContent: item.type === 'BOT' ? 'flex-start' : 'flex-end',
+              }}
+            >
+              {item.message}
+            </List.Item>
+          )}
+        />
+        <div ref={messagesEndRef}></div>
+      </div>
+      <div
+        style={{
+          maxHeight: '10vh',
+        }}
+      >
+        {currentStep === 0 && (
+          <>
+            <Input
+              size='large'
+              placeholder='Nome'
+              value={name}
+              onChange={e => setName(e.target.value)}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  addName()
+                }
+              }}
+            />
+          </>
         )}
-      />
-      <br />
-      {currentStep === 0 && (
-        <>
-          <Input
-            size='large'
-            placeholder='Nome'
-            value={name}
-            onChange={e => setName(e.target.value)}
-            onKeyPress={e => {
-              if (e.key === 'Enter') {
-                addName()
-              }
-            }}
-          />
-          <Button
-            type='primary'
-            htmlType='submit'
-            className='login-form-button'
-            size='large'
-            style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
-            disabled={name === ''}
-            onClick={addName}
-          >
-            Enviar
-          </Button>
-        </>
-      )}
 
-      {currentStep === 1 && (
-        <>
-          <Input
-            value={number}
-            onChange={e => setNumber(e.target.value)}
-            placeholder='Ex.: (84) 994654749'
-            onKeyPress={e => {
-              if (e.key === 'Enter') {
-                addNumber()
-              }
-            }}
-          />
-          <Button
-            type='primary'
-            htmlType='submit'
-            className='login-form-button'
-            size='large'
-            style={{
-              height: `48px`,
-              fontSize: `16px`,
-              fontWeight: `bold`,
-              marginBottom: '48px',
-            }}
-            disabled={number === ''}
-            onClick={addNumber}
+        {currentStep === 1 && (
+          <>
+            <Input
+              size='large'
+              value={number}
+              onChange={e => setNumber(e.target.value)}
+              placeholder='Ex.: (84) 994654749'
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  addNumber()
+                }
+              }}
+            />
+          </>
+        )}
+        {currentStep === 2 && (
+          <>
+            <Form
+              name='nest-messages'
+              form={formEmail}
+              onFinish={addEmail}
+              validateMessages={validateMessages}
+            >
+              <Form.Item name={['user', 'email']} rules={[{ type: 'email' }]}>
+                <Input
+                  type='email'
+                  size='large'
+                  placeholder='Ex.: nome@email.com'
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      formEmail.submit()
+                    }
+                  }}
+                />
+              </Form.Item>
+            </Form>
+          </>
+        )}
+        {currentStep === 3 && (
+          <>
+            <Select
+              mode='multiple'
+              size='large'
+              allowClear
+              style={{ width: '100%' }}
+              placeholder='Selecione um ou mais serviços'
+              value={servicesSelected}
+              onChange={(values: any) => {
+                setServicesSelected(values)
+              }}
+              options={services.map((item: any) => ({
+                value: item.id,
+                label: item.name,
+              }))}
+            />
+          </>
+        )}
+        {!loading && currentStep === 4 && (
+          <>
+            <div
+              style={{
+                marginTop: '8px',
+                marginBottom: '32px',
+              }}
+            >
+              <Space>
+                <InputNumber
+                  placeholder='Dia'
+                  min={moment().month() === month - 1 ? moment().date() : 1}
+                  max={31}
+                  value={day}
+                  onChange={value => {
+                    setDay(value)
+                  }}
+                />
+                <Select
+                  placeholder='Mês'
+                  style={{ width: '100px' }}
+                  value={month}
+                  onChange={value => {
+                    setMonth(value)
+                  }}
+                >
+                  {months
+                    .filter(item => {
+                      const currentYear = moment().year() === year
+                      if (currentYear && item.value < month) return false
+                      return true
+                    })
+                    .map(item => (
+                      <Select.Option value={item.value}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                </Select>
+                <InputNumber
+                  placeholder='Ano'
+                  min={moment().year()}
+                  max={moment().year() + 1}
+                  value={year}
+                  onChange={(value: any) => {
+                    setYear(value)
+                    if (value === moment().year()) {
+                      setMonth(moment().month() + 1)
+                      setDay(moment().date())
+                    }
+                  }}
+                />
+              </Space>
+            </div>
+          </>
+        )}
+        {!loading && currentStep === 5 && (
+          <Space
+            direction='vertical'
+            style={{ width: '100%', marginBottom: '8px' }}
           >
-            Enviar
-          </Button>
-        </>
-      )}
-      {currentStep === 2 && (
-        <>
-          <Checkbox.Group
-            style={{ width: '100%', display: 'flex', flexDirection: 'column' }}
-            onChange={(checkedValues: any) =>
-              setServicesSelected(checkedValues)
-            }
-          >
-            {services.map((service: any) => (
-              <Checkbox
-                style={{ marginLeft: 0 }}
-                key={service.id}
-                value={service.id}
-              >
-                {service.name} | {minutesToHourString(service.duration)} |{' '}
-                {priceToCurrencyString(service.price)}
-              </Checkbox>
-            ))}
-          </Checkbox.Group>
-          <Button
-            type='primary'
-            htmlType='submit'
-            className='login-form-button'
-            size='large'
-            style={{
-              height: `48px`,
-              fontSize: `16px`,
-              fontWeight: `bold`,
-              marginBottom: '48px',
-            }}
-            disabled={name === ''}
-            onClick={addService}
-          >
-            Enviar
-          </Button>
-        </>
-      )}
-      {!loading && currentStep === 3 && (
-        <>
-          <div
-            style={{
-              marginTop: '8px',
-              marginBottom: '32px',
-            }}
-          >
-            <Space>
-              <InputNumber
-                placeholder='Dia'
-                min={moment().date()}
-                max={31}
-                value={day}
-                onChange={value => {
-                  setDay(value)
-                }}
-              />
-              <Select
-                placeholder='Mês'
-                style={{ width: '100px' }}
-                value={month}
-                onChange={value => {
-                  setMonth(value)
-                }}
-              >
-                {months.map(item => (
-                  <Select.Option value={item.value}>{item.name}</Select.Option>
-                ))}
-              </Select>
-              <InputNumber
-                placeholder='Ano'
-                min={moment().year()}
-                max={moment().year() + 1}
-                value={year}
-                onChange={(value: any) => {
-                  setYear(value)
-                }}
-              />
-            </Space>
-          </div>
-          <Button
-            type='primary'
-            htmlType='submit'
-            className='login-form-button'
-            size='large'
-            style={{
-              height: `48px`,
-              fontSize: `16px`,
-              fontWeight: `bold`,
-              marginBottom: '48px',
-            }}
-            disabled={!day && !month && !year}
-            onClick={addDate}
-          >
-            Enviar
-          </Button>
-        </>
-      )}
-      {!loading && currentStep === 4 && (
-        <>
-          <Space direction='vertical' style={{ width: '100%' }}>
             <Select
               size='large'
               style={{ width: '100%' }}
@@ -434,41 +473,122 @@ const Chat: FC = () => {
               onChange={value => setSchedule(value)}
             />
           </Space>
+        )}
 
+        {loading && <Spin />}
+      </div>
+      <div
+        style={{
+          height: '20vh',
+          alignItems: 'flex-end',
+          justifyItems: 'flex-end',
+        }}
+      >
+        {currentStep === 0 && (
           <Button
             type='primary'
             htmlType='submit'
             className='login-form-button'
             size='large'
-            style={{
-              height: `48px`,
-              fontSize: `16px`,
-              fontWeight: `bold`,
-              marginTop: '8px',
-            }}
+            style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
             disabled={name === ''}
-            onClick={handleCreateAppoitment}
+            onClick={addName}
           >
-            Finalizar Agendamento
+            Enviar
           </Button>
+        )}
+
+        {currentStep === 1 && (
+          <>
+            <Button
+              type='primary'
+              htmlType='submit'
+              className='login-form-button'
+              size='large'
+              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              disabled={number === ''}
+              onClick={addNumber}
+            >
+              Enviar
+            </Button>
+          </>
+        )}
+        {currentStep === 2 && (
+          <>
+            <Button
+              type='primary'
+              htmlType='submit'
+              className='login-form-button'
+              size='large'
+              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              disabled={email === ''}
+              onClick={() => formEmail.submit()}
+            >
+              Enviar
+            </Button>
+            <Button
+              htmlType='submit'
+              className='login-form-button'
+              size='large'
+              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              onClick={() => nextEmail()}
+            >
+              Pular
+            </Button>
+          </>
+        )}
+        {currentStep === 3 && (
           <Button
+            type='primary'
             htmlType='submit'
             className='login-form-button'
             size='large'
-            style={{
-              height: `48px`,
-              fontSize: `16px`,
-              fontWeight: `bold`,
-              marginBottom: '48px',
-            }}
+            style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
             disabled={name === ''}
-            onClick={backToDateChange}
+            onClick={addService}
           >
-            Voltar
+            Enviar
           </Button>
-        </>
-      )}
-      {loading && <Spin />}
+        )}
+        {!loading && currentStep === 4 && (
+          <Button
+            type='primary'
+            htmlType='submit'
+            className='login-form-button'
+            size='large'
+            style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+            disabled={!day && !month && !year}
+            onClick={addDate}
+          >
+            Verificar
+          </Button>
+        )}
+        {!loading && currentStep === 5 && (
+          <>
+            <Button
+              type='primary'
+              htmlType='submit'
+              className='login-form-button'
+              size='large'
+              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              disabled={name === ''}
+              onClick={handleCreateAppoitment}
+            >
+              Finalizar Agendamento
+            </Button>
+            <Button
+              htmlType='submit'
+              className='login-form-button'
+              size='large'
+              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              disabled={name === ''}
+              onClick={backToDateChange}
+            >
+              Voltar
+            </Button>
+          </>
+        )}
+      </div>
     </>
   )
 }

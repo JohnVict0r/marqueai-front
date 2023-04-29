@@ -4,6 +4,7 @@ const PROFILE_KEY = `${APP_KEY}:Profile`;
 const ROLES_KEY = `${APP_KEY}:Roles`;
 const FIRST_ACCESS_KEY = `${APP_KEY}:First-Access`;
 const ESTABLISHMENT_KEY = `${APP_KEY}:Establishment`;
+const CUSTOMER_APPOINTMENT_KEY = `${APP_KEY}:customer:appointment`;
 
 export const getAuthToken = () => localStorage.getItem(TOKEN_KEY) || null
 export const setAuthToken = (token: string) =>
@@ -39,5 +40,14 @@ export const isFirstAccess = () =>
 export const getEstablishment = () =>
   JSON.parse(localStorage.getItem(ESTABLISHMENT_KEY) || '') || null
 
-export const setEstablishment = (estblishment: any) =>
-  localStorage.setItem(ESTABLISHMENT_KEY, JSON.stringify(estblishment))
+export const setEstablishment = (establishment: any) =>
+  localStorage.setItem(ESTABLISHMENT_KEY, JSON.stringify(establishment))
+
+
+export const getCustomerAppointment = () => {
+  const value = localStorage.getItem(CUSTOMER_APPOINTMENT_KEY)
+  if (!value) return null
+  return JSON.parse(value)
+}
+export const setCustomerAppointment = (data: any) =>
+  localStorage.setItem(CUSTOMER_APPOINTMENT_KEY, JSON.stringify(data))
