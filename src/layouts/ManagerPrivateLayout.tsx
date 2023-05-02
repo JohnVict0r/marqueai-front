@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { Layout, Button, Menu, Dropdown, Image, Drawer } from 'antd'
+import { Layout, Button, Menu, Dropdown, Drawer } from 'antd'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -13,8 +13,6 @@ import {
 } from '@ant-design/icons'
 
 import './PrivateLayout.less'
-import Logo from '../../assets/logos/gestio_azul.png'
-import LogoSmall from '../../assets/logos/g_azul.png'
 import Avatar from 'antd/lib/avatar/avatar'
 import { removeAuthToken, getProfile } from '../utils/authentication'
 import { useHistory, useLocation } from 'react-router-dom'

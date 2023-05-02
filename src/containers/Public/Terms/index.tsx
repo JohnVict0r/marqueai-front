@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography, Row, Col, Layout } from 'antd'
-import PublicTopic from './components/PublicTopic'
+import PublicTopic from '../components/PublicTopic'
 
 const Terms: React.FC = () => {
   return (

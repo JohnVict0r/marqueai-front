@@ -3,17 +3,11 @@ import {
   Form,
   Input,
   Button,
-  Typography,
   List,
   Space,
-  Radio,
   Select,
-  Calendar,
   Spin,
-  DatePicker,
   InputNumber,
-  Checkbox,
-  Row,
 } from 'antd'
 
 import { useHistory, useParams } from 'react-router-dom'
@@ -21,11 +15,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import moment from 'moment'
 
 import api from '../../../services/api'
-import {
-  dateExtend,
-  minutesToHourString,
-  priceToCurrencyString,
-} from '../../../utils/format'
+import { dateExtend, minutesToHourString } from '../../../utils/format'
 import { setCustomerAppointment } from '../../../utils/authentication'
 
 const botMessage = (msg: string) => ({
@@ -100,7 +90,6 @@ const Chat: FC = () => {
   const [servicesSelected, setServicesSelected] = useState<any>([])
   const [schedules, setSchedules] = useState([])
   const [schedule, setSchedule] = useState()
-  const [date, setDate] = useState()
   const [loading, setLoading] = useState(false)
   const [professional, setProfessional] = useState()
   const [professionalLoading, setProfessionalLoading] = useState(true)
@@ -120,19 +109,19 @@ const Chat: FC = () => {
       .catch(response => {
         console.error(response)
       })
-  }, [])
+  }, [params.username, history])
 
   useEffect(() => {
     api.get(`/users/${params.username}/services`).then(response => {
       setServices(response.data.data)
     })
-  }, [])
+  }, [params.username])
 
   useEffect(() => {
     messagesEndRef &&
       messagesEndRef.current &&
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, messagesEndRef])
 
   const addName = () => {
     setData({

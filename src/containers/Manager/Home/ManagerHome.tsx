@@ -16,15 +16,13 @@ import {
   RightSquareOutlined, */
 } from '@ant-design/icons'
 // import Card from '../../../components/Card'
-import { getProfile, getRoles } from '../../../utils/authentication'
+import { getProfile } from '../../../utils/authentication'
 // import api from '../../../services/api'
 // import Card from '../../../components/Card'
 // import { dateExtend } from '../../../utils/format'
-import { useHistory } from 'react-router-dom'
 //import VaccineModal from '../../../components/VaccineModal'
 
 const ManagerHome: React.FC = () => {
-  const history = useHistory()
   const profile = getProfile()
   const [users, setUsers] = useState<any[]>([])
   const [dataItens, setDataItens] = useState<any[]>([])

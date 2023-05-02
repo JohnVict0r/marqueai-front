@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Panel from '../../../../components/Panel'
 import { Row, Col, List, Statistic, Button, Card } from 'antd'
 import { PushpinOutlined, FormOutlined } from '@ant-design/icons'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import api from '../../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
@@ -10,7 +10,6 @@ import { weekdays } from '../../../../utils/constants'
 
 function ManagerProfessionalSchedulesList() {
   const isMobile = window.innerWidth < 720
-  // const params = useParams<any>()
   const history = useHistory()
   const [dataSchedule, setDataSchedule] = useState<any[]>([])
 

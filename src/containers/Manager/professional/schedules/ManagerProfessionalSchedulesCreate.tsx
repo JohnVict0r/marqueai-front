@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Form, Button, Space, Select, Row, Col, InputNumber } from 'antd'
 
 import Panel from '../../../../components/Panel'
@@ -23,7 +22,6 @@ const validateMessages = {
 }
 
 function ManagerProfessionalSchedulesCreate() {
-  const params = useParams<any>()
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 

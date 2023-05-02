@@ -110,9 +110,13 @@ function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/termos-de-uso' component={Terms} />
-        <Route path='/politica-de-privacidade' component={PrivacyPolicy} />
-        <Route path='/404' component={Page404} />
+        <Route exact path='/termos-de-uso' component={Terms} />
+        <Route
+          exact
+          path='/politica-de-privacidade'
+          component={PrivacyPolicy}
+        />
+        <Route exact path='/404' component={Page404} />
         <Route exact path='/success' component={PageSuccess} />
 
         <PublicRoute path='/login' component={Login} />

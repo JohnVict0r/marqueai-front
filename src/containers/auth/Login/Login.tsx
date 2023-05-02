@@ -1,15 +1,10 @@
-import React, { FC, useState, useEffect } from 'react'
-import { Form, Input, Button, Typography, Tooltip } from 'antd'
+import React, { FC, useState } from 'react'
+import { Form, Input, Button } from 'antd'
 
 import './Login.less'
-import {
-  setAuthToken,
-  setProfile,
-  setRoles,
-} from '../../../utils/authentication'
+import { setAuthToken, setProfile } from '../../../utils/authentication'
 import api from '../../../services/api'
 import { useHistory } from 'react-router-dom'
-import { maskCPF } from '../../../utils/mask'
 
 const Login: FC = () => {
   const history = useHistory()

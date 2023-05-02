@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import Panel from '../../../../components/Panel'
 import { Row, Col, List, Button, Card } from 'antd'
 import { PushpinOutlined, FormOutlined } from '@ant-design/icons'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import api from '../../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
@@ -13,7 +13,6 @@ import {
 
 function ManagerProfessionalServicesList() {
   const isMobile = window.innerWidth < 720
-  const params = useParams<any>()
   const history = useHistory()
   const [dataItem, setDataItem] = useState<any[]>([])
 

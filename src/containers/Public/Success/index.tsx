@@ -1,7 +1,10 @@
 import React from 'react'
 import { Button, Descriptions, Result } from 'antd'
-import { getCustomerAppointment } from '../../utils/authentication'
-import { minutesToHourString, priceToCurrencyString } from '../../utils/format'
+import { getCustomerAppointment } from '../../../utils/authentication'
+import {
+  minutesToHourString,
+  priceToCurrencyString,
+} from '../../../utils/format'
 import { useHistory } from 'react-router-dom'
 
 const PageSuccess: React.FC = () => {
