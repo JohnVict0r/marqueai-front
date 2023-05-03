@@ -10,8 +10,8 @@ import PublicLayout from './layouts/PublicLayout'
 import Home from './containers/pages/Home'
 import Profile from './containers/pages/Profile'
 import Success from './containers/auth/Success'
-import Terms from './containers/public/Terms'
-import PrivacyPolicy from './containers/public/PrivacyPolicy'
+// import Terms from './containers/public/Terms'
+// import PrivacyPolicy from './containers/public/PrivacyPolicy'
 import ResetPassword from './containers/auth/ResetPassword'
 import VerifyEmail from './containers/auth/VerifyEmail'
 import ManagerProfessionalList from './containers/manager/establishiment/ManagerProfessionalList'
@@ -110,12 +110,12 @@ function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path='/termos-de-uso' component={Terms} />
-        <Route
+        {/* <Route exact path='/termos-de-uso' component={Terms} /> */}
+        {/* <Route
           exact
           path='/politica-de-privacidade'
           component={PrivacyPolicy}
-        />
+        /> */}
         <Route exact path='/404' component={Page404} />
         <Route exact path='/success' component={PageSuccess} />
 
