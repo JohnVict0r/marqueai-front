@@ -10,8 +10,8 @@ import PublicLayout from './layouts/PublicLayout'
 import Home from './containers/pages/Home'
 import Profile from './containers/pages/Profile'
 import Success from './containers/auth/Success'
-import Terms from './containers/Terms'
-// import PrivacyPolicy from './containers/public/PrivacyPolicy'
+import Terms from './containers/pages/Terms'
+import PrivacyPolicy from './containers/pages/PrivacyPolicy'
 import ResetPassword from './containers/auth/ResetPassword'
 import VerifyEmail from './containers/auth/VerifyEmail'
 import ManagerProfessionalList from './containers/manager/establishiment/ManagerProfessionalList'
@@ -31,9 +31,9 @@ import Welcome from './containers/auth/Welcome'
 import UserAppointmentList from './containers/customer/UserAppointmentList'
 import ManagerEstablishmentList from './containers/manager/establishiment/ManagerEstablishmentList'
 import Chat from './containers/customer/Chat'
-import Page404 from './containers/public/404'
+import Page404 from './containers/pages/404'
 
-import PageSuccess from './containers/public/Success'
+import PageSuccess from './containers/pages/Success'
 interface IPublicRouteProps {
   component: any
 }
@@ -111,11 +111,11 @@ function Routes() {
     <BrowserRouter>
       <Switch>
         <Route exact path='/termos-de-uso' component={Terms} />
-        {/* <Route
+        <Route
           exact
           path='/politica-de-privacidade'
           component={PrivacyPolicy}
-        /> */}
+        />
         <Route exact path='/404' component={Page404} />
         <Route exact path='/success' component={PageSuccess} />
 
