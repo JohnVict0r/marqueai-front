@@ -8,11 +8,13 @@ import {
   Select,
   Spin,
   InputNumber,
+  Image,
 } from 'antd'
 
 import { useHistory, useParams } from 'react-router-dom'
 
 import moment from 'moment'
+import Logo from '../../../assets/marqueai.png'
 
 import api from '../../../services/api'
 import { dateExtend, minutesToHourString } from '../../../utils/format'
@@ -27,6 +29,26 @@ const customerMessage = (msg: string) => ({
   message: msg,
   type: 'CUSTOMER',
 })
+
+const botMessageStyle = {
+  justifyContent: 'flex-start',
+  display: 'flex',
+  fontWeight: 500,
+  padding: '10px',
+  color: '#ffffff',
+  background: '#ff9000',
+  borderRadius: '16px',
+  maxWidth: '75%',
+}
+
+const customerMessageStyle = {
+  fontWeight: 500,
+  padding: '10px',
+  color: 'white',
+  background: '#919292',
+  borderRadius: '16px',
+  maxWidth: '75%',
+}
 
 const initialMessages = [
   botMessage('Oi, tudo bem?'),
@@ -199,7 +221,7 @@ const Chat: FC = () => {
               `oops :(, Não temos horários disponíveis para esse dia, por favor, selecione outra data.`
             ),
           ])
-          setCurrentStep(2)
+          setCurrentStep(4)
         } else {
           setMessages([
             ...messages,
@@ -289,23 +311,45 @@ const Chat: FC = () => {
       })
   }
 
-  if (professionalLoading) return <Spin />
+  if (professionalLoading)
+    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
 
   return (
     <>
+      <div
+        style={{
+          // paddingTop: '20px',
+          // paddingBottom: '10px',
+          textAlign: 'center',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '20vh',
+        }}
+      >
+        <Image src={Logo} width='240px' />
+      </div>
       <div style={{ height: '50vh', overflowY: 'auto' }}>
         <List
           size='large'
           dataSource={messages}
           renderItem={item => (
-            <List.Item
-              key={item.message}
+            <div
               style={{
+                display: 'flex',
                 justifyContent: item.type === 'BOT' ? 'flex-start' : 'flex-end',
+                margin: '10px',
               }}
             >
-              {item.message}
-            </List.Item>
+              <List.Item
+                key={item.message}
+                style={
+                  item.type === 'BOT' ? botMessageStyle : customerMessageStyle
+                }
+              >
+                {item.message}
+              </List.Item>
+            </div>
           )}
         />
         <div ref={messagesEndRef}></div>
