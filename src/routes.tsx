@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 import Login from './containers/auth/Login/Login'
-import SignUp from './containers/auth/SignUp/SignUp'
 import SelectUser from './containers/auth/SelectUser'
 import { isAuthenticated } from './utils/authentication'
 import PrivateLayout from './layouts/PrivateLayout'
@@ -12,13 +11,10 @@ import Profile from './containers/pages/Profile'
 import Success from './containers/auth/Success'
 import Terms from './containers/pages/Terms'
 import PrivacyPolicy from './containers/pages/PrivacyPolicy'
-import ResetPassword from './containers/auth/ResetPassword'
-import VerifyEmail from './containers/auth/VerifyEmail'
 import ManagerProfessionalList from './containers/Manager/establishiment/ManagerProfessionalList'
 import ManagerUserList from './containers/admin/ManagerUserList'
 import ManagerProfessionalCreate from './containers/Manager/establishiment/ManagerProfessionalCreate'
 import ManagerCitizenCreate from './containers/admin/ManagerCitizenCreate'
-import UserAppointmentCreate from './containers/customer/UserAppointmentCreate'
 import ManagerHome from './containers/Manager/Home/ManagerHome'
 import ManagerEstablishmentCreate from './containers/Manager/establishiment/ManagerEstablishmentCreate'
 import ManagerEstablishmentAppointments from './containers/pages/ManagerEstablishmentAppointments'
@@ -28,7 +24,6 @@ import ManagerProfessionalServicesCreate from './containers/Manager/professional
 import ManagerProfessionalSchedulesList from './containers/Manager/professional/schedules/ManagerProfessionalSchedulesList'
 import ManagerProfessionalSchedulesCreate from './containers/Manager/professional/schedules/ManagerProfessionalSchedulesCreate'
 import Welcome from './containers/auth/Welcome'
-import UserAppointmentList from './containers/customer/UserAppointmentList'
 import ManagerEstablishmentList from './containers/Manager/establishiment/ManagerEstablishmentList'
 import Chat from './containers/customer/Chat'
 import Page404 from './containers/pages/404'
@@ -120,25 +115,9 @@ function Routes() {
         <Route exact path='/success' component={PageSuccess} />
 
         <PublicRoute path='/login' component={Login} />
-        <PublicRoute path='/cadastro' component={SignUp} />
-        {/*<PublicRoute path='/esqueceu-a-senha' component={ForgotPassword} /> */}
-        <PublicRoute path='/reset-password/:token' component={ResetPassword} />
-        <PublicRoute path='/verify-email/:token' component={VerifyEmail} />
         <PublicRoute path='/bem-vindo' component={Welcome} />
         <PublicRoute path='/success/:type' component={Success} />
-        <PublicRoute path='/:username' component={Chat} />
-        <PrivateRoute path='/cidadao/inicio' component={Home} />
-        <PrivateRoute path='/cidadao/perfil' exact component={Profile} />
-        <PrivateRoute
-          path='/cidadao/agendamentos'
-          exact
-          component={UserAppointmentList}
-        />
-        <PrivateRoute
-          path='/cidadao/agendamentos/cadastro'
-          exact
-          component={UserAppointmentCreate}
-        />
+        <PublicRoute exact path='/:username' component={Chat} />
 
         {/* PROFESSIONAL */}
         <ManagerPrivateRoute
@@ -166,7 +145,6 @@ function Routes() {
           exact
           component={ManagerProfessionalSchedulesCreate}
         />
-
         <ManagerPrivateRoute
           path='/manager/professional/appointments'
           exact
