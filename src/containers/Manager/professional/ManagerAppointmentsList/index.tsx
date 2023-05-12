@@ -1,73 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Panel from '../../../../components/Panel'
 import { Row, Col, List, Statistic, Card } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
-/* import { useHistory } from 'react-router-dom'
-import api from '../../../services/api'
-import { setEstablishment } from '../../../utils/authentication' */
+import api from '../../../../services/api'
 
 function ManagerAppointmentsList() {
-  /*   const history = useHistory()
+  const isMobile = window.innerWidth < 720
   const [data, setData] = useState<any[]>([])
 
   useEffect(() => {
-    api.get(`/establishments/161/appointments`).then((response) => {
-      setData(response.data)
+    api.get(`/me/appointments`).then(response => {
+      setData(response.data.data)
     })
-  }, []) */
-
-  let example = [
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '14/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '15/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '16/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 780,
-      date: '17/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '18/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '16/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '14/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '18/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '14/08/2021',
-    },
-    {
-      user_name: 'Gabriel',
-      time: 630,
-      date: '15/08/2021',
-    },
-  ]
+  }, [])
 
   const time_format = (time: any) => {
     let hours = adicionaZero(Math.trunc(time / 60))
@@ -95,7 +39,7 @@ function ManagerAppointmentsList() {
   return (
     <>
       <Panel
-        title='Controle da Agenda do Estabelecimentos de Saúde'
+        title='Controle de agendamentos'
         /*   action={
           <Button
             style={{ backgroundColor: '#1e3978', color: '#FCFCFC' }}
@@ -111,44 +55,53 @@ function ManagerAppointmentsList() {
       >
         <Row gutter={[24, 24]} style={{ width: '100%' }}>
           <Col xs={{ span: 24 }} lg={{ span: 24 }}>
-            <Statistic
-              title='Agendamentos Cadastrados'
-              value={example.length}
-            />
+            <Statistic title='Agendamentos Cadastrados' value={data.length} />
           </Col>
           <Col xs={{ span: 24 }} lg={{ span: 24 }}>
-            <List
-              grid={{ gutter: 24, column: 5 }}
-              dataSource={example}
-              renderItem={item => (
-                <List.Item
-
-                /*  actions={[<a key="agenda" onClick={() => {
-                    setEstablishment(item);
-                    history.push(`/gestao/estabelecimentos/${item.id}/agenda`)
-                  }}>Horários</a>,
-
-                  <a key="agendamentos" onClick={() => {
-                    setEstablishment(item);
-                    history.push(`/gestao/estabelecimentos/${item.id}/agendamentos`)
-                  }}>Agendamentos</a>]} */
-                >
-                  <Card
-                    title={
+            {!isMobile ? (
+              <List
+                grid={{ gutter: 12, xs: 24, lg: 3, column: 4 }}
+                dataSource={data}
+                renderItem={item => (
+                  <List.Item key={item.id}>
+                    <Card
+                      title={
+                        <p>
+                          <strong>Horário:</strong>{' '}
+                          {time_format(item.start_time)}
+                        </p>
+                      }
+                    >
                       <p>
-                        {' '}
-                        <UserOutlined /> {item.user_name}
+                        <strong>Nome:</strong> {item.name}{' '}
+                        <strong>Contato:</strong> {item.number}{' '}
                       </p>
-                    }
-                  >
-                    {[
-                      <p>Data: {item.date} </p>,
-                      <p>Horário: {time_format(item.time)}</p>,
-                    ]}
-                  </Card>
-                </List.Item>
-              )}
-            />
+                    </Card>
+                  </List.Item>
+                )}
+              />
+            ) : (
+              <List
+                dataSource={data}
+                renderItem={item => (
+                  <List.Item key={item.id}>
+                    <Card
+                      title={
+                        <p>
+                          <strong>Horário:</strong>{' '}
+                          {time_format(item.start_time)}
+                        </p>
+                      }
+                    >
+                      <p>
+                        <strong>Nome:</strong> {item.name}{' '}
+                        <strong>Contato:</strong> {item.number}{' '}
+                      </p>
+                    </Card>
+                  </List.Item>
+                )}
+              />
+            )}
           </Col>
         </Row>
       </Panel>

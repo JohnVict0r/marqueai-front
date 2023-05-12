@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, Image } from 'antd'
 
 import './Login.less'
 import { setAuthToken, setProfile } from '../../../utils/authentication'
 import api from '../../../services/api'
 import { useHistory } from 'react-router-dom'
+import Logo from '../../../assets/marqueai.png'
 
 const Login: FC = () => {
   const history = useHistory()
@@ -44,17 +45,19 @@ const Login: FC = () => {
   }
   return (
     <>
-      {/* <Typography.Title
+      <div
         style={{
+          // paddingTop: '20px',
+          // paddingBottom: '10px',
           textAlign: 'center',
-          fontSize: `32px`,
-          color: `#1a2423`,
-          marginTop: `12px`,
-          marginBottom: `12px`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '20vh',
         }}
       >
-        Realize o Login
-      </Typography.Title> */}
+        <Image src={Logo} width='240px' />
+      </div>
       <Form
         name='login-form'
         className='login-form'
@@ -100,10 +103,10 @@ const Login: FC = () => {
             Entrar
           </Button>
         </Form.Item>
-        <div className='login-form-register'>
+        {/* <div className='login-form-register'>
           Não tem conta?
           <a href='/cadastro'> Crie uma agora</a>
-        </div>
+        </div> */}
       </Form>
     </>
   )
