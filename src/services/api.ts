@@ -3,7 +3,7 @@ import { getAuthToken } from "../utils/authentication";
 
 const api = axios.create({
   //baseURL: "http://localhost/api",
-  baseURL: "http://api.marqueai.com.br/api",
+  baseURL: "https://api.marqueai.com.br/api",
 });
 
 api.interceptors.request.use((config) => {
