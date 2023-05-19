@@ -27,8 +27,6 @@ const PageSuccess: React.FC = () => {
               <br />
               Telefone/Celular: {appointment.number}
               <br />
-              E-mail: {appointment.email}
-              <br />
               data: {appointment.dateExtend}
               <br />
               Horário: {minutesToHourString(appointment.schedule)}
@@ -37,7 +35,8 @@ const PageSuccess: React.FC = () => {
               <br />
               Serviços: {appointment.serviceNames}
               <br />
-              Status: {appointment.status}
+              Status: Agendado
+              {/* Status: {appointment.status} */}
             </Descriptions.Item>
           </Descriptions>
           <Button type='primary' onClick={() => history.goBack()}>
