@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import {
-  Form,
   Input,
   Button,
   List,
@@ -58,20 +57,6 @@ const initialMessages = [
   botMessage('Qual o seu nome, por favor?'),
 ]
 
-const validateMessages = {
-  // eslint-disable-next-line
-  required: '${label} é um campo obrigatório!',
-  types: {
-    email: 'Por favor, insira um E-mail válido!',
-    // eslint-disable-next-line
-    number: '${label} is not a validate number!',
-  },
-  number: {
-    // eslint-disable-next-line
-    range: '${label} must be between ${min} and ${max}',
-  },
-}
-
 const months = [
   { name: 'Janeiro', value: 1 },
   { name: 'Fevereiro', value: 2 },
@@ -90,7 +75,6 @@ const months = [
 const initialData = {
   name: '',
   number: '',
-  email: '',
   services: [],
   serviceNames: '',
   date: '',
@@ -101,13 +85,11 @@ const initialData = {
 const Chat: FC = () => {
   const history = useHistory()
   const params = useParams() as any
-  const [formEmail] = Form.useForm()
   const [messages, setMessages] = useState(initialMessages)
   const messagesEndRef = useRef(null) as any
 
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
-  const [email, setEmail] = useState('')
   const [data, setData] = useState(initialData)
   const [services, setServices] = useState([])
   const [currentStep, setCurrentStep] = useState(0)
@@ -169,30 +151,6 @@ const Chat: FC = () => {
     setMessages([
       ...messages,
       customerMessage(number),
-      botMessage(
-        'Deseja receber notificações via e-mail? informe o seu, por favor.'
-      ),
-    ])
-    setCurrentStep(currentStep + 1)
-  }
-
-  const addEmail = () => {
-    setData({
-      ...data,
-      email,
-    })
-    setMessages([
-      ...messages,
-      customerMessage(email),
-      botMessage('Para qual serviço você deseja marcar um horário?'),
-    ])
-    setCurrentStep(currentStep + 1)
-  }
-
-  const nextEmail = () => {
-    setMessages([
-      ...messages,
-      customerMessage('Não'),
       botMessage('Para qual serviço você deseja marcar um horário?'),
     ])
     setCurrentStep(currentStep + 1)
@@ -223,7 +181,7 @@ const Chat: FC = () => {
               `oops :(, Não temos horários disponíveis para esse dia, por favor, selecione outra data.`
             ),
           ])
-          setCurrentStep(4)
+          setCurrentStep(3)
         } else {
           setMessages([
             ...messages,
@@ -409,31 +367,6 @@ const Chat: FC = () => {
           )}
           {currentStep === 2 && (
             <>
-              <Form
-                name='nest-messages'
-                form={formEmail}
-                onFinish={addEmail}
-                validateMessages={validateMessages}
-              >
-                <Form.Item name={['user', 'email']} rules={[{ type: 'email' }]}>
-                  <Input
-                    type='email'
-                    size='large'
-                    placeholder='Ex.: nome@email.com'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    onKeyPress={e => {
-                      if (e.key === 'Enter') {
-                        formEmail.submit()
-                      }
-                    }}
-                  />
-                </Form.Item>
-              </Form>
-            </>
-          )}
-          {currentStep === 3 && (
-            <>
               <Select
                 mode='multiple'
                 size='large'
@@ -451,7 +384,7 @@ const Chat: FC = () => {
               />
             </>
           )}
-          {!loading && currentStep === 4 && (
+          {!loading && currentStep === 3 && (
             <>
               <div
                 style={{
@@ -506,7 +439,7 @@ const Chat: FC = () => {
               </div>
             </>
           )}
-          {!loading && currentStep === 5 && (
+          {!loading && currentStep === 4 && (
             <Space
               direction='vertical'
               style={{ width: '100%', marginBottom: '8px' }}
@@ -564,30 +497,6 @@ const Chat: FC = () => {
             </>
           )}
           {currentStep === 2 && (
-            <>
-              <Button
-                type='primary'
-                htmlType='submit'
-                className='login-form-button'
-                size='large'
-                style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
-                disabled={email === ''}
-                onClick={() => formEmail.submit()}
-              >
-                Enviar
-              </Button>
-              <Button
-                htmlType='submit'
-                className='login-form-button'
-                size='large'
-                style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
-                onClick={() => nextEmail()}
-              >
-                Pular
-              </Button>
-            </>
-          )}
-          {currentStep === 3 && (
             <Button
               type='primary'
               htmlType='submit'
@@ -600,7 +509,7 @@ const Chat: FC = () => {
               Enviar
             </Button>
           )}
-          {!loading && currentStep === 4 && (
+          {!loading && currentStep === 3 && (
             <Button
               type='primary'
               htmlType='submit'
@@ -613,7 +522,7 @@ const Chat: FC = () => {
               Verificar
             </Button>
           )}
-          {!loading && currentStep === 5 && (
+          {!loading && currentStep === 4 && (
             <>
               <Button
                 type='primary'
