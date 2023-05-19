@@ -181,7 +181,7 @@ const Chat: FC = () => {
               `oops :(, Não temos horários disponíveis para esse dia, por favor, selecione outra data.`
             ),
           ])
-          setCurrentStep(4)
+          setCurrentStep(3)
         } else {
           setMessages([
             ...messages,
