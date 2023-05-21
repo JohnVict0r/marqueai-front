@@ -18,8 +18,13 @@ import moment from 'moment'
 import Logo from '../../../assets/marqueai.png'
 
 import api from '../../../services/api'
-import { dateExtend, minutesToHourString } from '../../../utils/format'
+import {
+  dateExtend,
+  minutesToHourString,
+  priceToCurrencyString,
+} from '../../../utils/format'
 import { setCustomerAppointment } from '../../../utils/authentication'
+import './index.less'
 
 const botMessage = (msg: string) => ({
   message: msg,
@@ -151,7 +156,7 @@ const Chat: FC = () => {
     setMessages([
       ...messages,
       customerMessage(number),
-      botMessage('Para qual serviço você deseja marcar um horário?'),
+      botMessage('Selecione um ou mais serviços para agendamento:'),
     ])
     setCurrentStep(currentStep + 1)
   }
@@ -222,6 +227,17 @@ const Chat: FC = () => {
       botMessage('Qual dia você deseja agendar?'),
     ])
     setCurrentStep(currentStep + 1)
+  }
+
+  const handleSelectService = (serviceId: any) => {
+    const active = servicesSelected.includes(serviceId)
+    if (active) {
+      setServicesSelected(
+        servicesSelected.filter((item: any) => item !== serviceId)
+      )
+    } else {
+      setServicesSelected([...servicesSelected, serviceId])
+    }
   }
 
   const backToDateChange = () => {
@@ -329,11 +345,7 @@ const Chat: FC = () => {
           />
           <div ref={messagesEndRef}></div>
         </div>
-        <div
-          style={{
-            maxHeight: '10vh',
-          }}
-        >
+        <div>
           {currentStep === 0 && (
             <>
               <Input
@@ -366,23 +378,30 @@ const Chat: FC = () => {
             </>
           )}
           {currentStep === 2 && (
-            <>
-              <Select
-                mode='multiple'
-                size='large'
-                allowClear
-                style={{ width: '100%' }}
-                placeholder='Selecione um ou mais serviços'
-                value={servicesSelected}
-                onChange={(values: any) => {
-                  setServicesSelected(values)
-                }}
-                options={services.map((item: any) => ({
-                  value: item.id,
-                  label: item.name,
-                }))}
-              />
-            </>
+            <div className='select-services'>
+              {services.map((item: any) => (
+                <div
+                  className='box'
+                  onClick={() => handleSelectService(item.id)}
+                >
+                  <div
+                    className={`info ${
+                      servicesSelected.includes(item.id) ? 'info--active' : null
+                    }`}
+                  >
+                    <input
+                      type='checkbox'
+                      checked={servicesSelected.includes(item.id)}
+                    />
+                    <p>{item.name}</p>
+                    <p>
+                      {minutesToHourString(item.duration)} /{' '}
+                      {priceToCurrencyString(item.price)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
           {!loading && currentStep === 3 && (
             <>
@@ -462,7 +481,6 @@ const Chat: FC = () => {
         </div>
         <div
           style={{
-            height: '20vh',
             alignItems: 'flex-end',
             justifyItems: 'flex-end',
           }}
