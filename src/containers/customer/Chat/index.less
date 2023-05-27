@@ -1,10 +1,10 @@
 .select-services {
-  display: flex;
   width: 100%;
   padding: 6px 16px 0;
   overflow-x: auto;
   white-space: nowrap;
   padding-bottom: 10px;
+  display: -webkit-inline-box;
 }
 
 .box {
@@ -33,5 +33,20 @@
   &--active {
     background: #ff9000;
     color: white;
+  }
+}
+
+.name {
+  width: calc(28% - 28px);
+  white-space: normal;
+  height: 50px;
+}
+
+.details {
+  margin-bottom: 0;
+  height: 50px;
+
+  p {
+    margin-bottom: 0;
   }
 }
