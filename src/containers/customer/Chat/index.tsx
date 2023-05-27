@@ -354,6 +354,8 @@ const Chat: FC = () => {
           {currentStep === 1 && (
             <>
               <Input
+                type='tel'
+                pattern='[0-9]*'
                 style={{ ...inputStyleDefault }}
                 size='large'
                 value={number}
