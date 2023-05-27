@@ -7,3 +7,13 @@ export const weekdays = [
   { name: 'Sábado', value: 'saturday' },
   { name: 'Domingo', value: 'sunday' },
 ]
+
+export const weekNumbers: any = {
+  0: 'Dom',
+  1: 'Seg' ,
+  2: 'Ter',
+  3: 'Qua',
+  4: 'Qui',
+  5: 'Sex',
+  6: 'Sat',
+}

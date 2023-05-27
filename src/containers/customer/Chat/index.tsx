@@ -1,16 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import {
-  Input,
-  Button,
-  List,
-  Space,
-  Select,
-  Spin,
-  InputNumber,
-  Image,
-  Col,
-  Row,
-} from 'antd'
+import { Input, Button, List, Spin, Image, Col, Row } from 'antd'
 
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -25,6 +14,7 @@ import {
 } from '../../../utils/format'
 import { setCustomerAppointment } from '../../../utils/authentication'
 import './index.less'
+import { weekNumbers } from '../../../utils/constants'
 
 const botMessage = (msg: string) => ({
   message: msg,
@@ -62,21 +52,6 @@ const initialMessages = [
   botMessage('Qual o seu nome, por favor?'),
 ]
 
-const months = [
-  { name: 'Janeiro', value: 1 },
-  { name: 'Fevereiro', value: 2 },
-  { name: 'Março', value: 3 },
-  { name: 'Abril', value: 4 },
-  { name: 'Maio', value: 5 },
-  { name: 'Junho', value: 6 },
-  { name: 'Julho', value: 7 },
-  { name: 'Agosto', value: 8 },
-  { name: 'Setembro', value: 9 },
-  { name: 'Outubro', value: 10 },
-  { name: 'Novembro', value: 11 },
-  { name: 'Dezembro', value: 12 },
-]
-
 const initialData = {
   name: '',
   number: '',
@@ -106,8 +81,12 @@ const Chat: FC = () => {
   const [professionalLoading, setProfessionalLoading] = useState(true)
 
   const [day, setDay] = useState<any>(moment().date())
-  const [month, setMonth] = useState(moment().month() + 1)
-  const [year, setYear] = useState(moment().year())
+  const [month] = useState(moment().month() + 1)
+  const [year] = useState(moment().year())
+
+  const dates = new Array(5)
+    .fill(0)
+    .map((_, index) => moment().add(index, 'day'))
 
   useEffect(() => {
     api
@@ -386,95 +365,67 @@ const Chat: FC = () => {
                 >
                   <div
                     className={`info ${
-                      servicesSelected.includes(item.id) ? 'info--active' : null
+                      servicesSelected.includes(item.id) ? 'info--active' : ''
                     }`}
                   >
                     <input
                       type='checkbox'
                       checked={servicesSelected.includes(item.id)}
                     />
-                    <p>{item.name}</p>
-                    <p>
-                      {minutesToHourString(item.duration)} /{' '}
-                      {priceToCurrencyString(item.price)}
-                    </p>
+                    <p className='name'>{item.name}</p>
+                    <div className='details'>
+                      <p>{minutesToHourString(item.duration)}</p>
+                      <p>{priceToCurrencyString(item.price)}</p>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
           {!loading && currentStep === 3 && (
-            <>
-              <div
-                style={{
-                  marginTop: '8px',
-                  marginBottom: '32px',
-                }}
-              >
-                <Space>
-                  <InputNumber
-                    placeholder='Dia'
-                    min={moment().month() === month - 1 ? moment().date() : 1}
-                    max={31}
-                    value={day}
-                    onChange={value => {
-                      setDay(value)
-                    }}
-                  />
-                  <Select
-                    placeholder='Mês'
-                    style={{ width: '100px' }}
-                    value={month}
-                    onChange={value => {
-                      setMonth(value)
-                    }}
+            <div className='select-services'>
+              {dates.map(item => (
+                <div
+                  className='box'
+                  onClick={() => {
+                    setDay(item.date())
+                  }}
+                >
+                  <div
+                    className={`info ${
+                      day === item.date() ? 'info--active' : ''
+                    }`}
                   >
-                    {months
-                      .filter(item => {
-                        const currentYear = moment().year() === year
-                        if (currentYear && item.value < month) return false
-                        return true
-                      })
-                      .map(item => (
-                        <Select.Option value={item.value}>
-                          {item.name}
-                        </Select.Option>
-                      ))}
-                  </Select>
-                  <InputNumber
-                    placeholder='Ano'
-                    min={moment().year()}
-                    max={moment().year() + 1}
-                    value={year}
-                    onChange={(value: any) => {
-                      setYear(value)
-                      if (value === moment().year()) {
-                        setMonth(moment().month() + 1)
-                        setDay(moment().date())
-                      }
-                    }}
-                  />
-                </Space>
-              </div>
-            </>
+                    <input type='radio' checked={day === item.date()} />
+                    <p className='name'>{weekNumbers[item.day()]}</p>
+                    <div className='details'>
+                      <p>{item.date()}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
           {!loading && currentStep === 4 && (
-            <Space
-              direction='vertical'
-              style={{ width: '100%', marginBottom: '8px' }}
-            >
-              <Select
-                size='large'
-                style={{ width: '100%' }}
-                placeholder='Selecione um horário...'
-                options={schedules.map((item: any) => ({
-                  value: item,
-                  label: minutesToHourString(item),
-                }))}
-                value={schedule}
-                onChange={value => setSchedule(value)}
-              />
-            </Space>
+            <div className='select-services'>
+              {schedules.map(item => (
+                <div
+                  className='box'
+                  onClick={() => {
+                    setSchedule(item)
+                  }}
+                >
+                  <div
+                    className={`info ${
+                      item === schedule ? 'info--active' : ''
+                    }`}
+                  >
+                    <input type='radio' checked={item === schedule} />
+                    <p className='name'>{minutesToHourString(item)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
 
           {loading && <Spin />}
