@@ -1,6 +1,6 @@
 .select-carrousel {
   width: 100%;
-  padding: 6px 16px 0;
+  padding: 6px 16px 6px;
   overflow-x: auto;
   white-space: nowrap;
   padding-bottom: 10px;
@@ -31,6 +31,13 @@
   padding-left: 10px;
 }
 
+.box-date {
+  width: 7rem;
+  margin-right: 3px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
 .info {
   width: 100%;
   height: 134px;
@@ -43,10 +50,6 @@
 
   cursor: pointer;
 
-  input {
-    float: right !important;
-    cursor: pointer;
-  }
   &--active {
     background: #ff9000;
     color: white;
@@ -66,10 +69,6 @@
 
   cursor: pointer;
 
-  input {
-    float: right !important;
-    cursor: pointer;
-  }
   &--active {
     background: #ff9000;
     color: white;
@@ -80,10 +79,49 @@
   height: 10px;
 }
 
+.info-date {
+  width: 100%;
+  height: 4rem;
+  margin-bottom: 0;
+  background: '#919292';
+  border-radius: 16px;
+  box-shadow: 0 0 7px 0 #0000004d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  cursor: pointer;
+
+  p {
+    // margin-top: 1rem;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  hr {
+    width: 100%;
+    border: 1px solid #000000d9;
+  }
+
+  hr.active {
+    border: 1px solid white;
+  }
+
+  &--active {
+    background: #ff9000;
+    color: white;
+  }
+}
+
 .name {
   width: calc(28% - 28px);
   white-space: normal;
   height: 50px;
+}
+
+.date {
+  white-space: normal;
 }
 
 .details {

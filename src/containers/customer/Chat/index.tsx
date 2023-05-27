@@ -409,23 +409,26 @@ const Chat: FC = () => {
             <div className='select-carrousel'>
               {dates.map(item => (
                 <div
-                  className='box'
+                  className='box-date'
                   onClick={() => {
                     setDate(item)
                   }}
                 >
                   <div
-                    className={`info ${
+                    className={`info-date ${
                       date.date() === item.date() ? 'info--active' : ''
                     }`}
                   >
                     {/* <input type='radio' checked={day === item.date()} /> */}
-                    <p className='name'>
+                    <p className='date'>
                       <b>{weekNumbers[item.day()]}</b>
                     </p>
-                    <div className='details'>
-                      <p>{item.format('DD/MM/YYYY')}</p>
-                    </div>
+                    <hr
+                      className={`${
+                        date.date() === item.date() ? 'active' : ''
+                      }`}
+                    />
+                    <p>{item.format('DD/MM/YYYY')}</p>
                   </div>
                 </div>
               ))}
@@ -548,7 +551,7 @@ const Chat: FC = () => {
                   fontWeight: 'bold',
                   ...inputStyleDefault,
                 }}
-                disabled={name === ''}
+                disabled={!schedule}
                 onClick={() => setModalAppointmentConfirmOpen(true)}
               >
                 Finalizar Agendamento
@@ -600,7 +603,7 @@ const Chat: FC = () => {
               <br />
               Telefone/Celular: {number}
               <br />
-              data: {dateExtend(date.format('YYYY-MM-DD'))}
+              Data: {dateExtend(date.format('YYYY-MM-DD'))}
               <br />
               Horário: {minutesToHourFormated(Number(schedule))}
               <br />
