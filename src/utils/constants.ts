@@ -15,5 +15,5 @@ export const weekNumbers: any = {
   3: 'Qua',
   4: 'Qui',
   5: 'Sex',
-  6: 'Sat',
+  6: 'Sáb',
 }
