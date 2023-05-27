@@ -47,6 +47,16 @@ export const minutesToHourString = (minutes: number): string => {
   return `${hourCalc}h${minutesWithZero}min`
 }
 
+export const minutesToHourFormated = (minutes: number): string => {
+  const hourCalc = Math.trunc(minutes / 60)
+  const minutesCalc = minutes % 60
+
+  const minutesWithZero = addZero(minutesCalc)
+  const hoursWithZero = addZero(hourCalc)
+
+  return `${hoursWithZero}:${minutesWithZero}`
+}
+
 function addZero(numero: any) {
   if (numero <= 9) return '0' + numero
   else return numero
