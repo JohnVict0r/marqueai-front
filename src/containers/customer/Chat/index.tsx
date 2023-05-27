@@ -1,5 +1,15 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { Input, Button, List, Spin, Image, Col, Row } from 'antd'
+import {
+  Input,
+  Button,
+  List,
+  Spin,
+  Image,
+  Col,
+  Row,
+  Modal,
+  Descriptions,
+} from 'antd'
 
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -9,6 +19,7 @@ import Logo from '../../../assets/marqueai.png'
 import api from '../../../services/api'
 import {
   dateExtend,
+  minutesToHourFormated,
   minutesToHourString,
   priceToCurrencyString,
 } from '../../../utils/format'
@@ -46,6 +57,12 @@ const customerMessageStyle = {
   maxWidth: '75%',
 }
 
+const inputStyleDefault = {
+  borderRadius: '5px',
+  margin: '3vw 3vw 0 3vw',
+  width: '94vw',
+}
+
 const initialMessages = [
   botMessage('Oi, tudo bem?'),
   botMessage('Sou o Mark, assistente virtual para marcar o seu horário!'),
@@ -80,11 +97,12 @@ const Chat: FC = () => {
   const [professional, setProfessional] = useState()
   const [professionalLoading, setProfessionalLoading] = useState(true)
 
-  const [day, setDay] = useState<any>(moment().date())
-  const [month] = useState(moment().month() + 1)
-  const [year] = useState(moment().year())
+  const [date, setDate] = useState<any>(moment())
 
-  const dates = new Array(5)
+  const [modalAppointmentConfirmOpen, setModalAppointmentConfirmOpen] =
+    useState<boolean>(false)
+
+  const dates = new Array(8)
     .fill(0)
     .map((_, index) => moment().add(index, 'day'))
 
@@ -144,9 +162,7 @@ const Chat: FC = () => {
     api
       .post(`/schedules/available`, {
         user_id: (professional as any).id,
-        date: `${year}-${month < 10 ? '0' + month : month}-${
-          day < 10 ? '0' + day : day
-        }`,
+        date: date.format('YYYY-MM-DD'),
         total_duration: 30,
       })
       .then(response => {
@@ -154,13 +170,7 @@ const Chat: FC = () => {
         if (typeof response.data === 'string' || !response.data.length) {
           setMessages([
             ...messages,
-            customerMessage(
-              dateExtend(
-                `${year}-${month < 10 ? '0' + month : month}-${
-                  day < 10 ? '0' + day : day
-                }`
-              ) || ''
-            ),
+            customerMessage(dateExtend(date.format('YYYY-MM-DD')) || ''),
             botMessage(
               `oops :(, Não temos horários disponíveis para esse dia, por favor, selecione outra data.`
             ),
@@ -169,13 +179,7 @@ const Chat: FC = () => {
         } else {
           setMessages([
             ...messages,
-            customerMessage(
-              dateExtend(
-                `${year}-${month < 10 ? '0' + month : month}-${
-                  day < 10 ? '0' + day : day
-                }`
-              ) || ''
-            ),
+            customerMessage(dateExtend(date.format('YYYY-MM-DD')) || ''),
             botMessage('Qual horário você deseja marcar?'),
           ])
           setSchedules(response.data)
@@ -230,16 +234,17 @@ const Chat: FC = () => {
 
   const addDate = () => {
     setLoading(true)
-    const dateValue = `${year}-${month < 10 ? '0' + month : month}-${
-      day < 10 ? '0' + day : day
-    }`
+
     setData({
       ...data,
-      date: dateValue,
-      dateExtend: dateExtend(dateValue) || '',
+      date: date.format('YYYY-MM-DD'),
+      dateExtend: dateExtend(date.format('YYYY-MM-DD')) || '',
     })
 
-    setMessages([...messages, customerMessage(dateExtend(dateValue) || '')])
+    setMessages([
+      ...messages,
+      customerMessage(dateExtend(date.format('YYYY-MM-DD')) || ''),
+    ])
     setCurrentStep(currentStep + 1)
     setTimeout(getSchedules, 1000)
   }
@@ -328,15 +333,20 @@ const Chat: FC = () => {
           {currentStep === 0 && (
             <>
               <Input
+                style={{ ...inputStyleDefault }}
                 size='large'
                 placeholder='Nome'
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={e => {
+                  const result = e.target.value.replace(/[^a-zA-Z\s]+/, '')
+                  setName(result)
+                }}
                 onKeyPress={e => {
                   if (e.key === 'Enter') {
                     addName()
                   }
                 }}
+                maxLength={50}
               />
             </>
           )}
@@ -344,20 +354,29 @@ const Chat: FC = () => {
           {currentStep === 1 && (
             <>
               <Input
+                style={{ ...inputStyleDefault }}
                 size='large'
                 value={number}
-                onChange={e => setNumber(e.target.value)}
+                onChange={e => {
+                  const numbers = e.target.value.replace(/[^0-9]/g, '')
+                  const result = numbers.replace(
+                    /^(\d{2})(\d{5})(\d{4}).*/,
+                    '($1) $2-$3'
+                  )
+                  setNumber(result)
+                }}
                 placeholder='Ex.: (84) 994654749'
                 onKeyPress={e => {
                   if (e.key === 'Enter') {
                     addNumber()
                   }
                 }}
+                maxLength={15}
               />
             </>
           )}
           {currentStep === 2 && (
-            <div className='select-services'>
+            <div className='select-carrousel'>
               {services.map((item: any) => (
                 <div
                   className='box'
@@ -368,11 +387,13 @@ const Chat: FC = () => {
                       servicesSelected.includes(item.id) ? 'info--active' : ''
                     }`}
                   >
-                    <input
+                    {/* <input
                       type='checkbox'
                       checked={servicesSelected.includes(item.id)}
-                    />
-                    <p className='name'>{item.name}</p>
+                    /> */}
+                    <p className='name'>
+                      <b>{item.name}</b>
+                    </p>
                     <div className='details'>
                       <p>{minutesToHourString(item.duration)}</p>
                       <p>{priceToCurrencyString(item.price)}</p>
@@ -383,23 +404,25 @@ const Chat: FC = () => {
             </div>
           )}
           {!loading && currentStep === 3 && (
-            <div className='select-services'>
+            <div className='select-carrousel'>
               {dates.map(item => (
                 <div
                   className='box'
                   onClick={() => {
-                    setDay(item.date())
+                    setDate(item)
                   }}
                 >
                   <div
                     className={`info ${
-                      day === item.date() ? 'info--active' : ''
+                      date.date() === item.date() ? 'info--active' : ''
                     }`}
                   >
-                    <input type='radio' checked={day === item.date()} />
-                    <p className='name'>{weekNumbers[item.day()]}</p>
+                    {/* <input type='radio' checked={day === item.date()} /> */}
+                    <p className='name'>
+                      <b>{weekNumbers[item.day()]}</b>
+                    </p>
                     <div className='details'>
-                      <p>{item.date()}</p>
+                      <p>{item.format('DD/MM/YYYY')}</p>
                     </div>
                   </div>
                 </div>
@@ -407,21 +430,20 @@ const Chat: FC = () => {
             </div>
           )}
           {!loading && currentStep === 4 && (
-            <div className='select-services'>
+            <div className='select-list-rows'>
               {schedules.map(item => (
                 <div
-                  className='box'
+                  className='box-time'
                   onClick={() => {
                     setSchedule(item)
                   }}
                 >
                   <div
-                    className={`info ${
+                    className={`info-time ${
                       item === schedule ? 'info--active' : ''
                     }`}
                   >
-                    <input type='radio' checked={item === schedule} />
-                    <p className='name'>{minutesToHourString(item)}</p>
+                    <p className='time'>{minutesToHourFormated(item)}</p>
                   </div>
                 </div>
               ))}
@@ -442,7 +464,12 @@ const Chat: FC = () => {
               htmlType='submit'
               className='login-form-button'
               size='large'
-              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              style={{
+                height: `48px`,
+                fontSize: `16px`,
+                fontWeight: `bold`,
+                ...inputStyleDefault,
+              }}
               disabled={name === ''}
               onClick={addName}
             >
@@ -457,7 +484,12 @@ const Chat: FC = () => {
                 htmlType='submit'
                 className='login-form-button'
                 size='large'
-                style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+                style={{
+                  height: `48px`,
+                  fontSize: `16px`,
+                  fontWeight: `bold`,
+                  ...inputStyleDefault,
+                }}
                 disabled={number === ''}
                 onClick={addNumber}
               >
@@ -471,7 +503,12 @@ const Chat: FC = () => {
               htmlType='submit'
               className='login-form-button'
               size='large'
-              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+              style={{
+                height: `48px`,
+                fontSize: `16px`,
+                fontWeight: `bold`,
+                ...inputStyleDefault,
+              }}
               disabled={name === ''}
               onClick={addService}
             >
@@ -484,8 +521,13 @@ const Chat: FC = () => {
               htmlType='submit'
               className='login-form-button'
               size='large'
-              style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
-              disabled={!day && !month && !year}
+              style={{
+                height: `48px`,
+                fontSize: `16px`,
+                fontWeight: `bold`,
+                ...inputStyleDefault,
+              }}
+              disabled={!date}
               onClick={addDate}
             >
               Verificar
@@ -498,9 +540,14 @@ const Chat: FC = () => {
                 htmlType='submit'
                 className='login-form-button'
                 size='large'
-                style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+                style={{
+                  height: `48px`,
+                  fontSize: `16px`,
+                  fontWeight: 'bold',
+                  ...inputStyleDefault,
+                }}
                 disabled={name === ''}
-                onClick={handleCreateAppoitment}
+                onClick={() => setModalAppointmentConfirmOpen(true)}
               >
                 Finalizar Agendamento
               </Button>
@@ -508,7 +555,12 @@ const Chat: FC = () => {
                 htmlType='submit'
                 className='login-form-button'
                 size='large'
-                style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
+                style={{
+                  height: `48px`,
+                  fontSize: `16px`,
+                  fontWeight: `bold`,
+                  ...inputStyleDefault,
+                }}
                 disabled={name === ''}
                 onClick={backToDateChange}
               >
@@ -517,6 +569,45 @@ const Chat: FC = () => {
             </>
           )}
         </div>
+        <Modal
+          title='Deseja finalizar o agendamento?'
+          centered
+          visible={modalAppointmentConfirmOpen}
+          onOk={handleCreateAppoitment}
+          onCancel={() => setModalAppointmentConfirmOpen(false)}
+          footer={[
+            <Button
+              key='back'
+              onClick={() => setModalAppointmentConfirmOpen(false)}
+            >
+              Não
+            </Button>,
+            <Button
+              key='submit'
+              type='primary'
+              loading={loading}
+              onClick={handleCreateAppoitment}
+            >
+              Sim
+            </Button>,
+          ]}
+        >
+          <Descriptions size='small' layout='vertical'>
+            <Descriptions.Item label='' style={{ textAlign: 'left' }}>
+              Nome: {name}
+              <br />
+              Telefone/Celular: {number}
+              <br />
+              data: {dateExtend(date.format('YYYY-MM-DD'))}
+              <br />
+              Horário: {minutesToHourFormated(Number(schedule))}
+              <br />
+              Preço total: {priceToCurrencyString(data.price)}
+              <br />
+              Serviços: {data.serviceNames}
+            </Descriptions.Item>
+          </Descriptions>
+        </Modal>
       </Col>
     </Row>
   )

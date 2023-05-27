@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Descriptions, Result } from 'antd'
 import { getCustomerAppointment } from '../../../utils/authentication'
 import {
-  minutesToHourString,
+  minutesToHourFormated,
   priceToCurrencyString,
 } from '../../../utils/format'
 import { useHistory } from 'react-router-dom'
@@ -29,7 +29,7 @@ const PageSuccess: React.FC = () => {
               <br />
               data: {appointment.dateExtend}
               <br />
-              Horário: {minutesToHourString(appointment.schedule)}
+              Horário: {minutesToHourFormated(appointment.schedule)}
               <br />
               Preço: {priceToCurrencyString(appointment.price)}
               <br />
