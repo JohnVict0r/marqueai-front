@@ -140,7 +140,7 @@ const Chat: FC = () => {
       ...messages,
       customerMessage(name),
       botMessage(`Excelente, ${name}! Bora lá?`),
-      botMessage('Poderia informar um telefone/celular para contato?'),
+      botMessage('Por favor, informe um telefone/celular para contato:'),
     ])
     setCurrentStep(currentStep + 1)
   }
@@ -498,7 +498,7 @@ const Chat: FC = () => {
                   fontWeight: `bold`,
                   ...inputStyleDefault,
                 }}
-                disabled={number === ''}
+                disabled={number.length < 11}
                 onClick={addNumber}
               >
                 Enviar
