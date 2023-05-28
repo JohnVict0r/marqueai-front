@@ -79,6 +79,11 @@ const initialData = {
   price: 0,
 }
 
+function validatePhone(phone: string) {
+  var regex = new RegExp('^\\(((1[1-9])|([2-9][0-9]))\\) 9[0-9]{4}-[0-9]{4}$')
+  return regex.test(phone)
+}
+
 const Chat: FC = () => {
   const history = useHistory()
   const params = useParams() as any
@@ -498,7 +503,7 @@ const Chat: FC = () => {
                   fontWeight: `bold`,
                   ...inputStyleDefault,
                 }}
-                disabled={number.length < 11}
+                disabled={number.length < 11 || !validatePhone(number)}
                 onClick={addNumber}
               >
                 Enviar
