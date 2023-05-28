@@ -338,7 +338,10 @@ const Chat: FC = () => {
                 placeholder='Nome'
                 value={name}
                 onChange={e => {
-                  const result = e.target.value.replace(/[^a-zA-Z\s]+/, '')
+                  const result = e.target.value.replace(
+                    /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
+                    ''
+                  )
                   setName(result)
                 }}
                 onKeyPress={e => {
