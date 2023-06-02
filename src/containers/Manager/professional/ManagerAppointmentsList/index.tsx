@@ -6,10 +6,12 @@ import api from '../../../../services/api'
 function ManagerAppointmentsList() {
   const isMobile = window.innerWidth < 720
   const [data, setData] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     api.get(`/me/appointments`).then(response => {
       setData(response.data.data)
+      setLoading(false)
     })
   }, [])
 
@@ -58,9 +60,39 @@ function ManagerAppointmentsList() {
             <Statistic title='Agendamentos Cadastrados' value={data.length} />
           </Col>
           <Col xs={{ span: 24 }} lg={{ span: 24 }}>
-            {!isMobile ? (
+            {/* {!isMobile ? ( */}
+            <List
+              className='demo-loadmore-list'
+              loading={loading}
+              itemLayout='horizontal'
+              dataSource={data}
+              renderItem={item => (
+                <List.Item
+                  actions={[
+                    <a key='list-edit'>Atender</a>,
+                    <a key='list-loadmore-more'>Cancelar</a>,
+                  ]}
+                >
+                  {/* <Skeleton avatar title={false} loading={item.loading} active> */}
+                  <List.Item.Meta
+                    title={
+                      <p>
+                        <strong>Nome:</strong> {item.name}
+                      </p>
+                    }
+                    description={
+                      <p>
+                        <strong>Contato:</strong> {item.number}{' '}
+                      </p>
+                    }
+                  />
+                  <div>{time_format(item.start_time)}</div>
+                  {/* </Skeleton> */}
+                </List.Item>
+              )}
+            />
+            {/* ) : (
               <List
-                grid={{ gutter: 12, xs: 24, lg: 3, column: 4 }}
                 dataSource={data}
                 renderItem={item => (
                   <List.Item key={item.id}>
@@ -80,28 +112,7 @@ function ManagerAppointmentsList() {
                   </List.Item>
                 )}
               />
-            ) : (
-              <List
-                dataSource={data}
-                renderItem={item => (
-                  <List.Item key={item.id}>
-                    <Card
-                      title={
-                        <p>
-                          <strong>Horário:</strong>{' '}
-                          {time_format(item.start_time)}
-                        </p>
-                      }
-                    >
-                      <p>
-                        <strong>Nome:</strong> {item.name}{' '}
-                        <strong>Contato:</strong> {item.number}{' '}
-                      </p>
-                    </Card>
-                  </List.Item>
-                )}
-              />
-            )}
+            )} */}
           </Col>
         </Row>
       </Panel>

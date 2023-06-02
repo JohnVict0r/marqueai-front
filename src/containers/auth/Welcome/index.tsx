@@ -10,7 +10,7 @@ const Welcome: React.FC = () => {
 
   if (!isFirstAccess()) {
     // history.push('/selecionar-modulo')
-    history.push('/manager/professional/home')
+    history.push('/manager/professional/appointments')
   }
   return (
     <>
@@ -35,7 +35,7 @@ const Welcome: React.FC = () => {
             size='large'
             onClick={() => {
               setFirstAccess()
-              history.push('/manager/professional/home')
+              history.push('/manager/professional/appointments')
             }}
           >
             Continuar

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { Layout, Button, Menu, Dropdown, Drawer } from 'antd'
+import { Layout, Button, Menu, Dropdown, Drawer, Image } from 'antd'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -11,6 +11,9 @@ import {
   SettingOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons'
+import Logo from '../../src/assets/marqueai.svg'
+
+import iconLogo from '../../src/assets/icon.svg'
 
 import './PrivateLayout.less'
 import Avatar from 'antd/lib/avatar/avatar'
@@ -71,7 +74,7 @@ const ManagerPrivateLayout: FC = ({ children }) => {
 
   const MenuManager = () => (
     <Menu theme='light' mode='inline'>
-      <Menu.Item
+      {/* <Menu.Item
         key='1'
         icon={<AppstoreOutlined />}
         className={
@@ -84,7 +87,22 @@ const ManagerPrivateLayout: FC = ({ children }) => {
         }}
       >
         Início
+      </Menu.Item> */}
+      <Menu.Item
+        key='1'
+        icon={<ClockCircleOutlined />}
+        className={
+          selectedMenuNav('/manager/professional/appointments')
+            ? 'ant-menu-item ant-menu-item-selected'
+            : 'ant-menu-item'
+        }
+        onClick={() => {
+          history.push('/manager/professional/appointments')
+        }}
+      >
+        Agendamentos
       </Menu.Item>
+
       <Menu.Item
         key='2'
         icon={<SettingOutlined />}
@@ -112,20 +130,6 @@ const ManagerPrivateLayout: FC = ({ children }) => {
         }}
       >
         Horários
-      </Menu.Item>
-      <Menu.Item
-        key='4'
-        icon={<ClockCircleOutlined />}
-        className={
-          selectedMenuNav('/manager/professional/appointments')
-            ? 'ant-menu-item ant-menu-item-selected'
-            : 'ant-menu-item'
-        }
-        onClick={() => {
-          history.push('/manager/professional/appointments')
-        }}
-      >
-        Agendamentos
       </Menu.Item>
 
       {/* <Menu.Item
@@ -160,8 +164,7 @@ const ManagerPrivateLayout: FC = ({ children }) => {
         <Drawer
           title={
             <div className='logo'>
-              {/* <Image src={Logo} preview={false} /> */}
-              Marqueai
+              <Image src={Logo} preview={false} />
             </div>
           }
           placement='left'
@@ -188,7 +191,11 @@ const ManagerPrivateLayout: FC = ({ children }) => {
               preview={false}
               style={{ opacity: '0.6' }}
             /> */}
-            {collapsed ? 'M' : 'Marqueai'}
+            {collapsed ? (
+              <Image src={iconLogo} preview={false} />
+            ) : (
+              <Image src={Logo} preview={false} />
+            )}
           </div>
           <MenuManager />
         </Sider>
@@ -210,7 +217,7 @@ const ManagerPrivateLayout: FC = ({ children }) => {
               <Avatar
                 style={{
                   color: '#FCFCFC',
-                  backgroundColor: '#1e3978',
+                  backgroundColor: '#FF7A00',
                   marginRight: '10px',
                 }}
               >
