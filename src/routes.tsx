@@ -18,7 +18,8 @@ import ManagerCitizenCreate from './containers/admin/ManagerCitizenCreate'
 import ManagerHome from './containers/Manager/Home/ManagerHome'
 import ManagerEstablishmentCreate from './containers/Manager/establishiment/ManagerEstablishmentCreate'
 import ManagerEstablishmentAppointments from './containers/pages/ManagerEstablishmentAppointments'
-import ManagerAppointmentsList from './containers/Manager/professional/ManagerAppointmentsList'
+import ManagerProfessionalAppointmentsList from './containers/Manager/professional/appointments/ManagerProfessionalAppointmentsList'
+import ManagerProfessionalAppointmentsCreate from './containers/Manager/professional/appointments/ManagerProfessionalAppointmentsCreate'
 import ManagerProfessionalServicesList from './containers/Manager/professional/services/ManagerProfessionalServicesList'
 import ManagerProfessionalServicesCreate from './containers/Manager/professional/services/ManagerProfessionalServicesCreate'
 import ManagerProfessionalSchedulesList from './containers/Manager/professional/schedules/ManagerProfessionalSchedulesList'
@@ -148,12 +149,12 @@ function Routes() {
         <ManagerPrivateRoute
           path='/manager/professional/appointments'
           exact
-          component={ManagerAppointmentsList}
+          component={ManagerProfessionalAppointmentsList}
         />
         <ManagerPrivateRoute
           path='/manager/professional/appointments/create'
           exact
-          component={ManagerAppointmentsList}
+          component={ManagerProfessionalAppointmentsCreate}
         />
         <ManagerPrivateRoute
           path='/manager/professional/profile'
