@@ -55,7 +55,30 @@ function ManagerProfesisonalAppointmentsList() {
 
     return unique;
   } */
-  console.log(date)
+
+  const handleCanceled = (appointmentId: number) => {
+    api
+      .patch(`/me/appointments/${appointmentId}/confirmation`, {
+        status: 'canceled',
+      })
+      .then(() => {
+        const newData = data.filter(item => item.id !== appointmentId)
+        setData(newData)
+        setLoading(false)
+      })
+  }
+
+  const handleConfirmed = (appointmentId: number) => {
+    api
+      .patch(`/me/appointments/${appointmentId}/confirmation`, {
+        status: 'confirmed',
+      })
+      .then(response => {
+        const newData = data.filter(item => item.id !== appointmentId)
+        setData([...newData, response.data])
+        setLoading(false)
+      })
+  }
 
   return (
     <>
@@ -95,11 +118,20 @@ function ManagerProfesisonalAppointmentsList() {
                 renderItem={item => (
                   <List.Item
                     actions={[
-                      <Button type='primary' icon={<CheckOutlined />}>
-                        Atender
-                      </Button>,
-                      <Button type='primary' icon={<CloseOutlined />} danger>
+                      <Button
+                        type='primary'
+                        danger
+                        icon={<CloseOutlined />}
+                        onClick={() => handleCanceled(item.id)}
+                      >
                         Cancelar
+                      </Button>,
+                      <Button
+                        type='primary'
+                        icon={<CheckOutlined />}
+                        onClick={() => handleConfirmed(item.id)}
+                      >
+                        Atender
                       </Button>,
                     ]}
                   >
@@ -142,10 +174,19 @@ function ManagerProfesisonalAppointmentsList() {
                       <div
                         style={{ display: 'flex', justifyContent: 'center' }}
                       >
-                        <Button type='primary' icon={<CloseOutlined />} danger>
+                        <Button
+                          type='primary'
+                          danger
+                          icon={<CloseOutlined />}
+                          onClick={() => handleCanceled(item.id)}
+                        >
                           Cancelar
                         </Button>
-                        <Button type='primary' icon={<CheckOutlined />}>
+                        <Button
+                          type='primary'
+                          icon={<CheckOutlined />}
+                          onClick={() => handleConfirmed(item.id)}
+                        >
                           Atender
                         </Button>
                       </div>
