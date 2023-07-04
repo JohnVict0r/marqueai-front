@@ -1,10 +1,21 @@
-import React from 'react'
-import { Form, Input, Button, Row, Col, InputNumber } from 'antd'
+import React, { useEffect, useState } from 'react'
+import {
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  InputNumber,
+  Select,
+  DatePicker,
+} from 'antd'
 
 import Panel from '../../../../components/Panel'
+import api from '../../../../services/api'
+import { getProfile } from '../../../../utils/authentication'
 
-// import api from '../../../../services/api'
-// import { useNotification } from '../../../../contexts/notification'
+import { useNotification } from '../../../../contexts/notification'
+import { minutesToHourFormated } from '../../../../utils/format'
 
 const validateMessages = {
   // eslint-disable-next-line
@@ -20,76 +31,84 @@ const validateMessages = {
   },
 }
 
-function ManagerProfessionalAppointmentsCreate() {
+const ManagerProfessionalAppointmentsCreate = () => {
   const [form] = Form.useForm()
-  // const [loading, setLoading] = useState(false)
-  // const { openNotification } = useNotification()
 
-  // const getSchedules = () => {
-  //   api
-  //     .post(`/schedules/available`, {
-  //       user_id: (professional as any).id,
-  //       date: date.format('YYYY-MM-DD'),
-  //       total_duration: 30,
-  //     })
-  //     .then(response => {
-  //       setLoading(false)
-  //       setSchedules(response.data)
-  //     })
-  // }
+  const [number, setNumber] = useState<string>()
+  const [date, setDate] = useState<any>()
+  const [services, setServices] = useState([])
+  const [servicesSelected, setServicesSelected] = useState<any>([])
+  const [schedules, setSchedules] = useState([])
+  const [schedule, setSchedule] = useState()
+  const [loading, setLoading] = useState(false)
+  const { openNotification } = useNotification()
 
-  // useEffect(() => {
-  //   api.get(`/users/${params.username}/services`).then(response => {
-  //     setServices(response.data.data)
-  //   })
-  // }, [params.username])
+  const profile = getProfile()
 
-  // const onFinish = (values: any) => {
-  //   setLoading(true)
-  //   const servicesTotalTime = services
-  //     .filter((item: any) => servicesSelected.includes(item.id))
-  //     .reduce((accumulator, item: any) => accumulator + item.duration, 0)
+  useEffect(() => {
+    api.get(`/users/${profile.username}/services`).then(response => {
+      setServices(response.data.data)
+    })
+  }, [profile.username])
 
-  //   api
-  //     .post(`/appointments`, {
-  //       ...data,
-  //       user_id: (professional as any).id,
-  //       type: 'service',
-  //       start_time: schedule,
-  //       end_time: Number(schedule) + servicesTotalTime,
-  //       status: 'pending',
-  //     })
-  //     .then(response => {
-  //       setLoading(false)
-  //       setCustomerAppointment({ ...response.data, ...data, schedule })
-  //       history.push('/success')
-  //     })
-  //   api
-  //     .post(`/me/services`, {
-  //       ...values,
-  //     })
-  //     .then(() => {
-  //       setLoading(false)
-  //       form.resetFields()
-  //       openNotification({
-  //         type: 'success',
-  //         message: 'Serviço cadastrado com sucesso!',
-  //       })
-  //     })
-  //     .catch(({ response }) => {
-  //       setLoading(false)
-  //       if (response.data) {
-  //         console.log(response.data)
+  useEffect(() => {
+    if (!date) return
+    api
+      .post(`/schedules/available`, {
+        user_id: profile.id,
+        date: date.format('YYYY-MM-DD'),
+        total_duration: 30,
+      })
+      .then(response => {
+        setLoading(false)
+        setSchedules(response.data)
+      })
+  }, [profile.id, date])
 
-  //         form.setFields([
-  //           {
-  //             name: 'description',
-  //             errors: [response.data.error],
-  //           },
-  //         ])
-  //       }
-  //     })
-  // }
+  const onFinish = (values: any) => {
+    setLoading(true)
+    const servicesTotalPrice = services
+      .filter((item: any) => values.services.includes(item.id))
+      .reduce((accumulator, item: any) => accumulator + item.price, 0)
+
+    const servicesTotalTime = services
+      .filter((item: any) => values.services.includes(item.id))
+      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
+
+    console.log(values, schedule, servicesTotalTime)
+    api
+      .post(`/appointments`, {
+        ...values,
+        user_id: profile.id,
+        type: 'service',
+        date: date.format('YYYY-MM-DD'),
+        start_time: values.schedule,
+        end_time: Number(values.schedule) + servicesTotalTime,
+        status: 'pending',
+        price: servicesTotalPrice,
+      })
+      .then(response => {
+        setLoading(false)
+        form.resetFields()
+        openNotification({
+          type: 'success',
+          message: 'Agendamento cadastrado com sucesso!',
+        })
+      })
+      .catch(({ response }) => {
+        setLoading(false)
+        if (response.data) {
+          console.log(response.data)
+
+          form.setFields([
+            {
+              name: 'name',
+              errors: [response.data.error],
+            },
+          ])
+        }
+      })
+  }
 
   return (
     <>
@@ -101,7 +120,7 @@ function ManagerProfessionalAppointmentsCreate() {
               className='login-form'
               layout='vertical'
               form={form}
-              // onFinish={onFinish}
+              onFinish={onFinish}
               onFinishFailed={err => console.log('erro no finish', err)}
               requiredMark={false}
               scrollToFirstError
@@ -123,7 +142,7 @@ function ManagerProfessionalAppointmentsCreate() {
                 ]}
               >
                 <Input
-                  placeholder='Ex.: Corte de cabelo'
+                  placeholder='Ex.: João'
                   size='large'
                   onKeyPress={e => {
                     const specialCharRegex = new RegExp(
@@ -142,113 +161,81 @@ function ManagerProfessionalAppointmentsCreate() {
               </Form.Item>
 
               <Form.Item
-                label='Descrição'
-                name='description'
+                label='Telefone'
+                name='number'
                 className='login-form-item'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Por favor, insira a descrição do serviço!',
-                  },
-                  {
-                    pattern: new RegExp('[a-zA-Z \u00C0-\u00FF]'),
-                    message: 'Apenas letras!',
-                  },
-                ]}
               >
                 <Input
-                  placeholder='Ex.: Corte de cabelo na tesoura...'
+                  type='tel'
+                  pattern='[0-9]*'
                   size='large'
-                  onKeyPress={e => {
-                    const specialCharRegex = new RegExp(
-                      '[a-zA-Z \u00C0-\u00FF]'
+                  value={number}
+                  onChange={e => {
+                    const numbers = e.target.value.replace(/[^0-9]/g, '')
+                    const result = numbers.replace(
+                      /^(\d{2})(\d{5})(\d{4}).*/,
+                      '($1) $2-$3'
                     )
-                    const pressedKey = String.fromCharCode(
-                      !e.charCode ? e.which : e.charCode
-                    )
-                    if (!specialCharRegex.test(pressedKey)) {
-                      e.preventDefault()
-                      return false
-                    }
-                    return true
+                    setNumber(result)
                   }}
+                  placeholder='Ex.: (84) 994654749'
+                  maxLength={15}
+                />
+              </Form.Item>
+
+              <Form.Item label='Data' name='date' className='login-form-item'>
+                <DatePicker
+                  defaultValue={date}
+                  format={['DD/MM/YYYY']}
+                  allowClear={false}
+                  onChange={momentValue => setDate(momentValue)}
+                />
+              </Form.Item>
+              <Form.Item
+                label='Serviço'
+                name='services'
+                className='login-form-item'
+              >
+                <Select
+                  placeholder='Selecione um serviço'
+                  mode='multiple'
+                  disabled={!services.length}
+                  options={services.map((item: any) => ({
+                    label: item.name,
+                    value: item.id,
+                  }))}
                 />
               </Form.Item>
 
               <Form.Item
-                label='Preço'
-                name='price'
+                label='Horário'
+                name='schedule'
                 className='login-form-item'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Por favor, insira o preço do serviço!',
-                  },
-                ]}
               >
-                <InputNumber
-                  placeholder='R$20,00'
-                  size='large'
-                  onKeyPress={e => {
-                    const specialCharRegex = new RegExp(
-                      '[a-zA-Z \u00C0-\u00FF]'
-                    )
-                    const pressedKey = String.fromCharCode(
-                      !e.charCode ? e.which : e.charCode
-                    )
-                    if (!specialCharRegex.test(pressedKey)) {
-                      e.preventDefault()
-                      return false
-                    }
-                    return true
-                  }}
+                <Select
+                  placeholder='Selecione um horário'
+                  disabled={!schedules.length}
+                  options={schedules.map((item: any) => ({
+                    label: minutesToHourFormated(item),
+                    value: item,
+                  }))}
                 />
               </Form.Item>
 
-              <Form.Item
-                label='Tempo de duração (min)'
-                name='duration'
-                className='login-form-item'
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      'Por favor, insira o tempo de duração do serviço em minutos!',
-                  },
-                ]}
-              >
-                <InputNumber
-                  placeholder='30min'
-                  size='large'
-                  onKeyPress={e => {
-                    const specialCharRegex = new RegExp(
-                      '[a-zA-Z \u00C0-\u00FF]'
-                    )
-                    const pressedKey = String.fromCharCode(
-                      !e.charCode ? e.which : e.charCode
-                    )
-                    if (!specialCharRegex.test(pressedKey)) {
-                      e.preventDefault()
-                      return false
-                    }
-                    return true
-                  }}
-                />
-              </Form.Item>
               <Form.Item className='login-form-item'>
                 <Button
                   type='primary'
                   htmlType='submit'
                   className='login-form-button'
                   size='large'
-                  // loading={loading}
+                  loading={loading}
                   style={{
                     height: `48px`,
                     fontSize: `16px`,
                     fontWeight: `bold`,
                   }}
                 >
-                  Cadastrar Item
+                  Cadatrar Agendamento
                 </Button>
               </Form.Item>
             </Form>
