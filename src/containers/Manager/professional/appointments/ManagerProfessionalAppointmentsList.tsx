@@ -58,7 +58,7 @@ function ManagerProfesisonalAppointmentsList() {
 
   const handleCanceled = (appointmentId: number) => {
     api
-      .patch(`/me/appointments/${appointmentId}/confirmation`, {
+      .put(`/me/appointments/${appointmentId}/confirmation`, {
         status: 'canceled',
       })
       .then(() => {
@@ -70,7 +70,7 @@ function ManagerProfesisonalAppointmentsList() {
 
   const handleConfirmed = (appointmentId: number) => {
     api
-      .patch(`/me/appointments/${appointmentId}/confirmation`, {
+      .put(`/me/appointments/${appointmentId}/confirmation`, {
         status: 'confirmed',
       })
       .then(response => {
@@ -117,23 +117,27 @@ function ManagerProfesisonalAppointmentsList() {
                 dataSource={data}
                 renderItem={item => (
                   <List.Item
-                    actions={[
-                      <Button
-                        type='primary'
-                        danger
-                        icon={<CloseOutlined />}
-                        onClick={() => handleCanceled(item.id)}
-                      >
-                        Cancelar
-                      </Button>,
-                      <Button
-                        type='primary'
-                        icon={<CheckOutlined />}
-                        onClick={() => handleConfirmed(item.id)}
-                      >
-                        Atender
-                      </Button>,
-                    ]}
+                    actions={
+                      item.status === 'pending'
+                        ? [
+                            <Button
+                              type='primary'
+                              danger
+                              icon={<CloseOutlined />}
+                              onClick={() => handleCanceled(item.id)}
+                            >
+                              Cancelar
+                            </Button>,
+                            <Button
+                              type='primary'
+                              icon={<CheckOutlined />}
+                              onClick={() => handleConfirmed(item.id)}
+                            >
+                              Atender
+                            </Button>,
+                          ]
+                        : []
+                    }
                   >
                     <List.Item.Meta
                       title={
@@ -171,25 +175,30 @@ function ManagerProfesisonalAppointmentsList() {
                       <p>
                         <strong>Contato:</strong> {item.number}{' '}
                       </p>
-                      <div
-                        style={{ display: 'flex', justifyContent: 'center' }}
-                      >
-                        <Button
-                          type='primary'
-                          danger
-                          icon={<CloseOutlined />}
-                          onClick={() => handleCanceled(item.id)}
+                      <p>
+                        <strong>Status:</strong> {item.status}{' '}
+                      </p>
+                      {item.status === 'pending' && (
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}
                         >
-                          Cancelar
-                        </Button>
-                        <Button
-                          type='primary'
-                          icon={<CheckOutlined />}
-                          onClick={() => handleConfirmed(item.id)}
-                        >
-                          Atender
-                        </Button>
-                      </div>
+                          <Button
+                            type='primary'
+                            danger
+                            icon={<CloseOutlined />}
+                            onClick={() => handleCanceled(item.id)}
+                          >
+                            Cancelar
+                          </Button>
+                          <Button
+                            type='primary'
+                            icon={<CheckOutlined />}
+                            onClick={() => handleConfirmed(item.id)}
+                          >
+                            Atender
+                          </Button>
+                        </div>
+                      )}
                     </Card>
                   </List.Item>
                 )}
