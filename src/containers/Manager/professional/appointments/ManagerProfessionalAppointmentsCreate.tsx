@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  InputNumber,
-  Select,
-  DatePicker,
-} from 'antd'
+import { Form, Input, Button, Row, Col, Select, DatePicker } from 'antd'
 
 import Panel from '../../../../components/Panel'
 import api from '../../../../services/api'
@@ -37,9 +28,7 @@ const ManagerProfessionalAppointmentsCreate = () => {
   const [number, setNumber] = useState<string>()
   const [date, setDate] = useState<any>()
   const [services, setServices] = useState([])
-  const [servicesSelected, setServicesSelected] = useState<any>([])
   const [schedules, setSchedules] = useState([])
-  const [schedule, setSchedule] = useState()
   const [loading, setLoading] = useState(false)
   const { openNotification } = useNotification()
 
@@ -75,7 +64,6 @@ const ManagerProfessionalAppointmentsCreate = () => {
       .filter((item: any) => values.services.includes(item.id))
       .reduce((accumulator, item: any) => accumulator + item.duration, 0)
 
-    console.log(values, schedule, servicesTotalTime)
     api
       .post(`/appointments`, {
         ...values,
