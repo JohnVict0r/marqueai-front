@@ -7,6 +7,8 @@ import PrivateLayout from './layouts/PrivateLayout'
 import ManagerPrivateLayout from './layouts/ManagerPrivateLayout'
 import PublicLayout from './layouts/PublicLayout'
 import Home from './containers/pages/Home'
+import Landing from './containers/pages/Landing'
+
 import Profile from './containers/pages/Profile'
 import Success from './containers/auth/Success'
 import Terms from './containers/pages/Terms'
@@ -115,6 +117,7 @@ function Routes() {
         <Route exact path='/404' component={Page404} />
         <Route exact path='/success' component={PageSuccess} />
 
+        <PublicRoute exact path='/' component={Landing} />
         <PublicRoute path='/login' component={Login} />
         <PublicRoute path='/bem-vindo' component={Welcome} />
         <PublicRoute path='/success/:type' component={Success} />
@@ -208,7 +211,7 @@ function Routes() {
         {/* <PrivateRoute path='/vaccines/:id' exact component={VaccineInfo} /> */}
         <Redirect
           to={{
-            pathname: '/login',
+            pathname: '/',
           }}
         />
       </Switch>
