@@ -11,7 +11,7 @@ const professionais = [
   {
     username: 'viana',
     name: 'Ricardo Viana',
-    jobDescription: 'Barbeiro, Santo Antônio/RN',
+    jobDescription: 'Barbeiro',
     avatar: Viana,
   },
 ]
@@ -69,7 +69,7 @@ const Landing: FC = () => {
               ]}
             >
               <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
+                avatar={<Avatar src={item.avatar} size='large' />}
                 title={item.name}
                 description={item.jobDescription}
               />
