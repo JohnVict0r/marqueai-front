@@ -152,6 +152,9 @@ function ManagerProfesisonalAppointmentsList() {
                       }
                     />
                     <div>{time_format(item.start_time)}</div>
+                    <div style={{ paddingLeft: '14px' }}>
+                      <strong>Status:</strong> {item.status}
+                    </div>
                   </List.Item>
                 )}
               />
