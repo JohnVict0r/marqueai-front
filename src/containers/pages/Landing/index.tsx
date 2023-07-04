@@ -41,16 +41,16 @@ const Landing: FC = () => {
         >
           <Image src={Logo} width='240px' />
         </div>
-        <Typography.Title
+        {/* <Typography.Title
           level={4}
           style={{ justifyItems: 'center', textAlign: 'center' }}
         >
           Seu serviço com hora marcada!
-        </Typography.Title>
+        </Typography.Title> */}
         <Typography.Paragraph
           style={{ justifyItems: 'center', textAlign: 'center' }}
         >
-          Selecione um profisisonal para agendar um atendimento:
+          Selecione um profisisonal abaixo:
         </Typography.Paragraph>
 
         <List
