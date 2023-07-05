@@ -164,11 +164,14 @@ const Chat: FC = () => {
   }
 
   const getSchedules = () => {
+    const servicesTotalTime = services
+      .filter((item: any) => servicesSelected.includes(item.id))
+      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
     api
       .post(`/schedules/available`, {
         user_id: (professional as any).id,
         date: date.format('YYYY-MM-DD'),
-        total_duration: 30,
+        total_duration: servicesTotalTime || 30,
       })
       .then(response => {
         setLoading(false)

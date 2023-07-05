@@ -50,7 +50,7 @@ const Landing: FC = () => {
         <Typography.Paragraph
           style={{ justifyItems: 'center', textAlign: 'center' }}
         >
-          Selecione um profisisonal abaixo:
+          Selecione um profissional abaixo:
         </Typography.Paragraph>
 
         <List
