@@ -40,12 +40,12 @@ const ManagerProfessionalAppointmentsCreate = () => {
     })
   }, [profile.username])
 
+  const servicesTotalTime = services
+    .filter((item: any) => form.getFieldValue('services').includes(item.id))
+    .reduce((accumulator, item: any) => accumulator + item.duration, 0)
+
   useEffect(() => {
     if (!date) return
-    const servicesTotalTime = services
-      .filter((item: any) => form.getFieldValue('services').includes(item.id))
-      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
-
     api
       .post(`/schedules/available`, {
         user_id: profile.id,
@@ -56,17 +56,13 @@ const ManagerProfessionalAppointmentsCreate = () => {
         setLoading(false)
         setSchedules(response.data)
       })
-  }, [profile.id, date])
+  }, [profile.id, date, servicesTotalTime])
 
   const onFinish = (values: any) => {
     setLoading(true)
     const servicesTotalPrice = services
       .filter((item: any) => values.services.includes(item.id))
       .reduce((accumulator, item: any) => accumulator + item.price, 0)
-
-    const servicesTotalTime = services
-      .filter((item: any) => values.services.includes(item.id))
-      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
 
     api
       .post(`/appointments`, {
