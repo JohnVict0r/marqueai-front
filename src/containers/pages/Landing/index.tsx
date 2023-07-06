@@ -6,6 +6,7 @@ import './index.less'
 import { useHistory } from 'react-router-dom'
 import Logo from '../../../assets/marqueai.png'
 import Viana from '../../../assets/images/viana.jpeg'
+import Lucas from '../../../assets/images/lucas.jpeg'
 
 const professionais = [
   {
@@ -13,6 +14,12 @@ const professionais = [
     name: 'Ricardo Viana',
     jobDescription: 'Barbeiro',
     avatar: Viana,
+  },
+  {
+    username: 'lucas',
+    name: 'Lucas Campelo',
+    jobDescription: 'Barbeiro',
+    avatar: Lucas,
   },
 ]
 
