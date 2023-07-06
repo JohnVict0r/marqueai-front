@@ -42,11 +42,15 @@ const ManagerProfessionalAppointmentsCreate = () => {
 
   useEffect(() => {
     if (!date) return
+    const servicesTotalTime = services
+      .filter((item: any) => form.getFieldValue('services').includes(item.id))
+      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
+
     api
       .post(`/schedules/available`, {
         user_id: profile.id,
         date: date.format('YYYY-MM-DD'),
-        total_duration: 30,
+        total_duration: servicesTotalTime,
       })
       .then(response => {
         setLoading(false)
