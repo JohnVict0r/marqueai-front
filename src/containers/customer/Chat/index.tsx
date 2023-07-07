@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Input,
   Button,
@@ -163,10 +163,15 @@ const Chat: FC = () => {
     setCurrentStep(currentStep + 1)
   }
 
+  const servicesTotalTime = useMemo(
+    () =>
+      services
+        .filter((item: any) => servicesSelected.includes(item.id))
+        .reduce((accumulator, item: any) => accumulator + item.duration, 0),
+    [services, servicesSelected]
+  )
+
   const getSchedules = () => {
-    const servicesTotalTime = services
-      .filter((item: any) => servicesSelected.includes(item.id))
-      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
     api
       .post(`/schedules/available`, {
         user_id: (professional as any).id,
@@ -259,10 +264,6 @@ const Chat: FC = () => {
 
   const handleCreateAppoitment = () => {
     setLoading(true)
-    const servicesTotalTime = services
-      .filter((item: any) => servicesSelected.includes(item.id))
-      .reduce((accumulator, item: any) => accumulator + item.duration, 0)
-
     api
       .post(`/appointments`, {
         ...data,
@@ -525,7 +526,7 @@ const Chat: FC = () => {
                 fontWeight: `bold`,
                 ...inputStyleDefault,
               }}
-              disabled={name === ''}
+              disabled={servicesTotalTime === 0}
               onClick={addService}
             >
               Enviar
