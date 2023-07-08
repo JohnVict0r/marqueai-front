@@ -9,12 +9,32 @@ import {
   Space,
   DatePicker,
   Card,
+  Tag,
 } from 'antd'
-import { FormOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons'
+import {
+  FormOutlined,
+  CloseOutlined,
+  CheckOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons'
 import api from '../../../../services/api'
 import { useHistory } from 'react-router-dom'
 
 import moment from 'moment'
+
+const statusTag: any = {
+  confirmed: (
+    <Tag icon={<CheckCircleOutlined />} color='success'>
+      Confirmado
+    </Tag>
+  ),
+  pending: (
+    <Tag icon={<ClockCircleOutlined />} color='default'>
+      Aguardando
+    </Tag>
+  ),
+}
 
 function ManagerProfesisonalAppointmentsList() {
   const isMobile = window.innerWidth < 720
@@ -153,7 +173,7 @@ function ManagerProfesisonalAppointmentsList() {
                     />
                     <div>{time_format(item.start_time)}</div>
                     <div style={{ paddingLeft: '14px' }}>
-                      <strong>Status:</strong> {item.status}
+                      <strong>Status:</strong> {statusTag[item.status]}
                     </div>
                   </List.Item>
                 )}
@@ -179,7 +199,7 @@ function ManagerProfesisonalAppointmentsList() {
                         <strong>Contato:</strong> {item.number}{' '}
                       </p>
                       <p>
-                        <strong>Status:</strong> {item.status}{' '}
+                        <strong>Status:</strong> {statusTag[item.status]}{' '}
                       </p>
                       {item.status === 'pending' && (
                         <div
