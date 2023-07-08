@@ -25,7 +25,7 @@ import {
 } from '../../../utils/format'
 import { setCustomerAppointment } from '../../../utils/authentication'
 import './index.less'
-import { weekNumbers } from '../../../utils/constants'
+import { weekNumbers, weekString } from '../../../utils/constants'
 
 const botMessage = (msg: string) => ({
   message: msg,
@@ -96,6 +96,7 @@ const Chat: FC = () => {
   const [services, setServices] = useState([])
   const [currentStep, setCurrentStep] = useState(0)
   const [servicesSelected, setServicesSelected] = useState<any>([])
+  const [daysAvailable, setDaysAvailable] = useState<any>([])
   const [schedules, setSchedules] = useState([])
   const [schedule, setSchedule] = useState()
   const [loading, setLoading] = useState(false)
@@ -107,9 +108,15 @@ const Chat: FC = () => {
   const [modalAppointmentConfirmOpen, setModalAppointmentConfirmOpen] =
     useState<boolean>(false)
 
-  const dates = new Array(8)
-    .fill(0)
-    .map((_, index) => moment().add(index, 'day'))
+  const dates = useMemo(
+    () => new Array(8).fill(0).map((_, index) => moment().add(index, 'day')),
+    []
+  )
+
+  const datesAvailable = useMemo(
+    () => dates.filter(item => daysAvailable.includes(weekString[item.day()])),
+    [dates, daysAvailable]
+  )
 
   useEffect(() => {
     api
@@ -127,6 +134,12 @@ const Chat: FC = () => {
   useEffect(() => {
     api.get(`/users/${params.username}/services`).then(response => {
       setServices(response.data.data)
+    })
+  }, [params.username])
+
+  useEffect(() => {
+    api.get(`/user/${params.username}/days/available`).then(response => {
+      setDaysAvailable(response.data.data.map((item: any) => item.day))
     })
   }, [params.username])
 
@@ -419,7 +432,7 @@ const Chat: FC = () => {
           )}
           {!loading && currentStep === 3 && (
             <div className='select-carrousel'>
-              {dates.map(item => (
+              {datesAvailable.map(item => (
                 <div
                   className='box-date'
                   onClick={() => {

@@ -17,3 +17,13 @@ export const weekNumbers: any = {
   5: 'Sex',
   6: 'Sáb',
 }
+
+export const weekString: any = {
+  0: 'sunday',
+  1: 'monday' ,
+  2: 'tuesday',
+  3: 'wednesday',
+  4: 'thursday',
+  5: 'friday',
+  6: 'saturday',
+}
