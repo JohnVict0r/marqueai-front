@@ -220,13 +220,12 @@ function ManagerProfesisonalAppointmentsList() {
                         <strong>Contato:</strong> {item.number}{' '}
                       </p>
                       <p>
-                        <strong>Status:</strong> {statusTag[item.status]}{' '}
-                      </p>
-                      <p>
                         <strong>Serviços:</strong>{' '}
                         {item.services.map((item: any) => item.name).join(', ')}{' '}
                       </p>
-
+                      <p>
+                        <strong>Status:</strong> {statusTag[item.status]}{' '}
+                      </p>
                       <div
                         style={{ display: 'flex', justifyContent: 'center' }}
                       >
