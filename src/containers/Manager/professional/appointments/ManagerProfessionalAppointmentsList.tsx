@@ -184,7 +184,11 @@ function ManagerProfesisonalAppointmentsList() {
                       }
                       description={
                         <p>
-                          <strong>Contato:</strong> {item.number}{' '}
+                          <strong>Contato:</strong> {item.number} <br />
+                          <strong>Serviços:</strong>{' '}
+                          {item.services
+                            .map((item: any) => item.name)
+                            .join(', ')}{' '}
                         </p>
                       }
                     />
@@ -217,6 +221,10 @@ function ManagerProfesisonalAppointmentsList() {
                       </p>
                       <p>
                         <strong>Status:</strong> {statusTag[item.status]}{' '}
+                      </p>
+                      <p>
+                        <strong>Serviços:</strong>{' '}
+                        {item.services.map((item: any) => item.name).join(', ')}{' '}
                       </p>
 
                       <div
