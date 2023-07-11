@@ -10,6 +10,8 @@ import {
   DatePicker,
   Card,
   Tag,
+  Modal,
+  Descriptions,
 } from 'antd'
 import {
   FormOutlined,
@@ -40,6 +42,8 @@ function ManagerProfesisonalAppointmentsList() {
   const isMobile = window.innerWidth < 720
   const [data, setData] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [appointmentSelected, setAppointmentSelected] = useState<any>({})
+  const [modalCancelOpen, setModalCancelOpen] = useState(false)
   const history = useHistory()
 
   const [date, setDate] = useState<any>(moment())
@@ -142,7 +146,10 @@ function ManagerProfesisonalAppointmentsList() {
                               type='primary'
                               danger
                               icon={<CloseOutlined />}
-                              onClick={() => handleCanceled(item.id)}
+                              onClick={() => {
+                                setAppointmentSelected(item)
+                                setModalCancelOpen(true)
+                              }}
                             >
                               Cancelar
                             </Button>,
@@ -159,7 +166,10 @@ function ManagerProfesisonalAppointmentsList() {
                               type='primary'
                               danger
                               icon={<CloseOutlined />}
-                              onClick={() => handleCanceled(item.id)}
+                              onClick={() => {
+                                setAppointmentSelected(item)
+                                setModalCancelOpen(true)
+                              }}
                             >
                               Cancelar
                             </Button>,
@@ -216,7 +226,10 @@ function ManagerProfesisonalAppointmentsList() {
                           type='primary'
                           danger
                           icon={<CloseOutlined />}
-                          onClick={() => handleCanceled(item.id)}
+                          onClick={() => {
+                            setAppointmentSelected(item)
+                            setModalCancelOpen(true)
+                          }}
                         >
                           Cancelar
                         </Button>
@@ -238,6 +251,40 @@ function ManagerProfesisonalAppointmentsList() {
           </Col>
         </Row>
       </Panel>
+      <Modal
+        title='Deseja Cancelar o agendamento?'
+        centered
+        visible={modalCancelOpen}
+        onOk={() => {
+          handleCanceled(appointmentSelected.id)
+          setModalCancelOpen(false)
+        }}
+        onCancel={() => setModalCancelOpen(false)}
+        footer={[
+          <Button key='back' onClick={() => setModalCancelOpen(false)}>
+            Não
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            loading={loading}
+            onClick={() => {
+              handleCanceled(appointmentSelected.id)
+              setModalCancelOpen(false)
+            }}
+          >
+            Sim
+          </Button>,
+        ]}
+      >
+        <Descriptions size='small' layout='vertical'>
+          <Descriptions.Item label='' style={{ textAlign: 'left' }}>
+            Nome: {appointmentSelected.name}
+            <br />
+            Telefone/Celular: {appointmentSelected.number}
+          </Descriptions.Item>
+        </Descriptions>
+      </Modal>
     </>
   )
 }
