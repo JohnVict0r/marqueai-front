@@ -84,7 +84,6 @@ function ManagerProfesisonalAppointmentsList() {
       .then(() => {
         const newData = data.filter(item => item.id !== appointmentId)
         setData(newData)
-        setLoading(false)
       })
   }
 
@@ -96,7 +95,6 @@ function ManagerProfesisonalAppointmentsList() {
       .then(response => {
         const newData = data.filter(item => item.id !== appointmentId)
         setData([...newData, response.data])
-        setLoading(false)
       })
   }
 
@@ -156,7 +154,16 @@ function ManagerProfesisonalAppointmentsList() {
                               Atender
                             </Button>,
                           ]
-                        : []
+                        : [
+                            <Button
+                              type='primary'
+                              danger
+                              icon={<CloseOutlined />}
+                              onClick={() => handleCanceled(item.id)}
+                            >
+                              Cancelar
+                            </Button>,
+                          ]
                     }
                   >
                     <List.Item.Meta
@@ -201,18 +208,19 @@ function ManagerProfesisonalAppointmentsList() {
                       <p>
                         <strong>Status:</strong> {statusTag[item.status]}{' '}
                       </p>
-                      {item.status === 'pending' && (
-                        <div
-                          style={{ display: 'flex', justifyContent: 'center' }}
+
+                      <div
+                        style={{ display: 'flex', justifyContent: 'center' }}
+                      >
+                        <Button
+                          type='primary'
+                          danger
+                          icon={<CloseOutlined />}
+                          onClick={() => handleCanceled(item.id)}
                         >
-                          <Button
-                            type='primary'
-                            danger
-                            icon={<CloseOutlined />}
-                            onClick={() => handleCanceled(item.id)}
-                          >
-                            Cancelar
-                          </Button>
+                          Cancelar
+                        </Button>
+                        {item.status === 'pending' && (
                           <Button
                             type='primary'
                             icon={<CheckOutlined />}
@@ -220,8 +228,8 @@ function ManagerProfesisonalAppointmentsList() {
                           >
                             Atender
                           </Button>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </Card>
                   </List.Item>
                 )}
