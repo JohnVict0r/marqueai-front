@@ -41,7 +41,7 @@ const ManagerProfessionalAppointmentsCreate = () => {
   }, [profile.username])
 
   const servicesTotalTime = services
-    .filter((item: any) => form.getFieldValue('services').includes(item.id))
+    .filter((item: any) => form.getFieldValue('services')?.includes(item.id))
     .reduce((accumulator, item: any) => accumulator + item.duration, 0)
 
   useEffect(() => {
