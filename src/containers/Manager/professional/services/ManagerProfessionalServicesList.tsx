@@ -28,7 +28,7 @@ function ManagerProfessionalServicesList() {
         title='Serviços cadastrados'
         action={
           <Button
-            style={{ backgroundColor: '#1e3978', color: '#FCFCFC' }}
+            type='primary'
             icon={<FormOutlined />}
             onClick={() => {
               history.push(`/manager/professional/services/create`)
@@ -80,6 +80,21 @@ function ManagerProfessionalServicesList() {
                             {minutesToHourString(item.duration)}
                           </p>,
                         ]}
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}
+                        >
+                          <Button
+                            type='primary'
+                            icon={<FormOutlined />}
+                            onClick={() => {
+                              history.push(
+                                `/manager/professional/services/${item.id}/update`
+                              )
+                            }}
+                          >
+                            Editar
+                          </Button>
+                        </div>
                       </Card>
                     </List.Item>
                   )}
@@ -90,11 +105,13 @@ function ManagerProfessionalServicesList() {
                   renderItem={item => (
                     <List.Item>
                       <Card
+                        style={{ width: '100%' }}
                         title={
                           <p>
                             {' '}
-                            <PushpinOutlined />{' '}
-                            <strong>{item.display_name}</strong>{' '}
+                            <PushpinOutlined /> <strong>
+                              {item.name}
+                            </strong>{' '}
                           </p>
                         }
                       >
@@ -114,6 +131,21 @@ function ManagerProfessionalServicesList() {
                             {minutesToHourString(item.duration)}
                           </p>,
                         ]}
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}
+                        >
+                          <Button
+                            type='primary'
+                            icon={<FormOutlined />}
+                            onClick={() => {
+                              history.push(
+                                `/manager/professional/services/${item.id}/update`
+                              )
+                            }}
+                          >
+                            Editar
+                          </Button>
+                        </div>
                       </Card>
                     </List.Item>
                   )}

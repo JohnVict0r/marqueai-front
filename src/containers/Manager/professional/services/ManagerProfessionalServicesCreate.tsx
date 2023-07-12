@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Form, Input, Button, Row, Col, InputNumber } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Form, Input, Button, Row, Col, InputNumber, Spin } from 'antd'
 
 import Panel from '../../../../components/Panel'
 
 import api from '../../../../services/api'
 import { useNotification } from '../../../../contexts/notification'
+import { useHistory, useParams } from 'react-router-dom'
 
 const validateMessages = {
   // eslint-disable-next-line
@@ -23,9 +24,24 @@ const validateMessages = {
 function ManagerProfessionalServicesCreate() {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
+  const [loadingPage, setLoadingPage] = useState(true)
   const { openNotification } = useNotification()
+  const history = useHistory()
+  const params = useParams<any>()
+  const [service, setService] = useState<any>({})
 
-  const onFinish = (values: any) => {
+  useEffect(() => {
+    if (params.serviceId) {
+      api.get(`/me/services/${params.serviceId}`).then(response => {
+        setService(response.data)
+        setLoadingPage(false)
+      })
+    } else {
+      setLoadingPage(false)
+    }
+  }, [params.serviceId])
+
+  const createService = (values: any) => {
     setLoading(true)
     api
       .post(`/me/services`, {
@@ -54,6 +70,43 @@ function ManagerProfessionalServicesCreate() {
       })
   }
 
+  const updateService = (values: any) => {
+    setLoading(true)
+    api
+      .put(`/me/services/${service.id}`, {
+        ...values,
+      })
+      .then(() => {
+        setLoading(false)
+        openNotification({
+          type: 'success',
+          message: 'Serviço atualizado com sucesso!',
+        })
+        history.push('/manager/professional/services')
+      })
+      .catch(({ response }) => {
+        setLoading(false)
+        if (response.data) {
+          console.log(response.data)
+
+          form.setFields([
+            {
+              name: 'description',
+              errors: [response.data.error],
+            },
+          ])
+        }
+      })
+  }
+
+  const onFinish = (values: any) => {
+    service.id ? updateService(values) : createService(values)
+  }
+
+  if (loadingPage) {
+    return <Spin />
+  }
+
   return (
     <>
       <Panel title='Cadastrar Serviço'>
@@ -69,6 +122,12 @@ function ManagerProfessionalServicesCreate() {
               requiredMark={false}
               scrollToFirstError
               validateMessages={validateMessages}
+              initialValues={{
+                name: service.name || '',
+                description: service.description || '',
+                price: service.price || '',
+                duration: service.duration || '',
+              }}
             >
               <Form.Item
                 label='Nome'
@@ -211,7 +270,7 @@ function ManagerProfessionalServicesCreate() {
                     fontWeight: `bold`,
                   }}
                 >
-                  Cadastrar Item
+                  {service.id ? 'Atualizar' : 'Cadastrar'} Item
                 </Button>
               </Form.Item>
             </Form>

@@ -140,6 +140,11 @@ function Routes() {
           component={ManagerProfessionalServicesCreate}
         />
         <ManagerPrivateRoute
+          path='/manager/professional/services/:serviceId/update'
+          exact
+          component={ManagerProfessionalServicesCreate}
+        />
+        <ManagerPrivateRoute
           path='/manager/professional/schedules'
           exact
           component={ManagerProfessionalSchedulesList}
