@@ -109,7 +109,7 @@ function ManagerProfessionalServicesCreate() {
 
   return (
     <>
-      <Panel title='Cadastrar Serviço'>
+      <Panel title={service.id ? 'Atualizar Serviço' : 'Cadastrar Serviço'}>
         <Row gutter={[24, 24]} style={{ width: '100%' }}>
           <Col xs={{ span: 24 }} lg={{ span: 12, offset: 6 }}>
             <Form
@@ -270,7 +270,7 @@ function ManagerProfessionalServicesCreate() {
                     fontWeight: `bold`,
                   }}
                 >
-                  {service.id ? 'Atualizar' : 'Cadastrar'} Item
+                  {service.id ? 'Atualizar Serviço' : 'Cadastrar Serviçø'}
                 </Button>
               </Form.Item>
             </Form>
