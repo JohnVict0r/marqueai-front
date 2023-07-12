@@ -64,7 +64,7 @@ function ManagerProfessionalSchedulesList() {
         title='Controle de horários'
         action={
           <Button
-            style={{ backgroundColor: '#1e3978', color: '#FCFCFC' }}
+            type='primary'
             icon={<FormOutlined />}
             onClick={() => {
               history.push(`/manager/professional/schedules/create`)
@@ -110,10 +110,25 @@ function ManagerProfessionalSchedulesList() {
                         <p>
                           {' '}
                           <strong>Horário de abertura:</strong>{' '}
-                          {time_format(item.start_time)}{' '}
+                          {time_format(item.start_time)} <br />
                           <strong>Horário de fechamento:</strong>{' '}
                           {time_format(item.end_time)}{' '}
                         </p>
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}
+                        >
+                          <Button
+                            type='primary'
+                            icon={<FormOutlined />}
+                            onClick={() => {
+                              history.push(
+                                `/manager/professional/schedules/${item.id}/update`
+                              )
+                            }}
+                          >
+                            Editar
+                          </Button>
+                        </div>
                       </Card>
                     </List.Item>
                   )}
@@ -137,10 +152,25 @@ function ManagerProfessionalSchedulesList() {
                         <p>
                           {' '}
                           <strong>Aabertura:</strong>{' '}
-                          {time_format(item.start_time)}{' '}
+                          {time_format(item.start_time)} <br />
                           <strong>Fechamento:</strong>{' '}
                           {time_format(item.end_time)}{' '}
                         </p>
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}
+                        >
+                          <Button
+                            type='primary'
+                            icon={<FormOutlined />}
+                            onClick={() => {
+                              history.push(
+                                `/manager/professional/schedules/${item.id}/update`
+                              )
+                            }}
+                          >
+                            Editar
+                          </Button>
+                        </div>
                       </Card>
                     </List.Item>
                   )}

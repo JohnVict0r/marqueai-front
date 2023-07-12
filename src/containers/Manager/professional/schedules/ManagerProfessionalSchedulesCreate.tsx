@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { Form, Button, Space, Select, Row, Col, InputNumber } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Form, Button, Space, Select, Row, Col, InputNumber, Spin } from 'antd'
 
 import Panel from '../../../../components/Panel'
 
 import api from '../../../../services/api'
 import { weekdays } from '../../../../utils/constants'
 import { useNotification } from '../../../../contexts/notification'
+import { useHistory, useParams } from 'react-router-dom'
 
 const validateMessages = {
   // eslint-disable-next-line
@@ -32,7 +33,37 @@ function ManagerProfessionalSchedulesCreate() {
   const [startMinutes, setStartMinutes] = useState<any>()
   const [endMinutes, setEndMinutes] = useState<any>()
 
+  const params = useParams<any>()
+  const [loadingPage, setLoadingPage] = useState(true)
+  const [schedule, setSchedule] = useState<any>({})
+  const history = useHistory()
+
+  useEffect(() => {
+    if (params.scheduleId) {
+      api.get(`/me/schedules/${params.scheduleId}`).then(response => {
+        setSchedule(response.data)
+        form.setFields([
+          {
+            name: 'day',
+            value: response.data.day,
+          },
+        ])
+        setStartHour(Math.trunc(response.data.start_time / 60))
+        setStartMinutes(response.data.start_time % 60)
+        setEndHour(Math.trunc(response.data.end_time / 60))
+        setEndMinutes(response.data.end_time % 60)
+        setLoadingPage(false)
+      })
+    } else {
+      setLoadingPage(false)
+    }
+  }, [params.scheduleId, form])
+
   const onFinish = (values: any) => {
+    params.scheduleId ? updateSchedule(values) : createSchedule(values)
+  }
+
+  const createSchedule = (values: any) => {
     setLoading(true)
     const startTimeInMinutes = (startHour || 0) * 60 + (startMinutes || 0)
     const endTimeInMinutes = (endHour || 0) * 60 + (endMinutes || 0)
@@ -68,9 +99,44 @@ function ManagerProfessionalSchedulesCreate() {
       })
   }
 
+  const updateSchedule = (values: any) => {
+    setLoading(true)
+    const startTimeInMinutes = (startHour || 0) * 60 + (startMinutes || 0)
+    const endTimeInMinutes = (endHour || 0) * 60 + (endMinutes || 0)
+
+    api
+      .put(`/me/schedules/${params.scheduleId}`, {
+        start_time: startTimeInMinutes,
+        end_time: endTimeInMinutes,
+      })
+      .then(() => {
+        setLoading(false)
+        openNotification({
+          type: 'success',
+          message: 'Horário atualizado com sucesso!',
+        })
+        history.push('/manager/professional/schedules')
+      })
+      .catch(({ response }) => {
+        setLoading(false)
+        if (response.data) {
+          form.setFields([
+            {
+              name: 'day',
+              errors: [response.data.errors[0]],
+            },
+          ])
+        }
+      })
+  }
+
+  if (loadingPage) {
+    return <Spin />
+  }
+
   return (
     <>
-      <Panel title='Cadastrar Horário'>
+      <Panel title={schedule.id ? 'Atualizar Horário' : 'Cadastrar Horário'}>
         <Row gutter={[24, 24]} style={{ width: '100%' }}>
           <Col xs={{ span: 24 }} lg={{ span: 12, offset: 6 }}>
             <Form
@@ -99,6 +165,7 @@ function ManagerProfessionalSchedulesCreate() {
                   allowClear
                   style={{ width: '100%' }}
                   placeholder='Selecione um dia'
+                  disabled={schedule.id}
                 >
                   {weekdays.map(item => (
                     <Select.Option value={item.value} key={item.value}>
@@ -112,12 +179,6 @@ function ManagerProfessionalSchedulesCreate() {
                 className='login-form-item'
                 name=''
                 label='Horário de abertura'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Por favor, insira um horário de abertura!',
-                  },
-                ]}
               >
                 <Space>
                   <InputNumber
@@ -144,12 +205,6 @@ function ManagerProfessionalSchedulesCreate() {
                 className='login-form-item'
                 name=''
                 label='Horário de fechamento'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Por favor, insira um horário de fechamento!',
-                  },
-                ]}
               >
                 <Space>
                   <InputNumber
@@ -186,7 +241,7 @@ function ManagerProfessionalSchedulesCreate() {
                     fontWeight: `bold`,
                   }}
                 >
-                  Cadastrar horário
+                  {schedule.id ? 'Atualizar Horário' : 'Cadastrar Horário'}
                 </Button>
               </Form.Item>
             </Form>
