@@ -85,9 +85,14 @@ function ProfesisonalAppointmentsList() {
       .put(`/me/appointments/${appointmentId}/confirmation`, {
         status: 'confirmed',
       })
-      .then(response => {
-        const newData = data.filter(item => item.id !== appointmentId)
-        setData([...newData, response.data])
+      .then(() => {
+        const newData = data.map(item => {
+          if (item.id === appointmentId) {
+            return { ...item, status: 'confirmed' }
+          }
+          return item
+        })
+        setData(newData)
       })
   }
 
