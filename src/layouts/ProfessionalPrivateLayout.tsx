@@ -1,34 +1,39 @@
 import React, { FC, useState } from 'react'
 
-import { Layout, Button, Menu, Dropdown, Image, Drawer } from 'antd'
+import { Layout, Button, Menu, Dropdown, Drawer, Image } from 'antd'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
   LogoutOutlined,
   DownOutlined,
-  AppstoreOutlined,
-  CalendarOutlined,
+  // AppstoreOutlined,
+  SettingOutlined,
+  ClockCircleOutlined,
 } from '@ant-design/icons'
+import Logo from '../../src/assets/marqueai.svg'
+
+import iconLogo from '../../src/assets/icon.svg'
 
 import './PrivateLayout.less'
-import Logo from '../assets/logos/gestio_azul.png'
-import LogoSmall from '../assets/logos/g_azul.png'
 import Avatar from 'antd/lib/avatar/avatar'
-import { removeAuthToken, getProfile, getRoles } from '../utils/authentication'
+import { removeAuthToken, getProfile } from '../utils/authentication'
 import { useHistory, useLocation } from 'react-router-dom'
-import VaccineIcon from '../components/Icons/VaccineIcon'
 
 const { Header, Sider, Content } = Layout
 
-const PrivateLayout: FC = ({ children }) => {
+const ProfessionalPrivateLayout: FC = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false)
 
   const history = useHistory()
   const location = useLocation()
 
   const profile = getProfile()
-  const roles = getRoles()
+  // const roles = getRoles()
+
+  // const isGestor = roles.includes("GESTOR")
+  // const isOperador = roles.includes("OPERADOR")
+  // const isProfessional = roles.includes("PROFESSIONAL")
 
   const isMobile = window.innerWidth < 720
   const menuProfile = () => (
@@ -37,12 +42,12 @@ const PrivateLayout: FC = ({ children }) => {
         key='1'
         icon={<UserOutlined />}
         onClick={() => {
-          history.push('/profile')
+          history.push('/professional/profile')
         }}
       >
         Perfil
       </Menu.Item>
-      {roles.length > 0 && (
+      {/* {roles.length > 0 &&
         <Menu.Item
           key='2'
           icon={<UserOutlined />}
@@ -52,7 +57,7 @@ const PrivateLayout: FC = ({ children }) => {
         >
           Selecionar Módulo
         </Menu.Item>
-      )}
+      } */}
       <Menu.Item
         key='3'
         icon={<LogoutOutlined />}
@@ -64,6 +69,83 @@ const PrivateLayout: FC = ({ children }) => {
       >
         Sair
       </Menu.Item>
+    </Menu>
+  )
+
+  const MenuManager = () => (
+    <Menu theme='light' mode='inline'>
+      {/* <Menu.Item
+        key='1'
+        icon={<AppstoreOutlined />}
+        className={
+          selectedMenuNav('/manager/professional/home')
+            ? 'ant-menu-item ant-menu-item-selected'
+            : 'ant-menu-item'
+        }
+        onClick={() => {
+          history.push('/manager/professional/home')
+        }}
+      >
+        Início
+      </Menu.Item> */}
+      <Menu.Item
+        key='1'
+        icon={<ClockCircleOutlined />}
+        className={
+          selectedMenuNav('/professional/appointments')
+            ? 'ant-menu-item ant-menu-item-selected'
+            : 'ant-menu-item'
+        }
+        onClick={() => {
+          history.push('/professional/appointments')
+        }}
+      >
+        Agendamentos
+      </Menu.Item>
+
+      <Menu.Item
+        key='2'
+        icon={<SettingOutlined />}
+        className={
+          selectedMenuNav('/professional/services')
+            ? 'ant-menu-item ant-menu-item-selected'
+            : 'ant-menu-item'
+        }
+        onClick={() => {
+          history.push('/professional/services')
+        }}
+      >
+        Serviços
+      </Menu.Item>
+      <Menu.Item
+        key='3'
+        icon={<ClockCircleOutlined />}
+        className={
+          selectedMenuNav('/professional/schedules')
+            ? 'ant-menu-item ant-menu-item-selected'
+            : 'ant-menu-item'
+        }
+        onClick={() => {
+          history.push('/professional/schedules')
+        }}
+      >
+        Horários
+      </Menu.Item>
+
+      {/* <Menu.Item
+        key='5'
+        icon={<UserOutlined />}
+        className={
+          selectedMenuNav('/gestao/profissionais')
+            ? 'ant-menu-item ant-menu-item-selected'
+            : 'ant-menu-item'
+        }
+        onClick={() => {
+          history.push('/gestao/profissionais')
+        }}
+      >
+        Profissionais
+      </Menu.Item> */}
     </Menu>
   )
 
@@ -82,7 +164,7 @@ const PrivateLayout: FC = ({ children }) => {
         <Drawer
           title={
             <div className='logo'>
-              <Image width={75} height={75} src={Logo} preview={false} />
+              <Image src={Logo} preview={false} />
             </div>
           }
           placement='left'
@@ -91,36 +173,7 @@ const PrivateLayout: FC = ({ children }) => {
           visible={!collapsed}
           key='left'
         >
-          <Menu theme='light' mode='inline'>
-            <Menu.Item
-              key='1'
-              icon={<AppstoreOutlined style={{ color: '#1e3978' }} />}
-              className={
-                selectedMenuNav('/cidadao/inicio')
-                  ? 'ant-menu-item ant-menu-item-selected'
-                  : 'ant-menu-item'
-              }
-              onClick={() => {
-                history.push('/cidadao/inicio')
-              }}
-            >
-              Início
-            </Menu.Item>
-            <Menu.Item
-              key='2'
-              icon={<VaccineIcon color={false} />}
-              className={
-                selectedMenuNav('/cidadao/agendamentos')
-                  ? 'ant-menu-item ant-menu-item-selected'
-                  : 'ant-menu-item'
-              }
-              onClick={() => {
-                history.push('/cidadao/agendamentos')
-              }}
-            >
-              Meus agendamentos
-            </Menu.Item>
-          </Menu>
+          <MenuManager />
         </Drawer>
       ) : (
         <Sider
@@ -131,45 +184,20 @@ const PrivateLayout: FC = ({ children }) => {
           collapsed={collapsed}
         >
           <div className='logo'>
-            <Image
+            {/* <Image
               src={collapsed ? LogoSmall : Logo}
               height={collapsed ? 45 : 75}
               width={collapsed ? 45 : 75}
               preview={false}
               style={{ opacity: '0.6' }}
-            />
+            /> */}
+            {collapsed ? (
+              <Image src={iconLogo} preview={false} />
+            ) : (
+              <Image src={Logo} preview={false} />
+            )}
           </div>
-          <Menu theme='light' mode='inline'>
-            <Menu.Item
-              key='1'
-              icon={<AppstoreOutlined />}
-              className={
-                selectedMenuNav('/cidadao/inicio')
-                  ? 'ant-menu-item ant-menu-item-selected'
-                  : 'ant-menu-item'
-              }
-              onClick={() => {
-                history.push('/cidadao/inicio')
-              }}
-            >
-              Início
-            </Menu.Item>
-
-            <Menu.Item
-              key='2'
-              icon={<CalendarOutlined />}
-              className={
-                selectedMenuNav('/cidadao/agendamentos')
-                  ? 'ant-menu-item ant-menu-item-selected'
-                  : 'ant-menu-item'
-              }
-              onClick={() => {
-                history.push('/cidadao/agendamentos')
-              }}
-            >
-              Meus agendamentos
-            </Menu.Item>
-          </Menu>
+          <MenuManager />
         </Sider>
       )}
 
@@ -189,7 +217,7 @@ const PrivateLayout: FC = ({ children }) => {
               <Avatar
                 style={{
                   color: '#FCFCFC',
-                  backgroundColor: '#1e3978',
+                  backgroundColor: '#FF7A00',
                   marginRight: '10px',
                 }}
               >
@@ -214,4 +242,4 @@ const PrivateLayout: FC = ({ children }) => {
   )
 }
 
-export default PrivateLayout
+export default ProfessionalPrivateLayout

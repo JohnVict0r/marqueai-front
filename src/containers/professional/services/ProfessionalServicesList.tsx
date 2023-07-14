@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import Panel from '../../../../components/Panel'
+import Panel from '../../../components/Panel'
 import { Row, Col, List, Button, Card } from 'antd'
 import { PushpinOutlined, FormOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router-dom'
-import api from '../../../../services/api'
+import api from '../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
 import {
   minutesToHourString,
   priceToCurrencyString,
-} from '../../../../utils/format'
+} from '../../../utils/format'
 
-function ManagerProfessionalServicesList() {
+function ProfessionalServicesList() {
   const isMobile = window.innerWidth < 720
   const history = useHistory()
   const [dataItem, setDataItem] = useState<any[]>([])
@@ -31,7 +31,7 @@ function ManagerProfessionalServicesList() {
             type='primary'
             icon={<FormOutlined />}
             onClick={() => {
-              history.push(`/manager/professional/services/create`)
+              history.push(`/professional/services/create`)
             }}
           >
             Cadastrar Serviço
@@ -88,7 +88,7 @@ function ManagerProfessionalServicesList() {
                             icon={<FormOutlined />}
                             onClick={() => {
                               history.push(
-                                `/manager/professional/services/${item.id}/update`
+                                `/professional/services/${item.id}/update`
                               )
                             }}
                           >
@@ -139,7 +139,7 @@ function ManagerProfessionalServicesList() {
                             icon={<FormOutlined />}
                             onClick={() => {
                               history.push(
-                                `/manager/professional/services/${item.id}/update`
+                                `/professional/services/${item.id}/update`
                               )
                             }}
                           >
@@ -159,4 +159,4 @@ function ManagerProfessionalServicesList() {
   )
 }
 
-export default ManagerProfessionalServicesList
+export default ProfessionalServicesList

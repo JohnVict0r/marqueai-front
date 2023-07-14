@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Input, Button, Row, Col, Select, DatePicker } from 'antd'
 
-import Panel from '../../../../components/Panel'
-import api from '../../../../services/api'
-import { getProfile } from '../../../../utils/authentication'
+import Panel from '../../../components/Panel'
+import api from '../../../services/api'
+import { getProfile } from '../../../utils/authentication'
 
-import { useNotification } from '../../../../contexts/notification'
-import { minutesToHourFormated } from '../../../../utils/format'
+import { useNotification } from '../../../contexts/notification'
+import { minutesToHourFormated } from '../../../utils/format'
 
 const validateMessages = {
   // eslint-disable-next-line
@@ -22,7 +22,7 @@ const validateMessages = {
   },
 }
 
-const ManagerProfessionalAppointmentsCreate = () => {
+const ProfessionalAppointmentsCreate = () => {
   const [form] = Form.useForm()
 
   const [number, setNumber] = useState<string>()
@@ -234,4 +234,4 @@ const ManagerProfessionalAppointmentsCreate = () => {
   )
 }
 
-export default ManagerProfessionalAppointmentsCreate
+export default ProfessionalAppointmentsCreate

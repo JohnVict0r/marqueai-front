@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect } from 'react'
-import { Form, Input, Button, Select } from 'antd'
+import React, { FC, useState } from 'react'
+import { Form, Input, Button } from 'antd'
 import api from '../../../services/api'
 import { getProfile, setProfile } from '../../../utils/authentication'
 
@@ -23,10 +23,10 @@ const ProfileForm: FC = () => {
 
   const profile = getProfile()
 
-  const [ufs, setUfs] = useState<any[]>([])
-  const [stateId, setStateId] = useState('24')
-  const [cities, setCities] = useState<any[]>([])
-  const [city, setCity] = useState(profile.city)
+  // const [ufs, setUfs] = useState<any[]>([])
+  // const [stateId, setStateId] = useState('24')
+  // const [cities, setCities] = useState<any[]>([])
+  // const [city, setCity] = useState(profile.city)
   const [loading, setLoading] = useState(false)
 
   // const [day, setDay] = useState(profile.birth.split('T')[0].split('-')[2])
@@ -36,41 +36,41 @@ const ProfileForm: FC = () => {
 
   // const [year, setYear] = useState(profile.birth.split('T')[0].split('-')[0])
 
-  useEffect(() => {
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(
-      response => {
-        response.json().then(ufs => setUfs(ufs))
-      }
-    )
-  }, [])
+  // useEffect(() => {
+  //   fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(
+  //     response => {
+  //       response.json().then(ufs => setUfs(ufs))
+  //     }
+  //   )
+  // }, [])
 
-  useEffect(() => {
-    fetch(
-      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateId}/municipios`
-    ).then(response => {
-      response.json().then(cities => setCities(cities))
-    })
-  }, [stateId])
+  // useEffect(() => {
+  //   fetch(
+  //     `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateId}/municipios`
+  //   ).then(response => {
+  //     response.json().then(cities => setCities(cities))
+  //   })
+  // }, [stateId])
 
   const onFinish = (values: any) => {
     setLoading(true)
-    const stateSelected = ufs.filter(uf => uf.id === Number(stateId))[0]
-    const stateFormated = `${stateSelected.nome} - ${stateSelected.sigla}`
+    // const stateSelected = ufs.filter(uf => uf.id === Number(stateId))[0]
+    // const stateFormated = `${stateSelected.nome} - ${stateSelected.sigla}`
 
     api
       .put(`/profiles/${profile.id}`, {
         ...values,
         // birth: `${year}-${month}-${day}`,
-        state: stateFormated,
-        city,
+        // state: stateFormated,
+        // city,
       })
       .then(() => {
         setProfile({
           ...profile,
           ...values,
           // birth: `${year}-${month}-${day}`,
-          state: stateFormated,
-          city,
+          // state: stateFormated,
+          // city,
         })
         setLoading(false)
       })
@@ -150,7 +150,7 @@ const ProfileForm: FC = () => {
         </Space>
       </Form.Item> */}
 
-      <Form.Item
+      {/* <Form.Item
         name='gender'
         label='Sexo'
         rules={[
@@ -163,9 +163,9 @@ const ProfileForm: FC = () => {
         initialValue={profile.gender === 'male' ? 'Masculino' : 'Feminino'}
       >
         <Input disabled={true} />
-      </Form.Item>
+      </Form.Item> */}
 
-      <Form.Item
+      {/* <Form.Item
         name='state'
         label='Estado'
         rules={[{ required: true, message: 'Por favor, selecione um estado!' }]}
@@ -209,7 +209,7 @@ const ProfileForm: FC = () => {
             </Select.Option>
           ))}
         </Select>
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item>
         <Button
@@ -218,6 +218,7 @@ const ProfileForm: FC = () => {
           className='login-form-button'
           size='large'
           loading={loading}
+          disabled
           style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
         >
           Salvar Alterações

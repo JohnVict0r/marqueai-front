@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Panel from '../../../../components/Panel'
+import Panel from '../../../components/Panel'
 import {
   Row,
   Col,
@@ -20,7 +20,7 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons'
-import api from '../../../../services/api'
+import api from '../../../services/api'
 import { useHistory } from 'react-router-dom'
 
 import moment from 'moment'
@@ -38,7 +38,7 @@ const statusTag: any = {
   ),
 }
 
-function ManagerProfesisonalAppointmentsList() {
+function ProfesisonalAppointmentsList() {
   const isMobile = window.innerWidth < 720
   const [data, setData] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -68,17 +68,6 @@ function ManagerProfesisonalAppointmentsList() {
     if (numero <= 9) return '0' + numero
     else return numero
   }
-
-  /* const onlyUnique = (value:any, index:any, self:any) => {
-    return self.indexOf(value) === index;
-  }
-
-  const get_unique_date = (data:any) => {
-    let atribute = data.map((item:any)=>item.user_name);
-    let unique = atribute.filter(onlyUnique);
-
-    return unique;
-  } */
 
   const handleCanceled = (appointmentId: number) => {
     api
@@ -111,7 +100,7 @@ function ManagerProfesisonalAppointmentsList() {
             type='primary'
             icon={<FormOutlined />}
             onClick={() => {
-              history.push(`/manager/professional/appointments/create`)
+              history.push(`/professional/appointments/create`)
             }}
           >
             Cadastrar Agendamento
@@ -296,4 +285,4 @@ function ManagerProfesisonalAppointmentsList() {
   )
 }
 
-export default ManagerProfesisonalAppointmentsList
+export default ProfesisonalAppointmentsList

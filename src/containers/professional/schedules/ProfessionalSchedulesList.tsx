@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import Panel from '../../../../components/Panel'
+import Panel from '../../../components/Panel'
 import { Row, Col, List, Statistic, Button, Card } from 'antd'
 import { PushpinOutlined, FormOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router-dom'
-import api from '../../../../services/api'
+import api from '../../../services/api'
 import '@progress/kendo-theme-material/dist/all.css'
 import 'hammerjs'
-import { weekdays } from '../../../../utils/constants'
+import { weekdays } from '../../../utils/constants'
 
-function ManagerProfessionalSchedulesList() {
+function ProfessionalSchedulesList() {
   const isMobile = window.innerWidth < 720
   const history = useHistory()
   const [dataSchedule, setDataSchedule] = useState<any[]>([])
@@ -36,28 +36,6 @@ function ManagerProfessionalSchedulesList() {
     })
   }, [])
 
-  /*  useEffect(() => {
-    api.get(`/puzzles`).then((response) => {
-      setDataPuzzle(response.data)
-    })
-
-  }, []) */
-
-  //console.log(actualPuzzle)
-  /*  const time_format = (time:any) =>{
-      let hours = adicionaZero(Math.trunc(time/60))
-      let minutes = adicionaZero(time%60)
-
-      return `${hours}h${minutes}min`
-    }
-
-    function adicionaZero(numero:any) {
-      if (numero <= 9)
-        return "0" + numero;
-      else
-        return numero;
-    } */
-
   return (
     <>
       <Panel
@@ -67,7 +45,7 @@ function ManagerProfessionalSchedulesList() {
             type='primary'
             icon={<FormOutlined />}
             onClick={() => {
-              history.push(`/manager/professional/schedules/create`)
+              history.push(`/professional/schedules/create`)
             }}
           >
             Cadastrar Horário
@@ -122,7 +100,7 @@ function ManagerProfessionalSchedulesList() {
                             icon={<FormOutlined />}
                             onClick={() => {
                               history.push(
-                                `/manager/professional/schedules/${item.id}/update`
+                                `/professional/schedules/${item.id}/update`
                               )
                             }}
                           >
@@ -164,7 +142,7 @@ function ManagerProfessionalSchedulesList() {
                             icon={<FormOutlined />}
                             onClick={() => {
                               history.push(
-                                `/manager/professional/schedules/${item.id}/update`
+                                `/professional/schedules/${item.id}/update`
                               )
                             }}
                           >
@@ -184,4 +162,4 @@ function ManagerProfessionalSchedulesList() {
   )
 }
 
-export default ManagerProfessionalSchedulesList
+export default ProfessionalSchedulesList

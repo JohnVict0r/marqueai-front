@@ -92,6 +92,7 @@ const PasswordAccountForm: FC = () => {
           className='login-form-button'
           size='large'
           loading={loading}
+          disabled
           style={{ height: `48px`, fontSize: `16px`, fontWeight: `bold` }}
         >
           Salvar nova senha

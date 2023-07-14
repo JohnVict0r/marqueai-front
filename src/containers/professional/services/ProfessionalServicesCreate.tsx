@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Input, Button, Row, Col, InputNumber, Spin } from 'antd'
 
-import Panel from '../../../../components/Panel'
+import Panel from '../../../components/Panel'
 
-import api from '../../../../services/api'
-import { useNotification } from '../../../../contexts/notification'
+import api from '../../../services/api'
+import { useNotification } from '../../../contexts/notification'
 import { useHistory, useParams } from 'react-router-dom'
 
 const validateMessages = {
@@ -21,7 +21,7 @@ const validateMessages = {
   },
 }
 
-function ManagerProfessionalServicesCreate() {
+function ProfessionalServicesCreate() {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const [loadingPage, setLoadingPage] = useState(true)
@@ -82,7 +82,7 @@ function ManagerProfessionalServicesCreate() {
           type: 'success',
           message: 'Serviço atualizado com sucesso!',
         })
-        history.push('/manager/professional/services')
+        history.push('/professional/services')
       })
       .catch(({ response }) => {
         setLoading(false)
@@ -281,4 +281,4 @@ function ManagerProfessionalServicesCreate() {
   )
 }
 
-export default ManagerProfessionalServicesCreate
+export default ProfessionalServicesCreate

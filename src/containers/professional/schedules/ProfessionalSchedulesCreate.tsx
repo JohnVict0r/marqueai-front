@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Space, Select, Row, Col, InputNumber, Spin } from 'antd'
 
-import Panel from '../../../../components/Panel'
+import Panel from '../../../components/Panel'
 
-import api from '../../../../services/api'
-import { weekdays } from '../../../../utils/constants'
-import { useNotification } from '../../../../contexts/notification'
+import api from '../../../services/api'
+import { weekdays } from '../../../utils/constants'
+import { useNotification } from '../../../contexts/notification'
 import { useHistory, useParams } from 'react-router-dom'
 
 const validateMessages = {
@@ -115,7 +115,7 @@ function ManagerProfessionalSchedulesCreate() {
           type: 'success',
           message: 'Horário atualizado com sucesso!',
         })
-        history.push('/manager/professional/schedules')
+        history.push('/professional/schedules')
       })
       .catch(({ response }) => {
         setLoading(false)
