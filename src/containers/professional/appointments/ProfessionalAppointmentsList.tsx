@@ -176,7 +176,7 @@ function ProfesisonalAppointmentsList() {
                           <strong>Contato:</strong> {item.number} <br />
                           <strong>Serviços:</strong>{' '}
                           {item.services
-                            .map((item: any) => item.name)
+                            ?.map((item: any) => item.name)
                             .join(', ')}{' '}
                         </p>
                       }
