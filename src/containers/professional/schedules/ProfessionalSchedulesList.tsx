@@ -90,7 +90,11 @@ function ProfessionalSchedulesList() {
                           <strong>Horário de abertura:</strong>{' '}
                           {time_format(item.start_time)} <br />
                           <strong>Horário de fechamento:</strong>{' '}
-                          {time_format(item.end_time)}{' '}
+                          {time_format(item.end_time)} <br />
+                          <strong>Início do Almoço:</strong>{' '}
+                          {time_format(item.lunch_start)} <br />
+                          <strong>Fim do Almoço:</strong>{' '}
+                          {time_format(item.lunch_end)}{' '}
                         </p>
                         <div
                           style={{ display: 'flex', justifyContent: 'center' }}
@@ -129,10 +133,14 @@ function ProfessionalSchedulesList() {
                       >
                         <p>
                           {' '}
-                          <strong>Aabertura:</strong>{' '}
+                          <strong>Abertura:</strong>{' '}
                           {time_format(item.start_time)} <br />
                           <strong>Fechamento:</strong>{' '}
-                          {time_format(item.end_time)}{' '}
+                          {time_format(item.end_time)} <br />
+                          <strong>Início do almoço:</strong>{' '}
+                          {time_format(item.lunch_start)} <br />
+                          <strong>Fim do almoço:</strong>{' '}
+                          {time_format(item.lunch_end)}{' '}
                         </p>
                         <div
                           style={{ display: 'flex', justifyContent: 'center' }}

@@ -33,6 +33,11 @@ function ManagerProfessionalSchedulesCreate() {
   const [startMinutes, setStartMinutes] = useState<any>()
   const [endMinutes, setEndMinutes] = useState<any>()
 
+  const [startLunchHour, setStartLunchHour] = useState<any>()
+  const [endLunchHour, setEndLunchHour] = useState<any>()
+  const [startLunchMinutes, setStartLunchMinutes] = useState<any>()
+  const [endLunchMinutes, setEndLunchMinutes] = useState<any>()
+
   const params = useParams<any>()
   const [loadingPage, setLoadingPage] = useState(true)
   const [schedule, setSchedule] = useState<any>({})
@@ -52,6 +57,12 @@ function ManagerProfessionalSchedulesCreate() {
         setStartMinutes(response.data.start_time % 60)
         setEndHour(Math.trunc(response.data.end_time / 60))
         setEndMinutes(response.data.end_time % 60)
+        if (response.data.lunch_start && response.data.lunch_end) {
+          setStartLunchHour(Math.trunc(response.data.lunch_start / 60))
+          setStartLunchMinutes(response.data.lunch_start % 60)
+          setEndLunchHour(Math.trunc(response.data.lunch_end / 60))
+          setEndLunchMinutes(response.data.lunch_end % 60)
+        }
         setLoadingPage(false)
       })
     } else {
@@ -67,12 +78,17 @@ function ManagerProfessionalSchedulesCreate() {
     setLoading(true)
     const startTimeInMinutes = (startHour || 0) * 60 + (startMinutes || 0)
     const endTimeInMinutes = (endHour || 0) * 60 + (endMinutes || 0)
+    const startLunchInMinutes =
+      (startLunchHour || 0) * 60 + (startLunchMinutes || 0)
+    const endLunchInMinutes = (endLunchHour || 0) * 60 + (endLunchMinutes || 0)
 
     api
       .post(`/me/schedules`, {
         ...values,
         start_time: startTimeInMinutes,
         end_time: endTimeInMinutes,
+        lunch_start: startLunchInMinutes,
+        lunch_end: endLunchInMinutes,
       })
       .then(() => {
         setLoading(false)
@@ -86,8 +102,9 @@ function ManagerProfessionalSchedulesCreate() {
           message: 'Horário cadastrado com sucesso!',
         })
       })
-      .catch(({ response }) => {
+      .catch(response => {
         setLoading(false)
+        console.error(response)
         if (response.data) {
           form.setFields([
             {
@@ -103,11 +120,16 @@ function ManagerProfessionalSchedulesCreate() {
     setLoading(true)
     const startTimeInMinutes = (startHour || 0) * 60 + (startMinutes || 0)
     const endTimeInMinutes = (endHour || 0) * 60 + (endMinutes || 0)
+    const startLunchInMinutes =
+      (startLunchHour || 0) * 60 + (startLunchMinutes || 0)
+    const endLunchInMinutes = (endLunchHour || 0) * 60 + (endLunchMinutes || 0)
 
     api
       .put(`/me/schedules/${params.scheduleId}`, {
         start_time: startTimeInMinutes,
         end_time: endTimeInMinutes,
+        lunch_start: startLunchInMinutes,
+        lunch_end: endLunchInMinutes,
       })
       .then(() => {
         setLoading(false)
@@ -117,7 +139,8 @@ function ManagerProfessionalSchedulesCreate() {
         })
         history.push('/professional/schedules')
       })
-      .catch(({ response }) => {
+      .catch(response => {
+        console.error(response)
         setLoading(false)
         if (response.data) {
           form.setFields([
@@ -223,6 +246,59 @@ function ManagerProfessionalSchedulesCreate() {
                     value={endMinutes}
                     onChange={value => {
                       setEndMinutes(Number(value))
+                    }}
+                  />
+                </Space>
+              </Form.Item>
+
+              <Form.Item
+                className='login-form-item'
+                name=''
+                label='Início do almoço'
+              >
+                <Space>
+                  <InputNumber
+                    placeholder='Hora'
+                    min={0}
+                    max={23}
+                    value={startLunchHour}
+                    onChange={value => {
+                      setStartLunchHour(Number(value))
+                    }}
+                  />
+                  <InputNumber
+                    placeholder='Minutos'
+                    min={0}
+                    max={59}
+                    value={startLunchMinutes}
+                    onChange={value => {
+                      setStartLunchMinutes(Number(value))
+                    }}
+                  />
+                </Space>
+              </Form.Item>
+              <Form.Item
+                className='login-form-item'
+                name=''
+                label='Fim do almoço'
+              >
+                <Space>
+                  <InputNumber
+                    placeholder='Hora'
+                    min={0}
+                    max={23}
+                    value={endLunchHour}
+                    onChange={value => {
+                      setEndLunchHour(Number(value))
+                    }}
+                  />
+                  <InputNumber
+                    placeholder='Minutos'
+                    min={0}
+                    max={59}
+                    value={endLunchMinutes}
+                    onChange={value => {
+                      setEndLunchMinutes(Number(value))
                     }}
                   />
                 </Space>
