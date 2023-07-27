@@ -87,8 +87,8 @@ function ManagerProfessionalSchedulesCreate() {
         ...values,
         start_time: startTimeInMinutes,
         end_time: endTimeInMinutes,
-        lunch_start: startLunchInMinutes,
-        lunch_end: endLunchInMinutes,
+        lunch_start: startLunchInMinutes || null,
+        lunch_end: endLunchInMinutes || null,
       })
       .then(() => {
         setLoading(false)
@@ -128,8 +128,8 @@ function ManagerProfessionalSchedulesCreate() {
       .put(`/me/schedules/${params.scheduleId}`, {
         start_time: startTimeInMinutes,
         end_time: endTimeInMinutes,
-        lunch_start: startLunchInMinutes,
-        lunch_end: endLunchInMinutes,
+        lunch_start: startLunchInMinutes || null,
+        lunch_end: endLunchInMinutes || null,
       })
       .then(() => {
         setLoading(false)

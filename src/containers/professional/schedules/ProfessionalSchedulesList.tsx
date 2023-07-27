@@ -91,10 +91,14 @@ function ProfessionalSchedulesList() {
                           {time_format(item.start_time)} <br />
                           <strong>Horário de fechamento:</strong>{' '}
                           {time_format(item.end_time)} <br />
-                          <strong>Início do Almoço:</strong>{' '}
-                          {time_format(item.lunch_start)} <br />
-                          <strong>Fim do Almoço:</strong>{' '}
-                          {time_format(item.lunch_end)}{' '}
+                          {item.lunch_start && item.lunch_end && (
+                            <React.Fragment>
+                              <strong>Início do almoço:</strong>{' '}
+                              {time_format(item.lunch_start)} <br />
+                              <strong>Fim do almoço:</strong>{' '}
+                              {time_format(item.lunch_end)}{' '}
+                            </React.Fragment>
+                          )}
                         </p>
                         <div
                           style={{ display: 'flex', justifyContent: 'center' }}
@@ -137,10 +141,14 @@ function ProfessionalSchedulesList() {
                           {time_format(item.start_time)} <br />
                           <strong>Fechamento:</strong>{' '}
                           {time_format(item.end_time)} <br />
-                          <strong>Início do almoço:</strong>{' '}
-                          {time_format(item.lunch_start)} <br />
-                          <strong>Fim do almoço:</strong>{' '}
-                          {time_format(item.lunch_end)}{' '}
+                          {item.lunch_start && item.lunch_end && (
+                            <React.Fragment>
+                              <strong>Início do almoço:</strong>{' '}
+                              {time_format(item.lunch_start)} <br />
+                              <strong>Fim do almoço:</strong>{' '}
+                              {time_format(item.lunch_end)}{' '}
+                            </React.Fragment>
+                          )}
                         </p>
                         <div
                           style={{ display: 'flex', justifyContent: 'center' }}
