@@ -227,33 +227,6 @@ function ManagerProfessionalSchedulesCreate() {
               <Form.Item
                 className='login-form-item'
                 name=''
-                label='Horário de fechamento'
-              >
-                <Space>
-                  <InputNumber
-                    placeholder='Hora'
-                    min={0}
-                    max={23}
-                    value={endHour}
-                    onChange={value => {
-                      setEndHour(Number(value))
-                    }}
-                  />
-                  <InputNumber
-                    placeholder='Minutos'
-                    min={0}
-                    max={59}
-                    value={endMinutes}
-                    onChange={value => {
-                      setEndMinutes(Number(value))
-                    }}
-                  />
-                </Space>
-              </Form.Item>
-
-              <Form.Item
-                className='login-form-item'
-                name=''
                 label='Início do almoço'
               >
                 <Space>
@@ -299,6 +272,32 @@ function ManagerProfessionalSchedulesCreate() {
                     value={endLunchMinutes}
                     onChange={value => {
                       setEndLunchMinutes(Number(value))
+                    }}
+                  />
+                </Space>
+              </Form.Item>
+              <Form.Item
+                className='login-form-item'
+                name=''
+                label='Horário de fechamento'
+              >
+                <Space>
+                  <InputNumber
+                    placeholder='Hora'
+                    min={0}
+                    max={23}
+                    value={endHour}
+                    onChange={value => {
+                      setEndHour(Number(value))
+                    }}
+                  />
+                  <InputNumber
+                    placeholder='Minutos'
+                    min={0}
+                    max={59}
+                    value={endMinutes}
+                    onChange={value => {
+                      setEndMinutes(Number(value))
                     }}
                   />
                 </Space>
