@@ -68,9 +68,7 @@ const Landing: FC = () => {
               actions={[
                 <Button
                   type='primary'
-                  onClick={() =>
-                    history.push(`https://app.marqueai.com.br/admin/login`)
-                  }
+                  onClick={() => history.push(`/${item.username}`)}
                 >
                   Agendar
                   <ArrowRightOutlined />
@@ -87,7 +85,7 @@ const Landing: FC = () => {
         />
         <div className='login-form-register' style={{ margin: '14px' }}>
           Você é um profissional?
-          <a href='/login'> Realize o login</a>
+          <a href='https://app.marqueai.com.br/admin/login'> Realize o login</a>
         </div>
       </Col>
     </Row>
