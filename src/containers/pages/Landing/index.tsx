@@ -68,7 +68,9 @@ const Landing: FC = () => {
               actions={[
                 <Button
                   type='primary'
-                  onClick={() => history.push(`/${item.username}`)}
+                  onClick={() =>
+                    history.push(`https://app.marqueai.com.br/admin/login`)
+                  }
                 >
                   Agendar
                   <ArrowRightOutlined />
