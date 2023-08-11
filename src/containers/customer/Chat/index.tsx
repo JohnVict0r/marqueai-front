@@ -258,6 +258,7 @@ const Chat: FC = () => {
       customerMessage('Voltar'),
       botMessage('Qual dia você deseja agendar?'),
     ])
+    setDate(moment())
     setCurrentStep(currentStep - 1)
   }
 
