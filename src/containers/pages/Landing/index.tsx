@@ -7,19 +7,41 @@ import { useHistory } from 'react-router-dom'
 import Logo from '../../../assets/marqueai.png'
 import Viana from '../../../assets/images/viana.jpeg'
 import Lucas from '../../../assets/images/lucas.jpeg'
+import Manoel from '../../../assets/images/manoel.jpeg'
+import Alaide from '../../../assets/images/alaide.jpeg'
 
 const professionais = [
   {
     username: 'viana',
     name: 'Ricardo Viana',
     jobDescription: 'Barbeiro',
+    city: 'Santo Antônio',
+    state: 'RN',
     avatar: Viana,
   },
   {
     username: 'lucas',
     name: 'Lucas Campelo',
     jobDescription: 'Barbeiro',
+    city: 'Santo Antônio',
+    state: 'RN',
     avatar: Lucas,
+  },
+  {
+    username: 'manoelbarber',
+    name: 'Manoel Barber',
+    jobDescription: 'Barbeiro',
+    city: 'Major Sales',
+    state: 'RN',
+    avatar: Manoel,
+  },
+  {
+    username: 'alaiderafaela',
+    name: 'Alaíde Rafaela',
+    jobDescription: 'Manicure e Pedicure',
+    city: 'Major Sales',
+    state: 'RN',
+    avatar: Alaide,
   },
 ]
 
@@ -78,7 +100,14 @@ const Landing: FC = () => {
               <List.Item.Meta
                 avatar={<Avatar src={item.avatar} size='large' />}
                 title={item.name}
-                description={item.jobDescription}
+                description={
+                  <div>
+                    <div>
+                      {item.city}/{item.state}
+                    </div>
+                    <div>{item.jobDescription}</div>
+                  </div>
+                }
               />
             </List.Item>
           )}
