@@ -63,6 +63,14 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      // Check for updates at start.
+      registration.update();
+      // Check for updates every 5 min.
+      setInterval(() => {
+      registration.update();
+      console.log("Checked for update...");
+      }, (1000 * 60) * 0.5); // 5 min.
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing
         if (installingWorker == null) {
@@ -89,6 +97,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               // "Content is cached for offline use." message.
               console.log('Content is cached for offline use.')
 
+              console.info("Update available! To update, close all windows and reopen");
               // Execute callback
               if (config && config.onSuccess) {
                 config.onSuccess(registration)
