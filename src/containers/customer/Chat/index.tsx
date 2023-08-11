@@ -146,8 +146,11 @@ const Chat: FC = () => {
   useEffect(() => {
     messagesEndRef &&
       messagesEndRef.current &&
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, messagesEndRef])
+      setTimeout(
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' }),
+        1000
+      )
+  }, [messages, messagesEndRef, loading])
 
   const addName = () => {
     setData({
@@ -297,13 +300,7 @@ const Chat: FC = () => {
     return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
 
   return (
-    <Row
-      justify='center'
-      align='middle'
-      style={{
-        height: '100vh',
-      }}
-    >
+    <Row justify='center'>
       <Col
         xs={{ span: 20 }}
         lg={{ span: 8 }}
@@ -320,12 +317,12 @@ const Chat: FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '20vh',
+            height: '10vh',
           }}
         >
           <Image src={Logo} width='240px' preview={false} />
         </div>
-        <div style={{ height: '50vh', overflowY: 'auto' }}>
+        <div style={{ height: '70vh', overflowY: 'auto' }}>
           <List
             size='large'
             dataSource={messages}
@@ -349,59 +346,6 @@ const Chat: FC = () => {
               </div>
             )}
           />
-          <div ref={messagesEndRef}></div>
-        </div>
-        <div>
-          {currentStep === 0 && (
-            <>
-              <Input
-                type='tel'
-                pattern='[0-9]*'
-                style={{ ...inputStyleDefault }}
-                size='large'
-                value={number}
-                onChange={e => {
-                  const numbers = e.target.value.replace(/[^0-9]/g, '')
-                  const result = numbers.replace(
-                    /^(\d{2})(\d{5})(\d{4}).*/,
-                    '($1) $2-$3'
-                  )
-                  setNumber(result)
-                }}
-                placeholder='Ex.: (84) 994654749'
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    addNumber()
-                  }
-                }}
-                maxLength={15}
-              />
-            </>
-          )}
-
-          {currentStep === 1 && (
-            <>
-              <Input
-                style={{ ...inputStyleDefault }}
-                size='large'
-                placeholder='Nome'
-                value={name}
-                onChange={e => {
-                  const result = e.target.value.replace(
-                    /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
-                    ''
-                  )
-                  setName(result)
-                }}
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    addName()
-                  }
-                }}
-                maxLength={50}
-              />
-            </>
-          )}
           {currentStep === 2 && (
             <div className='select-carrousel'>
               {services.map((item: any) => (
@@ -478,6 +422,60 @@ const Chat: FC = () => {
                 </div>
               ))}
             </div>
+          )}
+
+          <div ref={messagesEndRef}></div>
+        </div>
+        <div>
+          {currentStep === 0 && (
+            <>
+              <Input
+                type='tel'
+                pattern='[0-9]*'
+                style={{ ...inputStyleDefault }}
+                size='large'
+                value={number}
+                onChange={e => {
+                  const numbers = e.target.value.replace(/[^0-9]/g, '')
+                  const result = numbers.replace(
+                    /^(\d{2})(\d{5})(\d{4}).*/,
+                    '($1) $2-$3'
+                  )
+                  setNumber(result)
+                }}
+                placeholder='Ex.: (84) 994654749'
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    addNumber()
+                  }
+                }}
+                maxLength={15}
+              />
+            </>
+          )}
+
+          {currentStep === 1 && (
+            <>
+              <Input
+                style={{ ...inputStyleDefault }}
+                size='large'
+                placeholder='Nome'
+                value={name}
+                onChange={e => {
+                  const result = e.target.value.replace(
+                    /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
+                    ''
+                  )
+                  setName(result)
+                }}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    addName()
+                  }
+                }}
+                maxLength={50}
+              />
+            </>
           )}
 
           {loading && <Spin />}
