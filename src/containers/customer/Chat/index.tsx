@@ -323,7 +323,7 @@ const Chat: FC = () => {
             height: '20vh',
           }}
         >
-          <Image src={Logo} width='240px' />
+          <Image src={Logo} width='240px' preview={false} />
         </div>
         <div style={{ height: '50vh', overflowY: 'auto' }}>
           <List

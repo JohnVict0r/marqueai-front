@@ -46,7 +46,7 @@ const Landing: FC = () => {
             height: '20vh',
           }}
         >
-          <Image src={Logo} width='240px' />
+          <Image src={Logo} width='240px' preview={false} />
         </div>
         {/* <Typography.Title
           level={4}
