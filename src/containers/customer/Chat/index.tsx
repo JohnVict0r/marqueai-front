@@ -152,6 +152,44 @@ const Chat: FC = () => {
       )
   }, [messages, messagesEndRef, schedules])
 
+  const getNameByTel = async (tel: string) => {
+    setLoading(true)
+    api.get(`/appointments/customer/${tel}`).then(response => {
+      setLoading(false)
+      if (response.status === 200) {
+        setData({
+          ...data,
+          number,
+          name: response.data,
+        })
+        setMessages([
+          ...messages,
+          customerMessage(number),
+          botMessage(`Que bom que voltou, ${response.data}!`),
+          botMessage('Selecione um ou mais serviços para agendamento:'),
+        ])
+
+        setCurrentStep(2)
+      } else {
+        setMessages([
+          ...messages,
+          customerMessage(number),
+          botMessage('Qual o seu nome, por favor?'),
+        ])
+        setCurrentStep(currentStep + 1)
+      }
+    })
+  }
+
+  const addNumber = async () => {
+    setData({
+      ...data,
+      number,
+    })
+
+    getNameByTel(number.replace(/[^0-9]/g, ''))
+  }
+
   const addName = () => {
     setData({
       ...data,
@@ -162,19 +200,6 @@ const Chat: FC = () => {
       customerMessage(name),
       botMessage(`Legal, ${name}!`),
       botMessage('Selecione um ou mais serviços para agendamento:'),
-    ])
-    setCurrentStep(currentStep + 1)
-  }
-
-  const addNumber = () => {
-    setData({
-      ...data,
-      number,
-    })
-    setMessages([
-      ...messages,
-      customerMessage(number),
-      botMessage('Qual o seu nome, por favor?'),
     ])
     setCurrentStep(currentStep + 1)
   }
@@ -428,98 +453,118 @@ const Chat: FC = () => {
 
           <div ref={messagesEndRef}></div>
         </div>
-        <div
-          style={{
-            alignItems: 'center',
-            justifyItems: 'center',
-            position: 'fixed',
-            left: '0px',
-            right: '0px',
-            bottom: '0px',
-            padding: '1.5rem',
-            backgroundColor: 'white',
-            display: 'flex',
-            flexDirection: 'column',
-            WebkitBoxPack: 'center',
-            justifyContent: 'center',
-            zIndex: 3000,
-          }}
-        >
-          <div>
+        {loading ? (
+          <Spin />
+        ) : (
+          <div
+            style={{
+              alignItems: 'center',
+              justifyItems: 'center',
+              position: 'fixed',
+              left: '0px',
+              right: '0px',
+              bottom: '0px',
+              padding: '1.5rem',
+              backgroundColor: 'white',
+              display: 'flex',
+              flexDirection: 'column',
+              WebkitBoxPack: 'center',
+              justifyContent: 'center',
+              zIndex: 3000,
+            }}
+          >
+            <div>
+              {currentStep === 0 && (
+                <>
+                  <Input
+                    type='tel'
+                    pattern='[0-9]*'
+                    style={{ ...inputStyleDefault }}
+                    size='large'
+                    value={number}
+                    onChange={e => {
+                      const numbers = e.target.value.replace(/[^0-9]/g, '')
+                      const result = numbers.replace(
+                        /^(\d{2})(\d{5})(\d{4}).*/,
+                        '($1) $2-$3'
+                      )
+                      setNumber(result)
+                    }}
+                    placeholder='Ex.: (84) 994654749'
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') {
+                        addNumber()
+                      }
+                    }}
+                    maxLength={15}
+                  />
+                </>
+              )}
+
+              {currentStep === 1 && (
+                <>
+                  <Input
+                    style={{ ...inputStyleDefault }}
+                    size='large'
+                    placeholder='Seu nome'
+                    value={name}
+                    onChange={e => {
+                      const result = e.target.value.replace(
+                        /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
+                        ''
+                      )
+                      setName(result)
+                    }}
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') {
+                        addName()
+                      }
+                    }}
+                    maxLength={50}
+                  />
+                </>
+              )}
+            </div>
             {currentStep === 0 && (
-              <>
-                <Input
-                  type='tel'
-                  pattern='[0-9]*'
-                  style={{ ...inputStyleDefault }}
-                  size='large'
-                  value={number}
-                  onChange={e => {
-                    const numbers = e.target.value.replace(/[^0-9]/g, '')
-                    const result = numbers.replace(
-                      /^(\d{2})(\d{5})(\d{4}).*/,
-                      '($1) $2-$3'
-                    )
-                    setNumber(result)
-                  }}
-                  placeholder='Ex.: (84) 994654749'
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                      addNumber()
-                    }
-                  }}
-                  maxLength={15}
-                />
-              </>
+              <Button
+                type='primary'
+                htmlType='submit'
+                className='login-form-button'
+                size='large'
+                style={{
+                  height: `48px`,
+                  fontSize: `16px`,
+                  fontWeight: `bold`,
+                  ...inputStyleDefault,
+                }}
+                disabled={number.length < 11 || !validatePhone(number)}
+                onClick={addNumber}
+              >
+                Enviar
+              </Button>
             )}
 
             {currentStep === 1 && (
               <>
-                <Input
-                  style={{ ...inputStyleDefault }}
+                <Button
+                  type='primary'
+                  htmlType='submit'
+                  className='login-form-button'
                   size='large'
-                  placeholder='Nome'
-                  value={name}
-                  onChange={e => {
-                    const result = e.target.value.replace(
-                      /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
-                      ''
-                    )
-                    setName(result)
+                  style={{
+                    height: `48px`,
+                    fontSize: `16px`,
+                    fontWeight: `bold`,
+                    ...inputStyleDefault,
                   }}
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                      addName()
-                    }
-                  }}
-                  maxLength={50}
-                />
+                  disabled={name.length < 3}
+                  onClick={addName}
+                >
+                  Enviar
+                </Button>
               </>
             )}
-
-            {loading && <Spin />}
-          </div>
-          {currentStep === 0 && (
-            <Button
-              type='primary'
-              htmlType='submit'
-              className='login-form-button'
-              size='large'
-              style={{
-                height: `48px`,
-                fontSize: `16px`,
-                fontWeight: `bold`,
-                ...inputStyleDefault,
-              }}
-              disabled={number.length < 11 || !validatePhone(number)}
-              onClick={addNumber}
-            >
-              Enviar
-            </Button>
-          )}
-
-          {currentStep === 1 && (
-            <>
+            {currentStep === 2 && (
               <Button
                 type='primary'
                 htmlType='submit'
@@ -531,68 +576,15 @@ const Chat: FC = () => {
                   fontWeight: `bold`,
                   ...inputStyleDefault,
                 }}
-                disabled={name.length < 3}
-                onClick={addName}
+                disabled={servicesTotalTime === 0}
+                onClick={addService}
               >
                 Enviar
               </Button>
-            </>
-          )}
-          {currentStep === 2 && (
-            <Button
-              type='primary'
-              htmlType='submit'
-              className='login-form-button'
-              size='large'
-              style={{
-                height: `48px`,
-                fontSize: `16px`,
-                fontWeight: `bold`,
-                ...inputStyleDefault,
-              }}
-              disabled={servicesTotalTime === 0}
-              onClick={addService}
-            >
-              Enviar
-            </Button>
-          )}
-          {!loading && currentStep === 3 && (
-            <Button
-              type='primary'
-              htmlType='submit'
-              className='login-form-button'
-              size='large'
-              style={{
-                height: `48px`,
-                fontSize: `16px`,
-                fontWeight: `bold`,
-                ...inputStyleDefault,
-              }}
-              disabled={!date}
-              onClick={addDate}
-            >
-              Verificar
-            </Button>
-          )}
-          {!loading && currentStep === 4 && (
-            <>
+            )}
+            {!loading && currentStep === 3 && (
               <Button
                 type='primary'
-                htmlType='submit'
-                className='login-form-button'
-                size='large'
-                style={{
-                  height: `48px`,
-                  fontSize: `16px`,
-                  fontWeight: 'bold',
-                  ...inputStyleDefault,
-                }}
-                disabled={!schedule}
-                onClick={() => setModalAppointmentConfirmOpen(true)}
-              >
-                Finalizar Agendamento
-              </Button>
-              <Button
                 htmlType='submit'
                 className='login-form-button'
                 size='large'
@@ -602,14 +594,50 @@ const Chat: FC = () => {
                   fontWeight: `bold`,
                   ...inputStyleDefault,
                 }}
-                disabled={name === ''}
-                onClick={backToDateChange}
+                disabled={!date}
+                onClick={addDate}
               >
-                Voltar
+                Verificar
               </Button>
-            </>
-          )}
-        </div>
+            )}
+            {!loading && currentStep === 4 && (
+              <>
+                <Button
+                  type='primary'
+                  htmlType='submit'
+                  className='login-form-button'
+                  size='large'
+                  style={{
+                    height: `48px`,
+                    fontSize: `16px`,
+                    fontWeight: 'bold',
+                    ...inputStyleDefault,
+                  }}
+                  disabled={!schedule}
+                  onClick={() => setModalAppointmentConfirmOpen(true)}
+                >
+                  Finalizar Agendamento
+                </Button>
+                <Button
+                  htmlType='submit'
+                  className='login-form-button'
+                  size='large'
+                  style={{
+                    height: `48px`,
+                    fontSize: `16px`,
+                    fontWeight: `bold`,
+                    ...inputStyleDefault,
+                  }}
+                  disabled={name === ''}
+                  onClick={backToDateChange}
+                >
+                  Voltar
+                </Button>
+              </>
+            )}
+          </div>
+        )}
+
         <Modal
           title='Deseja finalizar o agendamento?'
           centered
