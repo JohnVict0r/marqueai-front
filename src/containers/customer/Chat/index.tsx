@@ -109,7 +109,7 @@ const Chat: FC = () => {
     useState<boolean>(false)
 
   const dates = useMemo(
-    () => new Array(8).fill(0).map((_, index) => moment().add(index, 'day')),
+    () => new Array(30).fill(0).map((_, index) => moment().add(index, 'day')),
     []
   )
 
