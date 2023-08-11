@@ -320,6 +320,7 @@ const Chat: FC = () => {
             justifyContent: 'center',
             height: '10vh',
           }}
+          onClick={() => history.push('/')}
         >
           <Image src={Logo} width='240px' preview={false} />
         </div>
