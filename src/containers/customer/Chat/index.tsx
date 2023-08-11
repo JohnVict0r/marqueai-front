@@ -66,7 +66,7 @@ const inputStyleDefault = {
 const initialMessages = [
   botMessage('Oi, tudo bem?'),
   botMessage('Sou o Mark, assistente virtual para marcar o seu horário!'),
-  botMessage('Qual o seu nome, por favor?'),
+  botMessage('Qual o seu número, por favor?'),
 ]
 
 const initialData = {
@@ -157,8 +157,8 @@ const Chat: FC = () => {
     setMessages([
       ...messages,
       customerMessage(name),
-      botMessage(`Excelente, ${name}! Bora lá?`),
-      botMessage('Por favor, informe um telefone/celular para contato:'),
+      botMessage(`Legal, ${name}!`),
+      botMessage('Selecione um ou mais serviços para agendamento:'),
     ])
     setCurrentStep(currentStep + 1)
   }
@@ -171,7 +171,7 @@ const Chat: FC = () => {
     setMessages([
       ...messages,
       customerMessage(number),
-      botMessage('Selecione um ou mais serviços para agendamento:'),
+      botMessage('Qual o seu nome, por favor?'),
     ])
     setCurrentStep(currentStep + 1)
   }
@@ -355,30 +355,6 @@ const Chat: FC = () => {
           {currentStep === 0 && (
             <>
               <Input
-                style={{ ...inputStyleDefault }}
-                size='large'
-                placeholder='Nome'
-                value={name}
-                onChange={e => {
-                  const result = e.target.value.replace(
-                    /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
-                    ''
-                  )
-                  setName(result)
-                }}
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    addName()
-                  }
-                }}
-                maxLength={50}
-              />
-            </>
-          )}
-
-          {currentStep === 1 && (
-            <>
-              <Input
                 type='tel'
                 pattern='[0-9]*'
                 style={{ ...inputStyleDefault }}
@@ -399,6 +375,30 @@ const Chat: FC = () => {
                   }
                 }}
                 maxLength={15}
+              />
+            </>
+          )}
+
+          {currentStep === 1 && (
+            <>
+              <Input
+                style={{ ...inputStyleDefault }}
+                size='large'
+                placeholder='Nome'
+                value={name}
+                onChange={e => {
+                  const result = e.target.value.replace(
+                    /[^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÒÖÚÇÑ'~˜` ]+$/,
+                    ''
+                  )
+                  setName(result)
+                }}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    addName()
+                  }
+                }}
+                maxLength={50}
               />
             </>
           )}
@@ -500,8 +500,8 @@ const Chat: FC = () => {
                 fontWeight: `bold`,
                 ...inputStyleDefault,
               }}
-              disabled={name === ''}
-              onClick={addName}
+              disabled={number.length < 11 || !validatePhone(number)}
+              onClick={addNumber}
             >
               Enviar
             </Button>
@@ -520,8 +520,8 @@ const Chat: FC = () => {
                   fontWeight: `bold`,
                   ...inputStyleDefault,
                 }}
-                disabled={number.length < 11 || !validatePhone(number)}
-                onClick={addNumber}
+                disabled={name.length < 3}
+                onClick={addName}
               >
                 Enviar
               </Button>
