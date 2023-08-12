@@ -162,6 +162,7 @@ const Chat: FC = () => {
           number,
           name: response.data,
         })
+        setName(response.data)
         setMessages([
           ...messages,
           customerMessage(number),
