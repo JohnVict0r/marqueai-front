@@ -6,6 +6,7 @@ import { isAuthenticated } from './utils/authentication'
 import ProfessionalPrivateLayout from './layouts/ProfessionalPrivateLayout'
 import PublicLayout from './layouts/PublicLayout'
 import Landing from './containers/pages/Landing'
+import LandingViana from './containers/pages/LandingViana'
 
 import Profile from './containers/pages/Profile'
 import Success from './containers/auth/Success'
@@ -83,6 +84,11 @@ function Routes() {
         <Route exact path='/success' component={PageSuccess} />
 
         <PublicRoute exact path='/' component={Landing} />
+        <PublicRoute
+          exact
+          path='/store/vianasbarbearia'
+          component={LandingViana}
+        />
         <PublicRoute path='/login' component={Login} />
         <PublicRoute path='/bem-vindo' component={Welcome} />
         <PublicRoute path='/success/:type' component={Success} />
