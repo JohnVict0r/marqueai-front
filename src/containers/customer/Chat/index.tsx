@@ -459,7 +459,7 @@ const Chat: FC = () => {
           <div ref={messagesEndRef}></div>
         </div>
         {loading ? (
-          <Spin />
+          <Spin style={{ display: 'flex', justifyContent: 'center' }} />
         ) : (
           <div
             style={{
