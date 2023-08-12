@@ -324,7 +324,11 @@ const Chat: FC = () => {
   }
 
   if (professionalLoading)
-    return <Spin style={{ display: 'flex', justifyContent: 'center' }} />
+    return (
+      <Spin
+        style={{ display: 'flex', justifyContent: 'center', marginTop: '50vh' }}
+      />
+    )
 
   return (
     <Row justify='center'>
