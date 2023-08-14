@@ -9,6 +9,7 @@ import {
   Row,
   Modal,
   Descriptions,
+  Checkbox,
 } from 'antd'
 
 import { useHistory, useParams } from 'react-router-dom'
@@ -379,29 +380,31 @@ const Chat: FC = () => {
             )}
           />
           {currentStep === 2 && (
-            <div className='select-carrousel'>
+            <div className='select-checkbox'>
               {services.map((item: any) => (
                 <div
-                  className='box'
-                  onClick={() => handleSelectService(item.id)}
+                  className={`checkbox-item ${
+                    servicesSelected.includes(item.id)
+                      ? 'checkbox-item--active'
+                      : ''
+                  }`}
                 >
-                  <div
-                    className={`info ${
-                      servicesSelected.includes(item.id) ? 'info--active' : ''
-                    }`}
+                  <Checkbox
+                    onClick={() => handleSelectService(item.id)}
+                    checked={servicesSelected.includes(item.id)}
                   >
-                    {/* <input
-                      type='checkbox'
-                      checked={servicesSelected.includes(item.id)}
-                    /> */}
-                    <p className='name'>
-                      <b>{item.name}</b>
-                    </p>
-                    <div className='details'>
-                      <p>{minutesToHourString(item.duration)}</p>
-                      <p>{priceToCurrencyString(item.price)}</p>
+                    <div>
+                      <p className='name'>
+                        <b>{item.name}</b>
+                      </p>
+                      <div className='details'>
+                        <p>
+                          {minutesToHourString(item.duration)} -{' '}
+                          {priceToCurrencyString(item.price)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </Checkbox>
                 </div>
               ))}
             </div>
