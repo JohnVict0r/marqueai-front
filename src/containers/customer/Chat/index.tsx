@@ -123,7 +123,7 @@ const Chat: FC = () => {
     api
       .get(`/users/${params.username}/info`)
       .then(response => {
-        if (response.data === 'Recurso não encontrado') history.push('/404')
+        if (response.data === 'errors.not_found') history.push('/404')
         setProfessionalLoading(false)
         setProfessional(response.data.data)
       })
@@ -133,10 +133,12 @@ const Chat: FC = () => {
   }, [params.username, history])
 
   useEffect(() => {
-    api.get(`/users/${params.username}/services`).then(response => {
-      setServices(response.data.data)
-    })
-  }, [params.username])
+    if (professional) {
+      api.get(`/users/${params.username}/services`).then(response => {
+        setServices(response.data.data)
+      })
+    }
+  }, [professional, params.username])
 
   useEffect(() => {
     api.get(`/user/${params.username}/days/available`).then(response => {
@@ -388,6 +390,7 @@ const Chat: FC = () => {
                       ? 'checkbox-item--active'
                       : ''
                   }`}
+                  onClick={() => handleSelectService(item.id)}
                 >
                   <Checkbox
                     onClick={() => handleSelectService(item.id)}
