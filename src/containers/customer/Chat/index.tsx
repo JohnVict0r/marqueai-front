@@ -390,7 +390,6 @@ const Chat: FC = () => {
                       ? 'checkbox-item--active'
                       : ''
                   }`}
-                  onClick={() => handleSelectService(item.id)}
                 >
                   <Checkbox
                     onClick={() => handleSelectService(item.id)}
