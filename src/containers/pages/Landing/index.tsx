@@ -1,15 +1,5 @@
 import React, { FC, useState } from 'react'
-import {
-  Image,
-  Row,
-  Col,
-  Button,
-  Typography,
-  Avatar,
-  List,
-  Select,
-  Space,
-} from 'antd'
+import { Image, Row, Col, Button, Avatar, List, Select } from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 
 import './index.less'
