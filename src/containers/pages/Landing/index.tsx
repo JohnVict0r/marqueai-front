@@ -1,5 +1,15 @@
-import React, { FC } from 'react'
-import { Image, Row, Col, Button, Typography, Avatar, List } from 'antd'
+import React, { FC, useState } from 'react'
+import {
+  Image,
+  Row,
+  Col,
+  Button,
+  Typography,
+  Avatar,
+  List,
+  Select,
+  Space,
+} from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 
 import './index.less'
@@ -7,6 +17,7 @@ import { useHistory } from 'react-router-dom'
 import Logo from '../../../assets/marqueai.png'
 import Viana from '../../../assets/images/viana.jpeg'
 import Lucas from '../../../assets/images/lucas.jpeg'
+import RejaneViana from '../../../assets/images/rejaneviana.jpeg'
 import Manoel from '../../../assets/images/manoel.jpeg'
 import Alaide from '../../../assets/images/alaide.jpeg'
 
@@ -28,6 +39,14 @@ const professionais = [
     avatar: Lucas,
   },
   {
+    username: 'rejaneviana',
+    name: 'Rejane Viana',
+    jobDescription: 'Dermato Funcional',
+    city: 'Santo Antônio',
+    state: 'RN',
+    avatar: RejaneViana,
+  },
+  {
     username: 'manoelbarber',
     name: 'Manoel Barber',
     jobDescription: 'Barbeiro',
@@ -47,6 +66,7 @@ const professionais = [
 
 const Landing: FC = () => {
   const history = useHistory()
+  const [city, setCity] = useState('')
 
   return (
     <Row
@@ -76,15 +96,28 @@ const Landing: FC = () => {
         >
           Seu serviço com hora marcada!
         </Typography.Title> */}
-        <Typography.Paragraph
-          style={{ justifyItems: 'center', textAlign: 'center' }}
-        >
-          Selecione um profissional abaixo:
-        </Typography.Paragraph>
+
+        <Row>
+          <Col span={16} offset={4}>
+            <Select
+              style={{ width: '100%' }}
+              placeholder={'Selecione uma cidade'}
+              onChange={(value: any) => setCity(value)}
+              options={[
+                { label: 'Santo Antônio/RN', value: 'Santo Antônio' },
+                { label: 'Major Sales/RN', value: 'Major Sales' },
+              ]}
+            />
+          </Col>
+        </Row>
 
         <List
           itemLayout='horizontal'
-          dataSource={professionais}
+          dataSource={
+            city !== ''
+              ? professionais.filter(item => item.city === city)
+              : professionais
+          }
           renderItem={item => (
             <List.Item
               actions={[
