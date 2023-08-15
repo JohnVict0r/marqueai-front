@@ -31,7 +31,7 @@ const professionais = [
   {
     username: 'rejaneviana',
     name: 'Rejane Viana',
-    jobDescription: 'Dermato Funcional',
+    jobDescription: 'Dermatofuncional',
     city: 'Santo Antônio',
     state: 'RN',
     avatar: RejaneViana,
