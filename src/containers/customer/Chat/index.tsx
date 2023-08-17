@@ -401,8 +401,14 @@ const Chat: FC = () => {
                       </p>
                       <div className='details'>
                         <p>
-                          {minutesToHourString(item.duration)} -{' '}
-                          {priceToCurrencyString(item.price)}
+                          {minutesToHourString(item.duration)}
+                          {item.price ? (
+                            <>
+                              {' - '} {priceToCurrencyString(item.price)}
+                            </>
+                          ) : (
+                            'Preço a combinar'
+                          )}
                         </p>
                       </div>
                     </div>

@@ -63,5 +63,5 @@ function addZero(numero: any) {
 }
 
 export const priceToCurrencyString = (price: any) => {
-  return `R$${price},00`
+  return price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
 }
