@@ -480,7 +480,7 @@ const Chat: FC = () => {
               left: '0px',
               right: '0px',
               bottom: '0px',
-              padding: '1.5rem',
+              paddingBottom: '0.5rem',
               backgroundColor: 'white',
               display: 'flex',
               flexDirection: 'column',
