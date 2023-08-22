@@ -407,7 +407,7 @@ const Chat: FC = () => {
                               {' - '} {priceToCurrencyString(item.price)}
                             </>
                           ) : (
-                            'Preço a combinar'
+                            ' Preço a combinar'
                           )}
                         </p>
                       </div>
