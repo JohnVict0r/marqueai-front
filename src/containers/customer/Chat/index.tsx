@@ -10,11 +10,15 @@ import {
   Modal,
   Descriptions,
   Checkbox,
+  Calendar,
+  Select,
 } from 'antd'
 
 import { useHistory, useParams } from 'react-router-dom'
 
 import moment from 'moment'
+import 'moment/locale/pt-br'
+import locale from 'antd/es/date-picker/locale/pt_PT'
 import Logo from '../../../assets/marqueai.png'
 
 import api from '../../../services/api'
@@ -26,7 +30,6 @@ import {
 } from '../../../utils/format'
 import { setCustomerAppointment } from '../../../utils/authentication'
 import './index.less'
-import { weekNumbers, weekString } from '../../../utils/constants'
 
 const botMessage = (msg: string) => ({
   message: msg,
@@ -85,6 +88,12 @@ function validatePhone(phone: string) {
   return regex.test(phone)
 }
 
+// eslint-disable-next-line arrow-body-style
+const disabledDate = (current: any) => {
+  // Can not select days before today and today
+  return current && current < moment().startOf('day')
+}
+
 const Chat: FC = () => {
   const history = useHistory()
   const params = useParams() as any
@@ -97,7 +106,7 @@ const Chat: FC = () => {
   const [services, setServices] = useState([])
   const [currentStep, setCurrentStep] = useState(0)
   const [servicesSelected, setServicesSelected] = useState<any>([])
-  const [daysAvailable, setDaysAvailable] = useState<any>([])
+  // const [daysAvailable, setDaysAvailable] = useState<any>([])
   const [schedules, setSchedules] = useState([])
   const [schedule, setSchedule] = useState()
   const [loading, setLoading] = useState(false)
@@ -108,16 +117,6 @@ const Chat: FC = () => {
 
   const [modalAppointmentConfirmOpen, setModalAppointmentConfirmOpen] =
     useState<boolean>(false)
-
-  const dates = useMemo(
-    () => new Array(31).fill(0).map((_, index) => moment().add(index, 'day')),
-    []
-  )
-
-  const datesAvailable = useMemo(
-    () => dates.filter(item => daysAvailable.includes(weekString[item.day()])),
-    [dates, daysAvailable]
-  )
 
   useEffect(() => {
     api
@@ -140,11 +139,11 @@ const Chat: FC = () => {
     }
   }, [professional, params.username])
 
-  useEffect(() => {
-    api.get(`/user/${params.username}/days/available`).then(response => {
-      setDaysAvailable(response.data.data.map((item: any) => item.day))
-    })
-  }, [params.username])
+  // useEffect(() => {
+  //   api.get(`/user/${params.username}/days/available`).then(response => {
+  //     setDaysAvailable(response.data.data.map((item: any) => item.day))
+  //   })
+  // }, [params.username])
 
   useEffect(() => {
     messagesEndRef &&
@@ -418,32 +417,83 @@ const Chat: FC = () => {
             </div>
           )}
           {!loading && currentStep === 3 && (
-            <div className='select-carrousel'>
-              {datesAvailable.map(item => (
-                <div
-                  className='box-date'
-                  onClick={() => {
-                    setDate(item)
-                  }}
-                >
-                  <div
-                    className={`info-date ${
-                      date.date() === item.date() ? 'info--active' : ''
-                    }`}
-                  >
-                    {/* <input type='radio' checked={day === item.date()} /> */}
-                    <p className='date'>
-                      <b>{weekNumbers[item.day()]}</b>
-                    </p>
-                    <hr
-                      className={`${
-                        date.date() === item.date() ? 'active' : ''
-                      }`}
-                    />
-                    <p>{item.format('DD/MM/YYYY')}</p>
-                  </div>
-                </div>
-              ))}
+            <div className='calendar'>
+              <Calendar
+                fullscreen={false}
+                onPanelChange={value => setDate(value)}
+                disabledDate={disabledDate}
+                locale={locale}
+                headerRender={({ value, onChange }) => {
+                  const start = 0
+                  const end = 12
+                  const monthOptions = []
+
+                  const current = value.clone()
+                  const localeData = value.localeData()
+                  const months = []
+                  for (let i = 0; i < 12; i++) {
+                    current.month(i)
+                    months.push(localeData.monthsShort(current))
+                  }
+
+                  for (let i = start; i < end; i++) {
+                    monthOptions.push(
+                      <Select.Option key={i} value={i} className='month-item'>
+                        {months[i]}
+                      </Select.Option>
+                    )
+                  }
+
+                  const year = value.year()
+                  const month = value.month()
+                  const options = []
+                  for (let i = year - 10; i < year + 10; i += 1) {
+                    options.push(
+                      <Select.Option key={i} value={i} className='year-item'>
+                        {i}
+                      </Select.Option>
+                    )
+                  }
+                  return (
+                    <div style={{ padding: 8 }}>
+                      <Row
+                        gutter={[24, 24]}
+                        style={{ width: '100%', margin: '0px' }}
+                      >
+                        <Col span={12}>
+                          <Select
+                            size='middle'
+                            dropdownMatchSelectWidth={false}
+                            className='my-year-select'
+                            value={year}
+                            onChange={newYear => {
+                              const now = value.clone().year(newYear)
+                              onChange(now)
+                            }}
+                            style={{ width: '100%' }}
+                          >
+                            {options}
+                          </Select>
+                        </Col>
+                        <Col span={12}>
+                          <Select
+                            size='middle'
+                            dropdownMatchSelectWidth={false}
+                            value={month}
+                            onChange={newMonth => {
+                              const now = value.clone().month(newMonth)
+                              onChange(now)
+                            }}
+                            style={{ width: '100%' }}
+                          >
+                            {monthOptions}
+                          </Select>
+                        </Col>
+                      </Row>
+                    </div>
+                  )
+                }}
+              />
             </div>
           )}
           {!loading && currentStep === 4 && (
