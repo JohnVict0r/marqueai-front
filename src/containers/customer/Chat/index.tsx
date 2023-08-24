@@ -30,6 +30,7 @@ import {
 } from '../../../utils/format'
 import { setCustomerAppointment } from '../../../utils/authentication'
 import './index.less'
+import { weekString } from '../../../utils/constants'
 
 const botMessage = (msg: string) => ({
   message: msg,
@@ -88,12 +89,6 @@ function validatePhone(phone: string) {
   return regex.test(phone)
 }
 
-// eslint-disable-next-line arrow-body-style
-const disabledDate = (current: any) => {
-  // Can not select days before today and today
-  return current && current < moment().startOf('day')
-}
-
 const Chat: FC = () => {
   const history = useHistory()
   const params = useParams() as any
@@ -106,7 +101,7 @@ const Chat: FC = () => {
   const [services, setServices] = useState([])
   const [currentStep, setCurrentStep] = useState(0)
   const [servicesSelected, setServicesSelected] = useState<any>([])
-  // const [daysAvailable, setDaysAvailable] = useState<any>([])
+  const [daysAvailable, setDaysAvailable] = useState<any>([])
   const [schedules, setSchedules] = useState([])
   const [schedule, setSchedule] = useState()
   const [loading, setLoading] = useState(false)
@@ -139,11 +134,20 @@ const Chat: FC = () => {
     }
   }, [professional, params.username])
 
-  // useEffect(() => {
-  //   api.get(`/user/${params.username}/days/available`).then(response => {
-  //     setDaysAvailable(response.data.data.map((item: any) => item.day))
-  //   })
-  // }, [params.username])
+  useEffect(() => {
+    api.get(`/user/${params.username}/days/available`).then(response => {
+      setDaysAvailable(response.data.data.map((item: any) => item.day))
+    })
+  }, [params.username])
+
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current: any) => {
+    if (!current) return false
+    if (current < moment().startOf('day')) return true
+    if (!daysAvailable.includes(weekString[current.day()])) return true
+
+    return false
+  }
 
   useEffect(() => {
     messagesEndRef &&
