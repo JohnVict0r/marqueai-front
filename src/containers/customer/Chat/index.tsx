@@ -425,6 +425,8 @@ const Chat: FC = () => {
               <Calendar
                 fullscreen={false}
                 onPanelChange={value => setDate(value)}
+                onChange={value => setDate(value)}
+                onSelect={value => setDate(value)}
                 disabledDate={disabledDate}
                 locale={locale}
                 headerRender={({ value, onChange }) => {
