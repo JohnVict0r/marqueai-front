@@ -433,7 +433,7 @@ const Chat: FC = () => {
                   const months = []
                   for (let i = 0; i < 12; i++) {
                     current.month(i)
-                    months.push(localeData.monthsShort(current))
+                    months.push(localeData.months(current))
                   }
 
                   for (let i = start; i < end; i++) {
